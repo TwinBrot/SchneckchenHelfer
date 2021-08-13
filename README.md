@@ -1,0 +1,2 @@
+# Schneckchencord
+Schneckchencord Bot
