@@ -1,0 +1,401 @@
+Main JDA wird gestartet
+Main JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+
+Main JDA wird gestartet
+Main JDA wurde gestartet
+
+Befehle werden registriert
+
+Main JDA wird gestartet
+Main JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+
+Main JDA wird gestartet
+Main JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread wird gestartet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+Main JDA wird gestartet
+Main JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+2
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:108)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+null
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:108)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+0
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+1
+null
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:109)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+1
+null
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:109)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+0
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+0
+null
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:109)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+MainThread startet
+
+JDA wird gestartet
+JDA wurde gestartet
+
+Befehle werden registriert
+Befehle wurden registriert
+
+MainThread wurde gestartet
+LoopThread startet
+LoopThread wurde gestartet
+
+----------------------------------
+
+Der Bot ist vollständig gestartet
+
+----------------------------------
+----------------------------------
+
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+0
+null
+java.lang.IllegalArgumentException: Provided text for message may not be null
+	at net.dv8tion.jda.internal.utils.Checks.notNull(Checks.java:69)
+	at net.dv8tion.jda.internal.utils.Checks.notEmpty(Checks.java:75)
+	at net.dv8tion.jda.api.entities.MessageChannel.sendMessage(MessageChannel.java:318)
+	at net.dv8tion.jda.internal.entities.PrivateChannelImpl.sendMessage(PrivateChannelImpl.java:134)
+	at de.Strobl.Commands.DM.CatBoy.onPrivateMessageReceived(CatBoy.java:110)
+	at net.dv8tion.jda.api.hooks.ListenerAdapter.onEvent(ListenerAdapter.java:482)
+	at net.dv8tion.jda.api.hooks.InterfacedEventManager.handle(InterfacedEventManager.java:96)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handleInternally(EventManagerProxy.java:88)
+	at net.dv8tion.jda.internal.hooks.EventManagerProxy.handle(EventManagerProxy.java:70)
+	at net.dv8tion.jda.internal.JDAImpl.handleEvent(JDAImpl.java:160)
+	at net.dv8tion.jda.internal.handle.MessageCreateHandler.handleInternally(MessageCreateHandler.java:108)
+	at net.dv8tion.jda.internal.handle.SocketHandler.handle(SocketHandler.java:36)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onDispatch(WebSocketClient.java:952)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onEvent(WebSocketClient.java:839)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.handleEvent(WebSocketClient.java:817)
+	at net.dv8tion.jda.internal.requests.WebSocketClient.onBinaryMessage(WebSocketClient.java:990)
+	at com.neovisionaries.ws.client.ListenerManager.callOnBinaryMessage(ListenerManager.java:385)
+	at com.neovisionaries.ws.client.ReadingThread.callOnBinaryMessage(ReadingThread.java:276)
+	at com.neovisionaries.ws.client.ReadingThread.handleBinaryFrame(ReadingThread.java:996)
+	at com.neovisionaries.ws.client.ReadingThread.handleFrame(ReadingThread.java:755)
+	at com.neovisionaries.ws.client.ReadingThread.main(ReadingThread.java:108)
+	at com.neovisionaries.ws.client.ReadingThread.runMain(ReadingThread.java:64)
+	at com.neovisionaries.ws.client.WebSocketThread.run(WebSocketThread.java:45)
+1
+https://cdn.discordapp.com/attachments/781192516342906921/874802556667318282/bdfcd24c0b95f938091eb6fa6b0b6a1a.png
+MainThread startet
+
+JDA wird gestartet
