@@ -4,13 +4,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javax.security.auth.login.LoginException;
 
 import org.ini4j.Wini;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
-import de.Strobl.Loops.LoopMain;
+import de.Strobl.Loops.TempBan;
+import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -37,7 +42,7 @@ public class Main {
 			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
 			System.setErr(errorStream);
 			
-			System.out.println("MainThread startet");
+
 //Read settings.ini File
 			try { @SuppressWarnings("unused")
 				Wini ini = new Wini (new File(Pfad + "settings.ini"));
@@ -113,15 +118,14 @@ public class Main {
 	            if (file.mkdir()) {
 	                System.err.println("User-Dateien Ordner nicht gefunden. \nVersuche Ordner zu erstellen.");
 	            } else {
-	                System.err.println("Failed to create directory!");
+	                System.err.println("Keinner User-Ordner nicht erstellen!");
 	            }
 	        }
 	        
 	        
 //JDA Builder
 	        
-			System.out.println("");
-			System.out.println("JDA wird gestartet");
+			System.out.println("\nJDA wird gestartet");
 			Wini ini = new Wini (new File(Pfad + "settings.ini"));
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(
@@ -189,30 +193,23 @@ public class Main {
 //Befehle anmelden
 			
 			BefehleRegistrieren.register(jda);
-
-//	        CommandListUpdateAction commands = jda.updateCommands();
-//	        commands.complete();
-			
-			System.out.println("MainThread wurde gestartet");
 		
 //Loops starten
-		    	
-			LoopMain LoopMain = new LoopMain();	
-			LoopMain.start();
-
+		    ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
+		    Loops.scheduleAtFixedRate(new TempBan(), 10, 60, TimeUnit.SECONDS);
+			System.out.println("TempBan-Loop wurde gestartet");
+		    Loops.scheduleAtFixedRate(new TempMute(), 10, 60, TimeUnit.SECONDS);
+			System.out.println("TempMute-Loop wurde gestartet");
+		    
+		    
 			
-		} catch (IOException e1) {
-			System.err.println("");
-			System.err.println("IOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
-			System.err.println("");
-			System.err.println("Signals that an I/O exception of some sort has occurred. Thisclass is the general class of exceptions produced by failed orinterrupted I/O operations.");
-			System.err.println("");
-			e1.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
+			System.err.println("\nSignals that an I/O exception of some sort has occurred. Thisclass is the general class of exceptions produced by failed orinterrupted I/O operations.\n");
+			e.printStackTrace();
 			
 		} catch (LoginException | InterruptedException e) {
-			System.err.println("");
-			System.err.println("Fehler beim Initialisieren des Bots. Ist der Token richtig?");
-			System.err.println("");
+			System.err.println("\nFehler beim Initialisieren des Bots. Ist der Token richtig?\n");
 			e.printStackTrace();
 			
 		}
