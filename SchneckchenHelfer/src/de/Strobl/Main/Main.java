@@ -89,17 +89,6 @@ public class Main {
 				Strafen.store();
 			}
 			
-//Read Auswertung.ini File
-			try {@SuppressWarnings("unused")
-				Wini Auswertung = new Wini (new File (Pfad + "Auswertung.ini"));
-			} catch (IOException e) {
-				System.err.println("Auswertung.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Auswertung.ini");
-				newFile.createNewFile();
-				Wini Auswertung = new Wini (new File(Pfad + "Auswertung.ini"));
-				Auswertung.store();
-			}
-			
 //Read ID.ini File
 			try {@SuppressWarnings("unused")
 				Wini Auswertung = new Wini (new File (Pfad + "ID.ini"));
@@ -125,7 +114,7 @@ public class Main {
 	        
 //JDA Builder
 	        
-			System.out.println("\nJDA wird gestartet");
+			System.out.println("JDA wird gestartet");
 			Wini ini = new Wini (new File(Pfad + "settings.ini"));
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(
@@ -192,7 +181,7 @@ public class Main {
 			
 //Befehle anmelden
 			
-			BefehleRegistrieren.register(jda);
+//			BefehleRegistrieren.register(jda);
 		
 //Loops starten
 		    ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
