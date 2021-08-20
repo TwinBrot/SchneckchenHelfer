@@ -10,7 +10,6 @@ import org.ini4j.Wini;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.ListedEmote;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -22,8 +21,7 @@ public class Emotes {
 
 	public static void emotes(SlashCommandEvent event) {
 		try {
-			Guild guild = event.getGuild();
-			List<ListedEmote> GuildEmotes = guild.retrieveEmotes().complete();
+			List<ListedEmote> GuildEmotes = event.getGuild().retrieveEmotes().complete();
 			MessageChannel channel = event.getChannel();
 //Ini initialisieren
 			try {

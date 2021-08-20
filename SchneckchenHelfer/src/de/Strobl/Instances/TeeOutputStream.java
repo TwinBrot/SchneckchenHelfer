@@ -1,4 +1,4 @@
-package de.Strobl.Main;
+package de.Strobl.Instances;
 
 import java.io.IOException;
 import java.io.OutputStream;

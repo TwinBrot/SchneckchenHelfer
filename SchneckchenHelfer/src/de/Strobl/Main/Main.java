@@ -14,6 +14,7 @@ import org.ini4j.Wini;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
+import de.Strobl.Instances.TeeOutputStream;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
