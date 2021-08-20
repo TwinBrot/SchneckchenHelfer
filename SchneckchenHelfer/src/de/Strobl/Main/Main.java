@@ -76,44 +76,9 @@ public class Main {
 				ini.put("Namensüberwachung", "Verboten", "[*~+]");
 				ini.store();
 			}
-
-//Updating settings.ini
-			Wini ini = new Wini(new File(Pfad + "settings.ini"));
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
-			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
-			String currentversion = ini.get("Setup", "VersionBot");
-			while (!currentversion.equals(version)) {
-				System.out.println("Updated Bot-Version detected");
-				currentversion = ini.get("Setup", "VersionBot");
-				if (currentversion.equals("v1.4.1")) {
-					try {
-						ini.put("Setup", "VersionBot", "1.4.2");
-						ini.put("Setup", "VersionCMD", "0");
-						ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
-						ini.put("Settings", "Settings.Status", "ONLINE");
-						ini.put("ModRollen", "Admin", ini.get("ModRollen", "Modrollen"));
-						ini.put("ModRollen", "Mod", "[0]");
-						ini.put("ModRollen", "Channelmod", "[0]");
-						ini.remove("ModRollen", "Modrollen");
-						ini.remove("Settings", "Settings.Prefix");
-						ini.store();
-						System.out.println("Updated settings.ini from Version 1.4.1 to Version 1.4.2");
-					} catch (IOException e) {
-						e.printStackTrace();
-						System.out.println("Update der settings.ini fehlgeschlagen!");
-					}
-				} else if (currentversion.equals("v1.4.2")) {
-					try {
-						ini.put("Setup", "VersionBot", "1.4.3");
-						ini.store();
-						System.out.println("Updated settings.ini from Version 1.4.1 to Version 1.4.2");
-					} catch (IOException e) {
-						e.printStackTrace();
-						System.out.println("Update der settings.ini fehlgeschlagen!");
-					}
-				}
-			}
-
+			
+			UpdateSettingsIni.Update();
+			
 //Read Emotes.ini File
 			try {
 				@SuppressWarnings("unused")
@@ -163,7 +128,7 @@ public class Main {
 			}
 
 //JDA Builder
-
+			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			System.out.println(
 					"----------------------------------------------\n----------------------------------------------\nJDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
@@ -232,6 +197,8 @@ public class Main {
 			System.out.println("TempMute-Loop wurde gestartet");
 
 // Update für den Bot verfügbar?
+			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
 				System.out.println("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
 			}
