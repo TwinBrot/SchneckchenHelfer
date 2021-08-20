@@ -37,6 +37,11 @@ public class UpdateSettingsIni {
 					ini.store();
 					System.out.println("Updated settings.ini from Version 1.4.3 to Version 1.4.4");
 					
+				} else if (currentversion.equals("v1.4.4")) {
+					ini.put("Setup", "VersionBot", "v1.4.5");
+					ini.store();
+					System.out.println("Updated settings.ini from Version 1.4.4 to Version 1.4.5");
+					
 					
 					
 					
