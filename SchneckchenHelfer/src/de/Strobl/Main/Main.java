@@ -33,7 +33,7 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.4.3";
+	public static String version = "v1.4.4";
 
 	public static void main(String[] arguments) {
 		try {
