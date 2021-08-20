@@ -8,7 +8,6 @@ public class UpdateSettingsIni {
 
 	public static void Update() {
 		try {
-			System.out.println("Test");
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String currentversion = ini.get("Setup", "VersionBot");
 			while (!currentversion.equals(Main.version)) {
