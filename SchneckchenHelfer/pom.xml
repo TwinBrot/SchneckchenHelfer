@@ -34,12 +34,22 @@
   		<artifactId>JDA</artifactId>
   		<version>4.3.0_310</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.kohsuke</groupId>
+  		<artifactId>github-api</artifactId>
+  		<version>1.132</version>
+  	</dependency>
   </dependencies>
   <repositories>
   	<repository>
     	<id>dv8tion</id>
     	<name>m2-dv8tion</name>
     	<url>https://m2.dv8tion.net/releases</url>
+	</repository>
+  	<repository>
+    	<id>org.kohsuke</id>
+    	<name>org.kohsuke</name>
+    	<url>https://mvnrepository.com/artifact/</url>
 	</repository>
   </repositories>
 </project>

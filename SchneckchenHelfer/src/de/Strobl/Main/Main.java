@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 import javax.security.auth.login.LoginException;
 
 import org.ini4j.Wini;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
@@ -31,6 +33,7 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
+	public static String version = "v1.4.3";
 
 	public static void main(String[] arguments) {
 		try {
@@ -55,8 +58,11 @@ public class Main {
 				newFile.createNewFile();
 				Wini ini = new Wini(new File(Pfad + "settings.ini"));
 				ini.put("Setup", "Token", "NzIyODU4NDA3Mzg3ODU3MDQ3.XuqAiQ.eVkd3rLUaWuI4dEkv2ulCeSJKG8");
+				ini.put("Setup", "VersionBot", version);
+				ini.put("Setup", "VersionCMD", "0");
 				ini.put("Settings", "Settings.Aktivity", "!hilfe");
 				ini.put("Settings", "Settings.Activity2", "playing");
+				ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
 				ini.put("Settings", "Settings.LogChannel", "");
 				ini.put("Settings", "Settings.AFKVoice", "no");
 				ini.put("Settings", "Settings.Status", "ONLINE");
@@ -69,6 +75,43 @@ public class Main {
 				ini.put("Namensüberwachung", "Active", "false");
 				ini.put("Namensüberwachung", "Verboten", "[*~+]");
 				ini.store();
+			}
+
+//Updating settings.ini
+			Wini ini = new Wini(new File(Pfad + "settings.ini"));
+			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
+			String currentversion = ini.get("Setup", "VersionBot");
+			while (!currentversion.equals(version)) {
+				System.out.println("Updated Bot-Version detected");
+				currentversion = ini.get("Setup", "VersionBot");
+				if (currentversion.equals("v1.4.1")) {
+					try {
+						ini.put("Setup", "VersionBot", "1.4.2");
+						ini.put("Setup", "VersionCMD", "0");
+						ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
+						ini.put("Settings", "Settings.Status", "ONLINE");
+						ini.put("ModRollen", "Admin", ini.get("ModRollen", "Modrollen"));
+						ini.put("ModRollen", "Mod", "[0]");
+						ini.put("ModRollen", "Channelmod", "[0]");
+						ini.remove("ModRollen", "Modrollen");
+						ini.remove("Settings", "Settings.Prefix");
+						ini.store();
+						System.out.println("Updated settings.ini from Version 1.4.1 to Version 1.4.2");
+					} catch (IOException e) {
+						e.printStackTrace();
+						System.out.println("Update der settings.ini fehlgeschlagen!");
+					}
+				} else if (currentversion.equals("v1.4.2")) {
+					try {
+						ini.put("Setup", "VersionBot", "1.4.3");
+						ini.store();
+						System.out.println("Updated settings.ini from Version 1.4.1 to Version 1.4.2");
+					} catch (IOException e) {
+						e.printStackTrace();
+						System.out.println("Update der settings.ini fehlgeschlagen!");
+					}
+				}
 			}
 
 //Read Emotes.ini File
@@ -121,8 +164,8 @@ public class Main {
 
 //JDA Builder
 
-			System.out.println("JDA wird gestartet");
-			Wini ini = new Wini(new File(Pfad + "settings.ini"));
+			System.out.println(
+					"----------------------------------------------\n----------------------------------------------\nJDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
 					GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
@@ -175,8 +218,11 @@ public class Main {
 			System.out.println("JDA wurde gestartet");
 
 //Befehle anmelden
-
-//			BefehleRegistrieren.register(jda);
+			if (!ini.get("Setup", "VersionCMD").equals(version)) {
+				BefehleRegistrieren.register(jda);
+				ini.put("Setup", "VersionCMD", version);
+				ini.store();
+			}
 
 //Loops starten
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
@@ -184,6 +230,11 @@ public class Main {
 			System.out.println("TempBan-Loop wurde gestartet");
 			Loops.scheduleAtFixedRate(new TempMute(), 10, 60, TimeUnit.SECONDS);
 			System.out.println("TempMute-Loop wurde gestartet");
+
+// Update für den Bot verfügbar?
+			if (!version.equals(neusteversion)) {
+				System.out.println("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
+			}
 
 		} catch (IOException e) {
 			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
