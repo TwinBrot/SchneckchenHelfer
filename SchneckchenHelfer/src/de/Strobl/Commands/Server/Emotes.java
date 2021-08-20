@@ -42,8 +42,9 @@ public class Emotes {
 			Emotelist.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach((i) -> {
 				counter++;
 				EmbedEmotes.addField("", i.getKey().getAsMention() + emotesini.get("Emotes", i.getKey().getId()), true);
+				int EmbedCount = Integer.parseInt(emotesini.get("Embed", "Count"));
 //Embed abschicken und leeren, wenn durch 24 Teilbar oder Liste leer
-				if (counter % 24 == 0 || counter == Emotelist.size()) {
+				if (counter % EmbedCount == 0 || counter == Emotelist.size()) {
 					EmbedEmotes.setAuthor(event.getJDA().getSelfUser().getName() + " Emote-Auswertung",
 							event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
 					EmbedEmotes.setColor(0x00c42b);
