@@ -21,6 +21,7 @@ public class Emotes {
 
 	public static void emotes(SlashCommandEvent event) {
 		try {
+			counter = 0;
 			List<ListedEmote> GuildEmotes = event.getGuild().retrieveEmotes().complete();
 			MessageChannel channel = event.getChannel();
 //Ini initialisieren

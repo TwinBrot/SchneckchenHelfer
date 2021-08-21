@@ -14,7 +14,6 @@ public class BefehleAuswertung extends ListenerAdapter {
 
 	public void onSlashCommand(SlashCommandEvent event) {
 		try {
-			System.out.println("Test");
 			event.deferReply(true).queue();
 			System.out.println("\nBefehl erkannt:");
 			System.out.println("Author: " + event.getMember());

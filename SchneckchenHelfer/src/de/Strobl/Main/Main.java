@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +19,9 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
+import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
+import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
+import de.Strobl.Events.Nachrichten.OnEmoteSentEvent;
 import de.Strobl.Events.Nachrichten.OnFileSentEvent;
 import de.Strobl.Events.Nachrichten.OnMessageReactionRemoveEvent;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
@@ -42,7 +47,7 @@ public class Main {
 	public static String Userpfad = "./users/";
 	public static JDA jda;
 	public static String version = "v1.5.0";
-
+	public static List<String> ServerEmotesID;
 	public static void main(String[] arguments) {
 		try {
 
@@ -155,13 +160,13 @@ public class Main {
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
 					GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
-					GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS);
-			Builder.disableIntents(GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_WEBHOOKS,
+					GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
+			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS,
 					GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING,
 					GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES,
-					CacheFlag.ROLE_TAGS, CacheFlag.VOICE_STATE);
-			Builder.disableCache(CacheFlag.EMOTE, CacheFlag.ONLINE_STATUS);
+					CacheFlag.ROLE_TAGS, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
+			Builder.disableCache(CacheFlag.ONLINE_STATUS);
 			Builder.setChunkingFilter(ChunkingFilter.NONE);
 			Builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 			Builder.setAutoReconnect(true);
@@ -179,6 +184,9 @@ public class Main {
 			Builder.addEventListeners(new OnGuildMemberJoinEvent());
 			Builder.addEventListeners(new OnMessageReactionRemoveEvent());
 			Builder.addEventListeners(new OnFileSentEvent());
+			Builder.addEventListeners(new OnEmoteSentEvent());
+			Builder.addEventListeners(new EmoteAdded());
+			Builder.addEventListeners(new EmoteRemoved());
 
 //Activity
 
@@ -230,6 +238,18 @@ public class Main {
 			if (!version.equals(neusteversion)) {
 				System.out.println("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
 			}
+			
+			
+			
+			
+			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
+				ServerEmotesID = new ArrayList<String>();
+				GuildEmotes.forEach(Emote -> {
+					ServerEmotesID.add(Emote.getId());
+				});
+			});
+			
+			
 
 		} catch (IOException e) {
 			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
