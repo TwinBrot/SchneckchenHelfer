@@ -17,8 +17,9 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
-import de.Strobl.Events.Nachrichten.LinkScamDetection;
 import de.Strobl.Events.Nachrichten.CodewortScamDetection;
+import de.Strobl.Events.Nachrichten.LinkScamDetection;
+import de.Strobl.Events.Voice.AFKKick;
 import de.Strobl.Instances.TeeOutputStream;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
@@ -167,6 +168,7 @@ public class Main {
 			Builder.addEventListeners(new BefehleAuswertung());
 			Builder.addEventListeners(new LinkScamDetection());
 			Builder.addEventListeners(new CodewortScamDetection());
+			Builder.addEventListeners(new AFKKick());
 
 //Activity
 
