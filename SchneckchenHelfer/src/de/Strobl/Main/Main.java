@@ -17,6 +17,7 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
+import de.Strobl.Events.Nachrichten.OnMessageReactionRemoveEvent;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
 import de.Strobl.Events.Nachrichten.ScamDetectionLink;
 import de.Strobl.Events.User.OnGuildMemberJoinEvent;
@@ -175,6 +176,7 @@ public class Main {
 			Builder.addEventListeners(new OnUserUpdateOnlineStatusEvent());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
 			Builder.addEventListeners(new OnGuildMemberJoinEvent());
+			Builder.addEventListeners(new OnMessageReactionRemoveEvent());
 
 //Activity
 
