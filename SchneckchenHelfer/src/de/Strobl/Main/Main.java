@@ -17,6 +17,8 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
+import de.Strobl.Events.Nachrichten.LinkScamDetection;
+import de.Strobl.Events.Nachrichten.CodewortScamDetection;
 import de.Strobl.Instances.TeeOutputStream;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
@@ -33,7 +35,7 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.4.5";
+	public static String version = "v1.5.0";
 
 	public static void main(String[] arguments) {
 		try {
@@ -150,6 +152,8 @@ public class Main {
 			Builder.addEventListeners(new CatBoy());
 			Builder.addEventListeners(new CatGirl());
 			Builder.addEventListeners(new BefehleAuswertung());
+			Builder.addEventListeners(new LinkScamDetection());
+			Builder.addEventListeners(new CodewortScamDetection()); 
 
 //Activity
 
