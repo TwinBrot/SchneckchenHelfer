@@ -78,9 +78,9 @@ public class Main {
 				ini.put("Namensüberwachung", "Verboten", "[*~+]");
 				ini.store();
 			}
-			
+
 			UpdateSettingsIni.Update();
-			
+
 //Read Emotes.ini File
 			try {
 				@SuppressWarnings("unused")
@@ -106,7 +106,7 @@ public class Main {
 				Strafen.store();
 			}
 
-//Read ID.ini File
+			// Read ID.ini File
 			try {
 				@SuppressWarnings("unused")
 				Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
@@ -117,6 +117,19 @@ public class Main {
 				Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
 				Auswertung.put("Hinweise", "Counter", "0");
 				Auswertung.store();
+			}
+
+			// Read Link.ini File
+			try {
+				@SuppressWarnings("unused")
+				Wini Link = new Wini(new File(Pfad + "Link.ini"));
+			} catch (IOException e) {
+				System.err.println("Link.ini nicht gefunden. \nVersuche Datei zu erstellen.");
+				File newFile = new File(Pfad + "Link.ini");
+				newFile.createNewFile();
+				Wini Link = new Wini(new File(Pfad + "Link.ini"));
+				Link.put("Links", "1", "discorcl.link/");
+				Link.store();
 			}
 
 //Users Ordner Anlegen
@@ -153,7 +166,7 @@ public class Main {
 			Builder.addEventListeners(new CatGirl());
 			Builder.addEventListeners(new BefehleAuswertung());
 			Builder.addEventListeners(new LinkScamDetection());
-			Builder.addEventListeners(new CodewortScamDetection()); 
+			Builder.addEventListeners(new CodewortScamDetection());
 
 //Activity
 
