@@ -196,7 +196,6 @@ public class Main {
 //JDA Starten und fertigstellung abwarten
 
 			jda = Builder.build().awaitReady();
-
 			System.out.println("JDA wurde gestartet");
 
 //Befehle anmelden
