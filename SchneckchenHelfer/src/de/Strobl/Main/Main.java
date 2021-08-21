@@ -19,6 +19,7 @@ import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
 import de.Strobl.Events.Nachrichten.CodewortScamDetection;
 import de.Strobl.Events.Nachrichten.LinkScamDetection;
+import de.Strobl.Events.User.OnGuildMemberJoinEvent;
 import de.Strobl.Events.User.OnUserUpdateOnlineStatusEvent;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
 import de.Strobl.Events.Voice.AFKKick;
@@ -173,6 +174,7 @@ public class Main {
 			Builder.addEventListeners(new AFKKick());
 			Builder.addEventListeners(new OnUserUpdateOnlineStatusEvent());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
+			Builder.addEventListeners(new OnGuildMemberJoinEvent());
 
 //Activity
 
