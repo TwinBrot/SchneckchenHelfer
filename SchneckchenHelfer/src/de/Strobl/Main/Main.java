@@ -17,8 +17,8 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
-import de.Strobl.Events.Nachrichten.CodewortScamDetection;
-import de.Strobl.Events.Nachrichten.LinkScamDetection;
+import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
+import de.Strobl.Events.Nachrichten.ScamDetectionLink;
 import de.Strobl.Events.User.OnGuildMemberJoinEvent;
 import de.Strobl.Events.User.OnUserUpdateOnlineStatusEvent;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
@@ -169,8 +169,8 @@ public class Main {
 			Builder.addEventListeners(new CatBoy());
 			Builder.addEventListeners(new CatGirl());
 			Builder.addEventListeners(new BefehleAuswertung());
-			Builder.addEventListeners(new LinkScamDetection());
-			Builder.addEventListeners(new CodewortScamDetection());
+			Builder.addEventListeners(new ScamDetectionLink());
+			Builder.addEventListeners(new ScamDetectionCodeWort());
 			Builder.addEventListeners(new AFKKick());
 			Builder.addEventListeners(new OnUserUpdateOnlineStatusEvent());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
