@@ -19,6 +19,7 @@ import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
 import de.Strobl.Events.Nachrichten.CodewortScamDetection;
 import de.Strobl.Events.Nachrichten.LinkScamDetection;
+import de.Strobl.Events.User.OnUserUpdateOnlineStatusEvent;
 import de.Strobl.Events.Voice.AFKKick;
 import de.Strobl.Instances.TeeOutputStream;
 import de.Strobl.Loops.TempBan;
@@ -169,6 +170,7 @@ public class Main {
 			Builder.addEventListeners(new LinkScamDetection());
 			Builder.addEventListeners(new CodewortScamDetection());
 			Builder.addEventListeners(new AFKKick());
+			Builder.addEventListeners(new OnUserUpdateOnlineStatusEvent());
 
 //Activity
 
