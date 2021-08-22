@@ -1,10 +1,10 @@
 package de.Strobl.Main;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -30,7 +30,6 @@ import de.Strobl.Events.User.OnGuildMemberJoinEvent;
 import de.Strobl.Events.User.OnUserUpdateOnlineStatusEvent;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
 import de.Strobl.Events.Voice.AFKKick;
-import de.Strobl.Instances.TeeOutputStream;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
@@ -46,20 +45,37 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.6.1";
+	public static String version = "v1.6.2";
 	public static List<String> ServerEmotesID;
-	public static void main(String[] arguments) {
+	public static void main(String[] arguments) {	
 		try {
-
-			PrintStream outStream = System.out;
-			OutputStream os = new FileOutputStream(Pfad + "log.txt", true);
-			PrintStream fileStream = new PrintStream(new TeeOutputStream(outStream, os));
-			System.setOut(fileStream);
-
-			PrintStream errStream = System.err;
-			OutputStream err = new FileOutputStream(Pfad + "log.txt", true);
-			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
-			System.setErr(errorStream);
+//Timestamp in console
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'['dd.MM.yyyy'  'HH:mm:ss']:  '");
+			PrintStream TimestampOutputStream = new PrintStream(System.out) {
+			    @Override
+			    public void print(String x) {
+			        super.print(ZonedDateTime.now().format(formatter) + x);
+			    }
+			};
+			PrintStream TimestampErrorStream = new PrintStream(System.err) {
+			    @Override
+			    public void print(String x) {
+			        super.print(ZonedDateTime.now().format(formatter) + x);
+			    }
+			};
+			System.setOut(TimestampOutputStream);
+			System.setErr(TimestampErrorStream);
+			
+//			PrintStream outStream = System.out;
+//			OutputStream os = new FileOutputStream(Pfad + "log.txt", true);
+//			PrintStream fileStream = new PrintStream(new TeeOutputStream(outStream, os));
+//			fileStream.write("Test".getBytes());
+//			System.setOut(fileStream);
+//
+//			PrintStream errStream = System.err;
+//			OutputStream err = new FileOutputStream(Pfad + "log.txt", true);
+//			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
+//			System.setErr(errorStream);
 
 //Read settings.ini File
 			try {
@@ -155,8 +171,9 @@ public class Main {
 
 //JDA Builder
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			System.out.println(
-					"----------------------------------------------\n----------------------------------------------\nJDA wird gestartet");
+			System.out.println("----------------------------------------------");
+			System.out.println("----------------------------------------------");
+			System.out.println("JDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
 					GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,

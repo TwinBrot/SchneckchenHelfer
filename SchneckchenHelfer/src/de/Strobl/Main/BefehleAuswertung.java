@@ -15,17 +15,18 @@ public class BefehleAuswertung extends ListenerAdapter {
 	public void onSlashCommand(SlashCommandEvent event) {
 		try {
 			event.deferReply(true).queue();
-			System.out.println("\nBefehl erkannt:");
-			System.out.println("Author: " + event.getMember());
-			System.out.println("Befehl: " + event.getName() + "   " + event.getOptions());
 			InteractionHook EventHook = event.getHook();
 
 // Only accept commands from guilds
 
 			if (!event.isFromGuild()) {
 				EventHook.editOriginal("Diese Befehle funktionieren nur auf dem Server.").queue();
+				System.out.println("Befehl in den Privatnachrichten erkannt. Abbruch");
 				return;
 			}
+			System.out.println("Befehl erkannt:");
+			System.out.println("Author: " + event.getMember());
+			System.out.println("Befehl: " + event.getName() + "   " + event.getOptions());
 
 // Modrollen Abfragen
 //-1 = Fehler		
