@@ -69,16 +69,17 @@ public class Main {
 //			PrintStream outStream = System.out;
 //			OutputStream os = new FileOutputStream(Pfad + "log.txt", true);
 //			PrintStream fileStream = new PrintStream(new TeeOutputStream(outStream, os));
-//			fileStream.write("Test".getBytes());
 //			System.setOut(fileStream);
-//
+			
 //			PrintStream errStream = System.err;
 //			OutputStream err = new FileOutputStream(Pfad + "log.txt", true);
 //			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
 //			System.setErr(errorStream);
-
+			
 			FileManagement.Update();
+			
 //JDA Builder
+			
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			System.out.println("----------------------------------------------");
 			System.out.println("----------------------------------------------");
@@ -165,7 +166,7 @@ public class Main {
 			}
 			
 			
-			
+//Cache Emotes
 			
 			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
 				ServerEmotesID = new ArrayList<String>();
@@ -175,7 +176,8 @@ public class Main {
 			});
 			
 			
-
+//Fehler Management
+			
 		} catch (IOException e) {
 			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
 			System.err.println(
