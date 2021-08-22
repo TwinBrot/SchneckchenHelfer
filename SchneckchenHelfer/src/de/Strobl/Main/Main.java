@@ -77,98 +77,7 @@ public class Main {
 //			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
 //			System.setErr(errorStream);
 
-//Read settings.ini File
-			try {
-				@SuppressWarnings("unused")
-				Wini ini = new Wini(new File(Pfad + "settings.ini"));
-			} catch (IOException e) {
-				System.err.println("settings.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "settings.ini");
-				newFile.createNewFile();
-				Wini ini = new Wini(new File(Pfad + "settings.ini"));
-				ini.put("Setup", "Token", "NzIyODU4NDA3Mzg3ODU3MDQ3.XuqAiQ.eVkd3rLUaWuI4dEkv2ulCeSJKG8");
-				ini.put("Setup", "VersionBot", version);
-				ini.put("Setup", "VersionCMD", "0");
-				ini.put("Settings", "Settings.Aktivity", "!hilfe");
-				ini.put("Settings", "Settings.Activity2", "playing");
-				ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
-				ini.put("Settings", "Settings.LogChannel", "");
-				ini.put("Settings", "Settings.AFKVoice", "no");
-				ini.put("Settings", "Settings.Status", "ONLINE");
-				ini.put("ModRollen", "Admin", "[0]");
-				ini.put("ModRollen", "Mod", "[0]");
-				ini.put("ModRollen", "Channelmod", "[0]");
-				ini.put("Dateiüberwachung", "Active", "false");
-				ini.put("Dateiüberwachung", "Allowed",
-						"[0, jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp]");
-				ini.put("Namensüberwachung", "Active", "false");
-				ini.put("Namensüberwachung", "Verboten", "[*~+]");
-				ini.store();
-			}
-
-			UpdateSettingsIni.Update();
-
-//Read Emotes.ini File
-			try {
-				@SuppressWarnings("unused")
-				Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
-			} catch (IOException e) {
-				System.err.println("Emotes.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Emotes.ini");
-				newFile.createNewFile();
-				Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
-				emotes.put("Embed", "Count", "24");
-				emotes.store();
-			}
-
-//Read Strafen.ini File
-			try {
-				@SuppressWarnings("unused")
-				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
-			} catch (IOException e) {
-				System.err.println("Strafen.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Strafen.ini");
-				newFile.createNewFile();
-				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
-				Strafen.store();
-			}
-
-			// Read ID.ini File
-			try {
-				@SuppressWarnings("unused")
-				Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
-			} catch (IOException e) {
-				System.err.println("ID.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "ID.ini");
-				newFile.createNewFile();
-				Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
-				Auswertung.put("Hinweise", "Counter", "0");
-				Auswertung.store();
-			}
-
-			// Read Link.ini File
-			try {
-				@SuppressWarnings("unused")
-				Wini Link = new Wini(new File(Pfad + "Link.ini"));
-			} catch (IOException e) {
-				System.err.println("Link.ini nicht gefunden. \nVersuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Link.ini");
-				newFile.createNewFile();
-				Wini Link = new Wini(new File(Pfad + "Link.ini"));
-				Link.put("Links", "1", "discorcl.link/");
-				Link.store();
-			}
-
-//Users Ordner Anlegen
-			File file = new File(Userpfad);
-			if (!file.exists()) {
-				if (file.mkdir()) {
-					System.err.println("User-Dateien Ordner nicht gefunden. \nVersuche Ordner zu erstellen.");
-				} else {
-					System.err.println("Keinner User-Ordner nicht erstellen!");
-				}
-			}
-
+			FileManagement.Update();
 //JDA Builder
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			System.out.println("----------------------------------------------");
@@ -236,13 +145,11 @@ public class Main {
 			System.out.println("JDA wurde gestartet");
 
 //Befehle anmelden
-			if (!ini.get("Setup", "VersionCMD").equals(version)) {
-				BefehleRegistrieren.register(jda);
-				ini.put("Setup", "VersionCMD", version);
-				ini.store();
-			}
+
+			BefehleRegistrieren.register(jda);
 
 //Loops starten
+			
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
 			Loops.scheduleAtFixedRate(new TempBan(), 10, 60, TimeUnit.SECONDS);
 			System.out.println("TempBan-Loop wurde gestartet");
@@ -250,6 +157,7 @@ public class Main {
 			System.out.println("TempMute-Loop wurde gestartet");
 
 // Update für den Bot verfügbar?
+			
 			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
