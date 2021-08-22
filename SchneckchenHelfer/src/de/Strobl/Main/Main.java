@@ -46,7 +46,7 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.6.0";
+	public static String version = "v1.6.1";
 	public static List<String> ServerEmotesID;
 	public static void main(String[] arguments) {
 		try {

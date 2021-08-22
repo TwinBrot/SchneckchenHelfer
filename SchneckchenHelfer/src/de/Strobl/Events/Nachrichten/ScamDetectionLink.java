@@ -33,7 +33,7 @@ public class ScamDetectionLink extends ListenerAdapter {
 					Info.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl(), event.getAuthor().getAvatarUrl());
 					Info.addField("UserID:", event.getAuthor().getId(), false);
 					Info.addField("Nachrichten Inhalt:", Message, false);
-					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessage("<@227131380058947584>").queue();
+					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessage("<@227131380058947584> <@140206875596685312>").queue();
 					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessageEmbeds(Info.build()).queue();
 				}
 			}

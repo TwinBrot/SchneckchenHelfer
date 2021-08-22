@@ -17,9 +17,9 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		try {
 			String message = event.getMessage().getContentRaw().toLowerCase();
-			if (message.contains("free") && message.contains("http")) {
+			if ((message.contains("free") || message.contains("gift")) && message.contains("http")) {
 				if (message.contains("discord") || message.contains("steam") || message.contains("nitro")
-						|| message.contains("cs:go") || message.contains("csgo") || message.contains("skin")) {
+						|| message.contains("cs:go") || message.contains("csgo") || message.contains("skin") || message.contains("@everyone")) {
 					ini = new Wini(new File(Main.Pfad + "settings.ini"));
 					Guild guild = event.getGuild();
 					EmbedBuilder Info = new EmbedBuilder();
@@ -28,7 +28,7 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 					Info.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl(), event.getAuthor().getAvatarUrl());
 					Info.addField("UserID:", event.getAuthor().getId(), false);
 					Info.addField("Nachrichten Inhalt:", message, false);
-					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessage("<@227131380058947584>").queue();
+					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessage("<@227131380058947584> <@140206875596685312>").queue();
 					guild.getTextChannelById(ini.get("Settings","Settings.LogChannel")).sendMessageEmbeds(Info.build()).queue();
 				}
 			}
