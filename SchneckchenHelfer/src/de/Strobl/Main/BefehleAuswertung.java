@@ -3,6 +3,7 @@ package de.Strobl.Main;
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis.Hinweis;
 import de.Strobl.Commands.Server.UserInfo.Info;
+import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
 import net.dv8tion.jda.api.entities.Member;
@@ -127,6 +128,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 				case "onlinestatus":
 					return;
 				case "activity":
+					Aktivität.aktivität(event);
 					return;
 				case "afkchannel":
 					return;

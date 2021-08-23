@@ -116,29 +116,39 @@ public class Main {
 			Builder.addEventListeners(new EmoteRemoved());
 
 //Activity
-
-			if (ini.get("Settings", "Settings.Activity2").equalsIgnoreCase("playing")) {
-				Builder.setActivity(Activity.playing(ini.get("Settings", "Settings.Aktivity")));
-			} else if (ini.get("Settings", "Settings.Activity2").equalsIgnoreCase("listening")) {
-				Builder.setActivity(Activity.listening(ini.get("Settings", "Settings.Aktivity")));
-			} else if (ini.get("Settings", "Settings.Activity2").equalsIgnoreCase("streaming")) {
-				Builder.setActivity(Activity.streaming(ini.get("Settings", "Settings.Aktivity"),
-						ini.get("Settings", "Settings.StreamLink")));
-			} else if (ini.get("Settings", "Settings.Activity2").equalsIgnoreCase("watching")) {
-				Builder.setActivity(Activity.watching(ini.get("Settings", "Settings.Aktivity")));
+			String Text = ini.get("Settings", "Settings.AktivitätText");
+			String URL = ini.get("Settings", "Settings.StreamLink");
+			switch (ini.get("Settings", "Settings.AktivitätTyp")) {
+			case "playing":
+				Builder.setActivity(Activity.playing(Text)); 
+				break;
+			case "listening":
+				Builder.setActivity(Activity.listening(Text));
+				break;
+			case "watching":
+				Builder.setActivity(Activity.watching(Text)); 
+				break;
+			case "streaming":
+				Builder.setActivity(Activity.streaming(Text, URL)); 
+				break;
 			}
-
+			
 //Status
-
-			if (ini.get("Settings", "Settings.Status").equalsIgnoreCase("ONLINE")) {
-				Builder.setStatus(OnlineStatus.ONLINE);
-			} else if (ini.get("Settings", "Settings.Status").equalsIgnoreCase("IDLE")) {
-				Builder.setStatus(OnlineStatus.IDLE);
-			} else if (ini.get("Settings", "Settings.Status").equalsIgnoreCase("DO_NOT_DISTURB")) {
-				Builder.setStatus(OnlineStatus.DO_NOT_DISTURB);
-			} else if (ini.get("Settings", "Settings.Status").equalsIgnoreCase("INVISIBLE")) {
-				Builder.setStatus(OnlineStatus.INVISIBLE);
+			switch (ini.get("Settings", "Settings.Status")) {
+			case "ONLINE": 			
+				Builder.setStatus(OnlineStatus.ONLINE); 
+				break;
+			case "IDLE": 			
+				Builder.setStatus(OnlineStatus.IDLE); 
+				break;
+			case "DO_NOT_DISTURB":	
+				Builder.setStatus(OnlineStatus.DO_NOT_DISTURB); 
+				break;
+			case "INVISIBLE":		
+				Builder.setStatus(OnlineStatus.INVISIBLE); 
+				break;
 			}
+
 
 //JDA Starten und fertigstellung abwarten
 

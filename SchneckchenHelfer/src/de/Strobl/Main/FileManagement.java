@@ -19,9 +19,18 @@ public class FileManagement {
 				newFile.createNewFile();
 			}
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
+			if (ini.get("Settings", "Settings.Aktivity")!=null) {
+				ini.put("Settings", "Settings.AktivitätTyp", ini.get("Settings", "Settings.Aktivity"));
+				ini.remove("Settings", "Settings.Aktivity");
+				}
+			if (ini.get("Settings", "Settings.Activity2")!=null) {
+				ini.put("Settings", "Settings.AktivitätText", ini.get("Settings", "Settings.Activity2"));
+				ini.remove("Settings", "Settings.Activity2");
+				}
+			ini.store();
 			if (ini.get("Setup", "Token")==null) {ini.put("Setup", "Token", "NzIyODU4NDA3Mzg3ODU3MDQ3.XuqAiQ.eVkd3rLUaWuI4dEkv2ulCeSJKG8");}
-			if (ini.get("Settings", "Settings.Aktivity")==null) {ini.put("Settings", "Settings.Aktivity", "!hilfe");}
-			if (ini.get("Settings", "Settings.Activity2")==null) {ini.put("Settings", "Settings.Activity2", "playing");}
+			if (ini.get("Settings", "Settings.AktivitätTyp")==null) {ini.put("Settings", "Settings.AktivitätTyp", "!hilfe");}
+			if (ini.get("Settings", "Settings.AktivitätText")==null) {ini.put("Settings", "Settings.AktivitätText", "playing");}
 			if (ini.get("Settings", "Settings.StreamLink")==null) {ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");}
 			if (ini.get("Settings", "Settings.LogChannel")==null) {ini.put("Settings", "Settings.LogChannel", "");}
 			if (ini.get("Settings", "Settings.AFKVoice")==null) {ini.put("Settings", "Settings.AFKVoice", "no");}

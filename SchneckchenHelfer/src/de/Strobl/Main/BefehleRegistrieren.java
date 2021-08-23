@@ -29,10 +29,10 @@ public class BefehleRegistrieren {
 
 			commands.addCommands(new CommandData("activity", "Konfiguriert die Aktivität des Bots")
 					.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.")
-							.addChoice("playing", "Ändere Aktivität auf: 'Spielt...'")
-							.addChoice("watching", "Ändere Aktivität auf: 'Schaut...zu'")
-							.addChoice("listening", "Ändere Aktivität auf: 'Hört ... zu'")
-							.addChoice("streaming", "Ändere Aktivität auf: 'Streamt...'").setRequired(true))
+							.addChoice("playing", "playing")
+							.addChoice("watching", "watching")
+							.addChoice("listening", "listening")
+							.addChoice("streaming", "streaming").setRequired(true))
 					.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity")
 							.setRequired(true)));
 
@@ -159,7 +159,7 @@ public class BefehleRegistrieren {
 //						System.out.println("Befehle wurden registriert" + List),
 //			         (error) -> error.printStackTrace()
 //			     );
-			commands.queue(success -> System.out.println("\nBefehle wurden registriert: \n" + success),
+			commands.queue(success -> System.out.println("Befehle wurden registriert: " + success),
 					failure -> failure.printStackTrace());
 
 			System.out.println("");
