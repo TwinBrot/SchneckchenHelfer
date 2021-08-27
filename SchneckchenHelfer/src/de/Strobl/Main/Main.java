@@ -116,9 +116,10 @@ public class Main {
 			Builder.addEventListeners(new EmoteRemoved());
 
 //Activity
+			String Typ = ini.get("Settings", "Settings.AktivitätTyp");
 			String Text = ini.get("Settings", "Settings.AktivitätText");
 			String URL = ini.get("Settings", "Settings.StreamLink");
-			switch (ini.get("Settings", "Settings.AktivitätTyp")) {
+			switch (Typ) {
 			case "playing":
 				Builder.setActivity(Activity.playing(Text)); 
 				break;

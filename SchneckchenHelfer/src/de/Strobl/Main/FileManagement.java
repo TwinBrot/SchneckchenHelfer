@@ -20,11 +20,11 @@ public class FileManagement {
 			}
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			if (ini.get("Settings", "Settings.Aktivity")!=null) {
-				ini.put("Settings", "Settings.AktivitätTyp", ini.get("Settings", "Settings.Aktivity"));
+				ini.put("Settings", "Settings.AktivitätText", ini.get("Settings", "Settings.Aktivity"));
 				ini.remove("Settings", "Settings.Aktivity");
 				}
 			if (ini.get("Settings", "Settings.Activity2")!=null) {
-				ini.put("Settings", "Settings.AktivitätText", ini.get("Settings", "Settings.Activity2"));
+				ini.put("Settings", "Settings.AktivitätTyp", ini.get("Settings", "Settings.Activity2"));
 				ini.remove("Settings", "Settings.Activity2");
 				}
 			ini.store();
