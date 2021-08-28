@@ -20,8 +20,8 @@ import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
+import de.Strobl.Events.Nachrichten.Filechecker;
 import de.Strobl.Events.Nachrichten.OnEmoteSentEvent;
-import de.Strobl.Events.Nachrichten.OnFileSentEvent;
 import de.Strobl.Events.Nachrichten.OnMessageReactionRemoveEvent;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
 import de.Strobl.Events.Nachrichten.ScamDetectionLink;
@@ -51,12 +51,13 @@ public class Main {
 	public static void main(String[] arguments) {
 		try {
 //Logger Levels:
-//			logger.fatal("Bot funktioniert nicht mehr");
-//			logger.error("Funktion ist fehlgeschlagen");
-//			logger.warn("Veraltet, Bot musste Dateien erstellen");
-//			logger.info("Information");
-//			logger.debug("DEBUG");
-//			logger.trace("TRACE");
+//logger.fatal("Bot funktioniert nicht mehr");
+//logger.error("Funktion ist fehlgeschlagen");
+//logger.warn("Veraltet, Bot musste Dateien erstellen");
+//logger.info("Information");
+//logger.debug("DEBUG");
+//logger.trace("TRACE");
+
 			FileManagement.Update();
 
 //JDA Builder
@@ -91,7 +92,7 @@ public class Main {
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
 			Builder.addEventListeners(new OnGuildMemberJoinEvent());
 			Builder.addEventListeners(new OnMessageReactionRemoveEvent());
-			Builder.addEventListeners(new OnFileSentEvent());
+			Builder.addEventListeners(new Filechecker());
 			Builder.addEventListeners(new OnEmoteSentEvent());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());

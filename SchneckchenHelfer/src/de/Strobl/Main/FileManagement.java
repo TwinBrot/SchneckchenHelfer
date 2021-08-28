@@ -10,17 +10,21 @@ public class FileManagement {
 	@SuppressWarnings("unused")
 	public static void Update() {
 		Logger logger = Main.logger;
+		String Pfad = Main.Pfad;
 		try {
 //Read settings.ini File
 			try {
-				Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
+				Wini ini = new Wini(new File(Pfad + "settings.ini"));
 			} catch (IOException e) {
 				logger.warn("settings.ini nicht gefunden.");
 				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Main.Pfad + "settings.ini");
+				File newFile = new File(Pfad + "settings.ini");
 				newFile.createNewFile();
 			}
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
+			Wini ini = new Wini(new File(Pfad + "settings.ini"));
+
+//Migration of Settings
+
 			if (ini.get("Settings", "Settings.Aktivity") != null) {
 				ini.put("Settings", "Settings.AktivitätText", ini.get("Settings", "Settings.Aktivity"));
 				ini.remove("Settings", "Settings.Aktivity");
@@ -30,14 +34,17 @@ public class FileManagement {
 				ini.remove("Settings", "Settings.Activity2");
 			}
 			ini.store();
+
+//Check for Not Existing Settings
+
 			if (ini.get("Setup", "Token") == null) {
-				ini.put("Setup", "Token", "NzIyODU4NDA3Mzg3ODU3MDQ3.XuqAiQ.eVkd3rLUaWuI4dEkv2ulCeSJKG8");
-			}
-			if (ini.get("Settings", "Settings.AktivitätTyp") == null) {
-				ini.put("Settings", "Settings.AktivitätTyp", "!hilfe");
+				ini.put("Setup", "Token", "INPUT_TOKEN_HERE");
 			}
 			if (ini.get("Settings", "Settings.AktivitätText") == null) {
 				ini.put("Settings", "Settings.AktivitätText", "playing");
+			}
+			if (ini.get("Settings", "Settings.AktivitätTyp") == null) {
+				ini.put("Settings", "Settings.AktivitätTyp", "/hilfe");
 			}
 			if (ini.get("Settings", "Settings.StreamLink") == null) {
 				ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
@@ -46,10 +53,16 @@ public class FileManagement {
 				ini.put("Settings", "Settings.LogChannel", "");
 			}
 			if (ini.get("Settings", "Settings.AFKVoice") == null) {
-				ini.put("Settings", "Settings.AFKVoice", "no");
+				ini.put("Settings", "Settings.AFKVoice", "");
 			}
 			if (ini.get("Settings", "Settings.Status") == null) {
 				ini.put("Settings", "Settings.Status", "ONLINE");
+			}
+			if (ini.get("ModRollen", "Admin") == null) {
+				ini.put("ModRollen", "Admin", "[0]");
+			}
+			if (ini.get("ModRollen", "Mod") == null) {
+				ini.put("ModRollen", "Mod", "[0]");
 			}
 			if (ini.get("ModRollen", "Channelmod") == null) {
 				ini.put("ModRollen", "Channelmod", "[0]");
@@ -58,27 +71,26 @@ public class FileManagement {
 				ini.put("Dateiüberwachung", "Active", "false");
 			}
 			if (ini.get("Dateiüberwachung", "Allowed") == null) {
-				ini.put("Dateiüberwachung", "Allowed",
-						"[0, jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp]");
+				ini.put("Dateiüberwachung", "Allowed", "jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp");
 			}
 			if (ini.get("Namensüberwachung", "Active") == null) {
 				ini.put("Namensüberwachung", "Active", "false");
 			}
 			if (ini.get("Namensüberwachung", "Verboten") == null) {
-				ini.put("Namensüberwachung", "Verboten", "[*~+]");
+				ini.put("Namensüberwachung", "Verboten", "");
 			}
 			ini.store();
 
 // Read Emotes.ini File
 			try {
-				Wini emotes = new Wini(new File(Main.Pfad + "Emotes.ini"));
+				Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
 			} catch (IOException e) {
 				logger.warn("Emotes.ini nicht gefunden.");
 				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Main.Pfad + "Emotes.ini");
+				File newFile = new File(Pfad + "Emotes.ini");
 				newFile.createNewFile();
 			}
-			Wini emotes = new Wini(new File(Main.Pfad + "Emotes.ini"));
+			Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
 			if (emotes.get("Embed", "Count") == null) {
 				emotes.put("Embed", "Count", "24");
 			}
@@ -86,26 +98,26 @@ public class FileManagement {
 
 // Read Strafen.ini File
 			try {
-				Wini Strafen = new Wini(new File(Main.Pfad + "Strafen.ini"));
+				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
 			} catch (IOException e) {
 				logger.warn("Strafen.ini nicht gefunden.");
 				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Main.Pfad + "Strafen.ini");
+				File newFile = new File(Pfad + "Strafen.ini");
 				newFile.createNewFile();
-				Wini Strafen = new Wini(new File(Main.Pfad + "Strafen.ini"));
+				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
 				Strafen.store();
 			}
 
 // Read ID.ini File
 			try {
-				Wini ID = new Wini(new File(Main.Pfad + "ID.ini"));
+				Wini ID = new Wini(new File(Pfad + "ID.ini"));
 			} catch (IOException e) {
 				logger.warn("ID.ini nicht gefunden.");
 				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Main.Pfad + "ID.ini");
+				File newFile = new File(Pfad + "ID.ini");
 				newFile.createNewFile();
 			}
-			Wini Auswertung = new Wini(new File(Main.Pfad + "ID.ini"));
+			Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
 			if (Auswertung.get("Hinweise", "Counter") == null) {
 				Auswertung.put("Hinweise", "Counter", "0");
 			}
@@ -113,14 +125,14 @@ public class FileManagement {
 
 // Read Link.ini File
 			try {
-				Wini Link = new Wini(new File(Main.Pfad + "Link.ini"));
+				Wini Link = new Wini(new File(Pfad + "Link.ini"));
 			} catch (IOException e) {
 				logger.warn("Link.ini nicht gefunden.");
 				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Main.Pfad + "Link.ini");
+				File newFile = new File(Pfad + "Link.ini");
 				newFile.createNewFile();
 			}
-			Wini Link = new Wini(new File(Main.Pfad + "Link.ini"));
+			Wini Link = new Wini(new File(Pfad + "Link.ini"));
 			if (Link.isEmpty()) {
 				Link.clear();
 				Link.putComment("Links", "Add Links like this:   COUNTER = LINK");
