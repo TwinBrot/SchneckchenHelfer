@@ -3,6 +3,7 @@ package de.Strobl.Events.User;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -15,10 +16,11 @@ public class OnuserUpdateNameEvent extends ListenerAdapter {
 
 	@Override
 	public void onUserUpdateName(UserUpdateNameEvent event) {
+		Logger logger = Main.logger;
 		try {
 			ini = new Wini(new File(Main.Pfad + "settings.ini"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("IO-Fehler", e);
 		}
 		String Alarm;
 		Alarm = "false";
@@ -59,7 +61,7 @@ public class OnuserUpdateNameEvent extends ListenerAdapter {
 					join.clear();
 					// Logchannel nicht eingerichtet
 				} catch (Exception e) {
-					System.out.println("Kein Logchannel eingerichtet");
+					logger.info("Kein Logchannel eingerichtet");
 				}
 			}
 		}

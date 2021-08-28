@@ -1,5 +1,7 @@
 package de.Strobl.Main;
 
+import org.apache.logging.log4j.Logger;
+
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis.Hinweis;
 import de.Strobl.Commands.Server.UserInfo.Info;
@@ -14,6 +16,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class BefehleAuswertung extends ListenerAdapter {
 
 	public void onSlashCommand(SlashCommandEvent event) {
+		Logger logger = Main.logger;
 		try {
 			event.deferReply(true).queue();
 			InteractionHook EventHook = event.getHook();
@@ -22,12 +25,12 @@ public class BefehleAuswertung extends ListenerAdapter {
 
 			if (!event.isFromGuild()) {
 				EventHook.editOriginal("Diese Befehle funktionieren nur auf dem Server.").queue();
-				System.out.println("Befehl in den Privatnachrichten erkannt. Abbruch");
+				logger.info("Befehl in den Privatnachrichten erkannt. Abbruch");
 				return;
 			}
-			System.out.println("Befehl erkannt:");
-			System.out.println("Author: " + event.getMember());
-			System.out.println("Befehl: " + event.getName() + "   " + event.getOptions());
+			logger.info("Befehl erkannt:");
+			logger.info("Author: " + event.getMember());
+			logger.info("Befehl: " + event.getName() + "   " + event.getOptions());
 
 // Modrollen Abfragen
 //-1 = Fehler		
@@ -137,9 +140,9 @@ public class BefehleAuswertung extends ListenerAdapter {
 				}
 			}
 			EventHook.sendMessage("Befehl nicht gefunden. Bitte klär das mit Twin.").setEphemeral(false).queue();
-			System.out.println(event.getName());
+			logger.info(event.getName());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 	}

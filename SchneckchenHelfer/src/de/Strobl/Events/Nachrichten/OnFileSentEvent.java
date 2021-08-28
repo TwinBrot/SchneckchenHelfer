@@ -3,6 +3,7 @@ package de.Strobl.Events.Nachrichten;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -19,6 +20,7 @@ public class OnFileSentEvent extends ListenerAdapter {
 	public String ID;
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		Logger logger = Main.logger;
 		try {
 			Endung = null;
 //Datei lesen
@@ -26,7 +28,7 @@ public class OnFileSentEvent extends ListenerAdapter {
 				ini = new Wini(new File(Main.Pfad + "settings.ini"));
 				active = ini.get("Dateiüberwachung", "Active");
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("IO-Fehler", e);
 			}
 //Datei erkennung & Aktiv
 			if (!event.getMessage().getAttachments().isEmpty() && active.equals("true") && !event.getAuthor().isBot()) {
@@ -59,7 +61,7 @@ public class OnFileSentEvent extends ListenerAdapter {
 							Dateigelöscht.clear();
 							event.getMessage().delete().queue();
 						} catch (Exception e) {
-							System.out.println("Kein Logchannel eingerichtet");
+							logger.error("Kein Logchannel eingerichtet", e);
 						}
 					}
 				} catch (NullPointerException e) {
@@ -81,12 +83,12 @@ public class OnFileSentEvent extends ListenerAdapter {
 						Dateigelöscht.clear();
 						event.getMessage().delete().queue();
 					} catch (Exception e1) {
-						System.out.println("Kein Logchannel eingerichtet");
+						logger.error("Kein Logchannel eingerichtet", e);
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler", e);
 		}
 	}
 }

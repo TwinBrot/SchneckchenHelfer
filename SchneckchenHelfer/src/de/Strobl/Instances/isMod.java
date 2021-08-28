@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class isMod {
 	public static Wini ini;
 	public static Integer check (SlashCommandEvent event, InteractionHook EventHook) {
+		Logger logger = Main.logger;
 		
 //-1 = Fehler		
 //0 = User ist kein Mod
@@ -33,7 +35,7 @@ public class isMod {
 				ini = new Wini (new File(Main.Pfad + "settings.ini"));
 			} catch (IOException e1) {
 				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.").queue();
-				e1.printStackTrace();
+				logger.error("Fehler:", e1);
 				return -1;
 			}
 			
@@ -98,7 +100,7 @@ public class isMod {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler:", e);
 			EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.").queue();
 			return -1;
 		}

@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
@@ -18,11 +19,12 @@ public class OnGuildMemberJoinEvent extends ListenerAdapter {
 	Wini ini;
 
 	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+		Logger logger = Main.logger;
 
 		try {
 			ini = new Wini(new File(Main.Pfad + "settings.ini"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler", e);
 		}
 		String Alarm;
 		Alarm = "false";
@@ -67,7 +69,7 @@ public class OnGuildMemberJoinEvent extends ListenerAdapter {
 					join.clear();
 					// Kein LogChannel
 				} catch (Exception e) {
-					System.out.println("Kein Logchannel eingerichtet");
+					logger.info("Kein Logchannel eingerichtet");
 				}
 			}
 		}
@@ -97,15 +99,15 @@ public class OnGuildMemberJoinEvent extends ListenerAdapter {
 			try {
 				newFile.createNewFile();
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				logger.error("IO-Fehler", e1);
 			}
 			Wini iniMember = null;
 			try {
 				iniMember = new Wini(new File(Main.Userpfad + event.getMember().getId() + ".ini"));
 			} catch (InvalidFileFormatException e1) {
-				e1.printStackTrace();
+				logger.error("Fehler", e1);
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				logger.error("Fehler", e1);
 			}
 //IDs
 			iniMember.put("Userdata", "Join", event.getMember().getTimeJoined().format(fmt));
@@ -113,7 +115,7 @@ public class OnGuildMemberJoinEvent extends ListenerAdapter {
 			try {
 				iniMember.store();
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				logger.error("IO-Fehler", e1);
 			}
 
 		}

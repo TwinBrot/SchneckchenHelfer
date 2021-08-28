@@ -3,6 +3,7 @@ package de.Strobl.Events.Nachrichten;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class OnEmoteSentEvent extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		Logger logger = Main.logger;
 		try {
 //			event.getGuild().retrieveEmotes().queue(GuildEmotes -> {
 //				List<ListedEmote> ServerEmotes = GuildEmotes;
@@ -26,7 +28,8 @@ public class OnEmoteSentEvent extends ListenerAdapter {
 				try {
 					emoteslog = new Wini(new File(Main.Pfad + "Emotes.ini"));
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("IO-Fehler", e);
+					return;
 				}
 				for (int i = 0; Emotes.size() > i; i++) {
 					if (Main.ServerEmotesID.contains(Emotes.get(i)) && !event.getAuthor().isBot()) {
@@ -39,7 +42,7 @@ public class OnEmoteSentEvent extends ListenerAdapter {
 						try {
 							emoteslog.store();
 						} catch (Exception e) {
-							System.out.println("Konnte Emotes.ini nicht beschreiben!");
+							logger.error("Konnte Emotes.ini nicht beschreiben!", e);
 						}
 					} else {
 					}
@@ -48,7 +51,7 @@ public class OnEmoteSentEvent extends ListenerAdapter {
 //			});
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler", e);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package de.Strobl.Events.Nachrichten;
 import java.io.File;
 import java.time.ZonedDateTime;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Profile.Section;
 import org.ini4j.Wini;
 
@@ -18,6 +19,7 @@ public class ScamDetectionLink extends ListenerAdapter {
 	public Section Links;
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		Logger logger = Main.logger;
 		try {
 			ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			Link = new Wini(new File(Main.Pfad + "Link.ini"));
@@ -38,7 +40,7 @@ public class ScamDetectionLink extends ListenerAdapter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("IO-Fehler", e);
 		}
 	}
 }

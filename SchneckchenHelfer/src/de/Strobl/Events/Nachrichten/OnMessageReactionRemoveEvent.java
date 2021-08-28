@@ -2,6 +2,7 @@ package de.Strobl.Events.Nachrichten;
 
 import java.io.File;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -12,13 +13,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class OnMessageReactionRemoveEvent extends ListenerAdapter {
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+		Logger logger = Main.logger;
 		try {
 //Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353")
 					&& !event.getChannel().getId().equals("720439181696041122")) {
 				EmbedBuilder ReactionRemoved = new EmbedBuilder();
-
-				System.out.println();
 
 				try {
 					ReactionRemoved.setThumbnail(event.getReactionEmote().getEmote().getImageUrl());
@@ -43,7 +43,7 @@ public class OnMessageReactionRemoveEvent extends ListenerAdapter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("IO-Fehler", e);
 		}
 	}
 }

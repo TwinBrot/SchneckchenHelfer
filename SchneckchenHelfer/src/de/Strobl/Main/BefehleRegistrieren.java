@@ -5,6 +5,8 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.ROLE;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
 
+import org.apache.logging.log4j.Logger;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -14,9 +16,10 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 public class BefehleRegistrieren {
 
 	public static void register(JDA jda) {
+		Logger logger = Main.logger;
 		try {
-			System.out.println("");
-			System.out.println("Befehle werden registriert");
+			logger.info("");
+			logger.info("Befehle werden registriert");
 			CommandListUpdateAction commands = jda.updateCommands();
 
 //Setup
@@ -156,13 +159,13 @@ public class BefehleRegistrieren {
 
 //			commands.queue(
 //			         (List) -> 
-//						System.out.println("Befehle wurden registriert" + List),
+//						logger.info("Befehle wurden registriert" + List),
 //			         (error) -> error.printStackTrace()
 //			     );
-			commands.queue(success -> System.out.println("Befehle wurden registriert: " + success),
+			commands.queue(success -> logger.info("Befehle wurden registriert: " + success),
 					failure -> failure.printStackTrace());
 
-			System.out.println("");
+			logger.info("");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

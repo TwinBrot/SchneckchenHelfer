@@ -3,18 +3,20 @@ package de.Strobl.Main;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 public class FileManagement {
 	@SuppressWarnings("unused")
 	public static void Update() {
+		Logger logger = Main.logger;
 		try {
 //Read settings.ini File
 			try {
 				Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			} catch (IOException e) {
-				System.err.println("settings.ini nicht gefunden.");
-				System.err.println("Versuche Datei zu erstellen.");
+				logger.warn("settings.ini nicht gefunden.");
+				logger.warn("Versuche Datei zu erstellen.");
 				File newFile = new File(Main.Pfad + "settings.ini");
 				newFile.createNewFile();
 			}
@@ -71,8 +73,8 @@ public class FileManagement {
 			try {
 				Wini emotes = new Wini(new File(Main.Pfad + "Emotes.ini"));
 			} catch (IOException e) {
-				System.err.println("Emotes.ini nicht gefunden.");
-				System.err.println("Versuche Datei zu erstellen.");
+				logger.warn("Emotes.ini nicht gefunden.");
+				logger.warn("Versuche Datei zu erstellen.");
 				File newFile = new File(Main.Pfad + "Emotes.ini");
 				newFile.createNewFile();
 			}
@@ -86,8 +88,8 @@ public class FileManagement {
 			try {
 				Wini Strafen = new Wini(new File(Main.Pfad + "Strafen.ini"));
 			} catch (IOException e) {
-				System.err.println("Strafen.ini nicht gefunden.");
-				System.err.println("Versuche Datei zu erstellen.");
+				logger.warn("Strafen.ini nicht gefunden.");
+				logger.warn("Versuche Datei zu erstellen.");
 				File newFile = new File(Main.Pfad + "Strafen.ini");
 				newFile.createNewFile();
 				Wini Strafen = new Wini(new File(Main.Pfad + "Strafen.ini"));
@@ -98,8 +100,8 @@ public class FileManagement {
 			try {
 				Wini ID = new Wini(new File(Main.Pfad + "ID.ini"));
 			} catch (IOException e) {
-				System.err.println("ID.ini nicht gefunden.");
-				System.err.println("Versuche Datei zu erstellen.");
+				logger.warn("ID.ini nicht gefunden.");
+				logger.warn("Versuche Datei zu erstellen.");
 				File newFile = new File(Main.Pfad + "ID.ini");
 				newFile.createNewFile();
 			}
@@ -113,8 +115,8 @@ public class FileManagement {
 			try {
 				Wini Link = new Wini(new File(Main.Pfad + "Link.ini"));
 			} catch (IOException e) {
-				System.err.println("Link.ini nicht gefunden.");
-				System.err.println("Versuche Datei zu erstellen.");
+				logger.warn("Link.ini nicht gefunden.");
+				logger.warn("Versuche Datei zu erstellen.");
 				File newFile = new File(Main.Pfad + "Link.ini");
 				newFile.createNewFile();
 			}
@@ -134,16 +136,16 @@ public class FileManagement {
 			File file = new File(Main.Userpfad);
 			if (!file.exists()) {
 				if (file.mkdir()) {
-					System.err.println("User-Dateien Ordner nicht gefunden.");
-					System.err.println("Versuche Ordner zu erstellen.");
+					logger.warn("User-Dateien Ordner nicht gefunden.");
+					logger.warn("Versuche Ordner zu erstellen.");
 				} else {
-					System.err.println("Konnte User-Ordner nicht erstellen!");
+					logger.warn("Konnte User-Ordner nicht erstellen!");
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Fehler beim anlegen der Dateien.");
+			logger.fatal("Fehler beim anlegen der Dateien.");
 		}
 	}
 }

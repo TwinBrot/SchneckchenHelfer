@@ -3,6 +3,7 @@ package de.Strobl.Events.Nachrichten;
 import java.io.File;
 import java.time.ZonedDateTime;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -15,6 +16,7 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 	public static Wini ini;
 
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+		Logger logger = Main.logger;
 		try {
 			String message = event.getMessage().getContentRaw().toLowerCase();
 //Link enthalten
@@ -38,7 +40,7 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("IO-Fehler", e);
 		}
 	}
 }

@@ -44,22 +44,19 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.6.2";
+	public static String version = "v1.6.3";
 	public static List<String> ServerEmotesID;
-	private static final Logger logger = LogManager.getLogger(Main.class);
+	public static final Logger logger = LogManager.getLogger(Main.class);
 
 	public static void main(String[] arguments) {
 		try {
-			
-			logger.fatal("Fatal");
-			logger.error("ERROR");
-			logger.warn("WARN");
-			logger.info("INFO");
-			logger.debug("DEBUG");
-			logger.trace("TRACE");
-
-			
-			
+//Logger Levels:
+//			logger.fatal("Bot funktioniert nicht mehr");
+//			logger.error("Funktion ist fehlgeschlagen");
+//			logger.warn("Veraltet, Bot musste Dateien erstellen");
+//			logger.info("Information");
+//			logger.debug("DEBUG");
+//			logger.trace("TRACE");
 			FileManagement.Update();
 
 //JDA Builder
@@ -156,7 +153,7 @@ public class Main {
 			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
-				logger.info("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
+				logger.warn("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
 			}
 
 //Cache Emotes
@@ -171,14 +168,10 @@ public class Main {
 //Fehler Management
 
 		} catch (IOException e) {
-			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
-			System.err.println(
-					"\nSignals that an I/O exception of some sort has occurred. Thisclass is the general class of exceptions produced by failed orinterrupted I/O operations.\n");
-			e.printStackTrace();
+			logger.fatal("IOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?", e);
 
 		} catch (LoginException | InterruptedException e) {
-			System.err.println("\nFehler beim Initialisieren des Bots. Ist der Token richtig?\n");
-			e.printStackTrace();
+			logger.fatal("Fehler beim Initialisieren des Bots. Ist der Token richtig:", e);
 
 		}
 	}
