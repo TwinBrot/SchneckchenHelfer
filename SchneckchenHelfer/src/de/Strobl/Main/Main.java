@@ -2,9 +2,6 @@ package de.Strobl.Main;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -13,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -47,50 +46,35 @@ public class Main {
 	public static JDA jda;
 	public static String version = "v1.6.2";
 	public static List<String> ServerEmotesID;
-	public static void main(String[] arguments) {	
+	private static final Logger logger = LogManager.getLogger(Main.class);
+
+	public static void main(String[] arguments) {
 		try {
-//Timestamp in console
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'['dd.MM.yyyy'  'HH:mm:ss']:  '");
-			PrintStream TimestampOutputStream = new PrintStream(System.out) {
-			    @Override
-			    public void print(String x) {
-			        super.print(ZonedDateTime.now().format(formatter) + x);
-			    }
-			};
-			PrintStream TimestampErrorStream = new PrintStream(System.err) {
-			    @Override
-			    public void print(String x) {
-			        super.print(ZonedDateTime.now().format(formatter) + x);
-			    }
-			};
-			System.setOut(TimestampOutputStream);
-			System.setErr(TimestampErrorStream);
 			
-//			PrintStream outStream = System.out;
-//			OutputStream os = new FileOutputStream(Pfad + "log.txt", true);
-//			PrintStream fileStream = new PrintStream(new TeeOutputStream(outStream, os));
-//			System.setOut(fileStream);
+			logger.fatal("Fatal");
+			logger.error("ERROR");
+			logger.warn("WARN");
+			logger.info("INFO");
+			logger.debug("DEBUG");
+			logger.trace("TRACE");
+
 			
-//			PrintStream errStream = System.err;
-//			OutputStream err = new FileOutputStream(Pfad + "log.txt", true);
-//			PrintStream errorStream = new PrintStream(new TeeOutputStream(errStream, err));
-//			System.setErr(errorStream);
 			
 			FileManagement.Update();
-			
+
 //JDA Builder
-			
+
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			System.out.println("----------------------------------------------");
-			System.out.println("----------------------------------------------");
-			System.out.println("JDA wird gestartet");
+			logger.info("----------------------------------------------");
+			logger.info("----------------------------------------------");
+			logger.info("JDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,
 					GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
 					GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
-			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS,
-					GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING,
-					GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES,
+					GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING,
+					GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES,
 					CacheFlag.ROLE_TAGS, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
 			Builder.disableCache(CacheFlag.ONLINE_STATUS);
@@ -121,74 +105,71 @@ public class Main {
 			String URL = ini.get("Settings", "Settings.StreamLink");
 			switch (Typ) {
 			case "playing":
-				Builder.setActivity(Activity.playing(Text)); 
+				Builder.setActivity(Activity.playing(Text));
 				break;
 			case "listening":
 				Builder.setActivity(Activity.listening(Text));
 				break;
 			case "watching":
-				Builder.setActivity(Activity.watching(Text)); 
+				Builder.setActivity(Activity.watching(Text));
 				break;
 			case "streaming":
-				Builder.setActivity(Activity.streaming(Text, URL)); 
-				break;
-			}
-			
-//Status
-			switch (ini.get("Settings", "Settings.Status")) {
-			case "ONLINE": 			
-				Builder.setStatus(OnlineStatus.ONLINE); 
-				break;
-			case "IDLE": 			
-				Builder.setStatus(OnlineStatus.IDLE); 
-				break;
-			case "DO_NOT_DISTURB":	
-				Builder.setStatus(OnlineStatus.DO_NOT_DISTURB); 
-				break;
-			case "INVISIBLE":		
-				Builder.setStatus(OnlineStatus.INVISIBLE); 
+				Builder.setActivity(Activity.streaming(Text, URL));
 				break;
 			}
 
+//Status
+			switch (ini.get("Settings", "Settings.Status")) {
+			case "ONLINE":
+				Builder.setStatus(OnlineStatus.ONLINE);
+				break;
+			case "IDLE":
+				Builder.setStatus(OnlineStatus.IDLE);
+				break;
+			case "DO_NOT_DISTURB":
+				Builder.setStatus(OnlineStatus.DO_NOT_DISTURB);
+				break;
+			case "INVISIBLE":
+				Builder.setStatus(OnlineStatus.INVISIBLE);
+				break;
+			}
 
 //JDA Starten und fertigstellung abwarten
 
 			jda = Builder.build().awaitReady();
-			System.out.println("JDA wurde gestartet");
+			logger.info("JDA wurde gestartet");
 
 //Befehle anmelden
 
 			BefehleRegistrieren.register(jda);
 
 //Loops starten
-			
+
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
 			Loops.scheduleAtFixedRate(new TempBan(), 10, 60, TimeUnit.SECONDS);
-			System.out.println("TempBan-Loop wurde gestartet");
+			logger.info("TempBan-Loop wurde gestartet");
 			Loops.scheduleAtFixedRate(new TempMute(), 10, 60, TimeUnit.SECONDS);
-			System.out.println("TempMute-Loop wurde gestartet");
+			logger.info("TempMute-Loop wurde gestartet");
 
 // Update für den Bot verfügbar?
-			
+
 			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
-				System.out.println("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
+				logger.info("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
 			}
-			
-			
+
 //Cache Emotes
-			
+
 			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
 				ServerEmotesID = new ArrayList<String>();
 				GuildEmotes.forEach(Emote -> {
 					ServerEmotesID.add(Emote.getId());
 				});
 			});
-			
-			
+
 //Fehler Management
-			
+
 		} catch (IOException e) {
 			System.err.println("\nIOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?");
 			System.err.println(
