@@ -8,14 +8,7 @@
 				</pattern>>
 			</PatternLayout>
 		</Console>
-		<File name="File-Appender" fileName="./log.log" bufferedIO="false">
-			<PatternLayout>
-				<pattern>
-					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %c{1} - %msg%n
-				</pattern>
-			</PatternLayout>
-		</File>  
-		<RollingFile name="RollFile-Appender" fileName="./debug/log.log" filePattern="./debug/%d{yyyy-MM-dd-HH}.%i.log.gz">
+		<RollingFile name="RollFile-Appender" fileName="./log/log.log" filePattern="./log/%d{yyyy.MM.dd HH.mm.ss}.%i.log.gz">
 			<PatternLayout>
 				<pattern>
 					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %c{1} - %msg%n
@@ -23,14 +16,13 @@
 			</PatternLayout>
 		<Policies>
 			<OnStartupTriggeringPolicy />
-			<TimeBasedTriggeringPolicy interval ="24"/>
 		</Policies>
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="INFO">
+		<Root level="Info">
 		<AppenderRef ref="Console-Appender" />
-		<AppenderRef ref="File-Appender" />
+		<AppenderRef ref="RollFile-Appender" />
 		</Root>
 	</Loggers>
 </Configuration>
