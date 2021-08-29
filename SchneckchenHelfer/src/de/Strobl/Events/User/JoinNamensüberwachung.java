@@ -9,21 +9,17 @@ import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class OnuserUpdateNameEvent extends ListenerAdapter {
-	public Wini ini;
-
-	@Override
-	public void onUserUpdateName(UserUpdateNameEvent event) {
+public class JoinNamensüberwachung extends ListenerAdapter {
+	public void onGuildMemberJoin(GuildMemberJoinEvent event) {
 		Logger logger = Main.logger;
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 //Namensüberwachung aktiv
 			if (ini.get("Namensüberwachung", "Active").equals("true")) {
-				String ID = event.getUser().getId();
+				String ID = event.getMember().getId();
 //Ausnahmen
 				if (!ID.equals("137612175454765056") && !ID.equals("196990278643613696") && !ID.equals("137267295801049088")
 						&& !ID.equals("137300611212247040") && !ID.equals("109777843046645760") && !ID.equals("137258978479439873")
@@ -37,17 +33,17 @@ public class OnuserUpdateNameEvent extends ListenerAdapter {
 //Namens erkennung
 					for (int i = 0; i < Namen.size(); i++) {
 						if (event.getUser().getName().toLowerCase().contains(Namen.get(i))) {
-							String LogChannelID = ini.get("Settings", "Settings.LogChannel");
-							if (!LogChannelID.equals("")) {
+							String LogChannel = ini.get("Settings", "Settings.LogChannel");
+							if (!LogChannel.equals("")) {
 								EmbedBuilder join = new EmbedBuilder();
 								join.setColor(0x110acc);
 								join.setAuthor("Neuer User mit verbotenem Namen", event.getJDA().getGuilds().get(0).getIconUrl(),
 										event.getJDA().getGuilds().get(0).getIconUrl());
-								join.addField("UserID: " + event.getUser().getId(), "User: " + event.getUser().getAsMention(), false);
-								join.setFooter("Name: " + event.getUser().getName());
-								TextChannel LogChannel = event.getJDA().getGuilds().get(0).getTextChannelById(LogChannelID);
-								LogChannel.sendMessageEmbeds(join.build()).queue();
-								LogChannel.sendMessage("<@227131380058947584>").queue();
+								join.addField("UserID: " + event.getMember().getId(), "User: " + event.getMember().getAsMention(), false);
+								join.setFooter("Name: " + event.getMember().getUser().getName());
+								event.getGuild().getTextChannelById(LogChannel).sendMessageEmbeds(join.build()).queue();
+								event.getGuild().getTextChannelById(LogChannel)
+										.sendMessage(event.getJDA().getGuilds().get(0).getMemberById("227131380058947584").getAsMention()).queue();
 								join.clear();
 							}
 						}

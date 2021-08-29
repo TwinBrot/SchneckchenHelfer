@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -16,15 +17,15 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Info {
-	public static void info (SlashCommandEvent event, Member member, InteractionHook EventHook) {
-		ZoneId zone = ZoneId.of("Europe/Paris");
-		
-		DateTimeFormatter date = DateTimeFormatter.ofPattern("dd.MM.yyyy \n HH:mm").withZone(zone);
-		
-		try{
+	public static void info(SlashCommandEvent event, Member member, InteractionHook EventHook) {
+		Logger logger = Main.logger;
+		try {
+			ZoneId zone = ZoneId.of("Europe/Paris");
+			DateTimeFormatter date = DateTimeFormatter.ofPattern("dd.MM.yyyy \n HH:mm").withZone(zone);
 
 			List<Role> rolesList = member.getRoles();
 			String roles;
+
 			if (!rolesList.isEmpty()) {
 				Role tempRole = (Role) rolesList.get(0);
 				roles = tempRole.getAsMention();
@@ -35,7 +36,7 @@ public class Info {
 			} else {
 				roles = "Keine Rollen";
 			}
-			
+
 			EmbedBuilder info = new EmbedBuilder();
 			info.setAuthor(member.getEffectiveName() + "     UserID: " + member.getId(), member.getUser().getAvatarUrl(), member.getUser().getAvatarUrl());
 			info.addField("Serverbeitritt:", member.getTimeJoined().format(date), true);
@@ -46,9 +47,9 @@ public class Info {
 			info.setTimestamp(LocalDateTime.now());
 			try {
 				Wini ini1 = null;
-		  		ini1 = new Wini (new File(Main.Userpfad + member.getId() + ".ini"));
+				ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
 				info.addField("Bans:", ini1.get("Bans").size() + "", true);
-			}catch (Exception e) {
+			} catch (Exception e) {
 				info.addField("Bans:", "Keine", true);
 			}
 //			try {
@@ -60,19 +61,19 @@ public class Info {
 //			}
 			try {
 				Wini ini1 = null;
-		  		ini1 = new Wini (new File(Main.Userpfad + member.getId() + ".ini"));
+				ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
 				info.addField("Hinweise:", ini1.get("Hinweise").size() + "", true);
-			}catch (Exception e) {
+			} catch (Exception e) {
 				info.addField("Hinweise:", "Keine", true);
 			}
 			event.getChannel().sendMessageEmbeds(info.build()).queue();
 			EventHook.editOriginal("Erledigt.").queue();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
+
+
+		} catch (Exception e) {
+			logger.error("Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("Fehler beim Ausführen.").queue();
-			return;
 		}
-		
+
 	}
 }

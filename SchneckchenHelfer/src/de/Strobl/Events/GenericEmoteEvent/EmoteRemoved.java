@@ -22,7 +22,7 @@ public class EmoteRemoved extends ListenerAdapter {
 				});
 			});
 		} catch (Exception e) {
-			logger.error("IO-Fehler", e);
+			logger.error("Fehler Emoteliste aktuallisieren", e);
 		}
 	}
 

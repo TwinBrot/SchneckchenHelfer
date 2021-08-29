@@ -20,15 +20,15 @@ import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
+import de.Strobl.Events.Nachrichten.EmoteTracking;
 import de.Strobl.Events.Nachrichten.Filechecker;
-import de.Strobl.Events.Nachrichten.OnEmoteSentEvent;
-import de.Strobl.Events.Nachrichten.OnMessageReactionRemoveEvent;
+import de.Strobl.Events.Nachrichten.ReactionRemoveLog;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
 import de.Strobl.Events.Nachrichten.ScamDetectionLink;
-import de.Strobl.Events.User.OnGuildMemberJoinEvent;
-import de.Strobl.Events.User.OnUserUpdateOnlineStatusEvent;
+import de.Strobl.Events.User.JoinNamensüberwachung;
+import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
-import de.Strobl.Events.Voice.AFKKick;
+import de.Strobl.Events.User.UserInfoJoin;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
@@ -46,6 +46,7 @@ public class Main {
 	public static JDA jda;
 	public static String version = "v1.6.3";
 	public static List<String> ServerEmotesID;
+	public static Boolean PingPause = false;
 	public static final Logger logger = LogManager.getLogger(Main.class);
 
 	public static void main(String[] arguments) {
@@ -74,7 +75,7 @@ public class Main {
 					GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING,
 					GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES,
-					CacheFlag.ROLE_TAGS, CacheFlag.EMOTE, CacheFlag.VOICE_STATE);
+					CacheFlag.ROLE_TAGS, CacheFlag.EMOTE);
 			Builder.disableCache(CacheFlag.ONLINE_STATUS);
 			Builder.setChunkingFilter(ChunkingFilter.NONE);
 			Builder.setMemberCachePolicy(MemberCachePolicy.ALL);
@@ -87,13 +88,13 @@ public class Main {
 			Builder.addEventListeners(new BefehleAuswertung());
 			Builder.addEventListeners(new ScamDetectionLink());
 			Builder.addEventListeners(new ScamDetectionCodeWort());
-			Builder.addEventListeners(new AFKKick());
-			Builder.addEventListeners(new OnUserUpdateOnlineStatusEvent());
+			Builder.addEventListeners(new BotIsOfflineAlarm());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
-			Builder.addEventListeners(new OnGuildMemberJoinEvent());
-			Builder.addEventListeners(new OnMessageReactionRemoveEvent());
+			Builder.addEventListeners(new JoinNamensüberwachung());
+			Builder.addEventListeners(new UserInfoJoin());
+			Builder.addEventListeners(new ReactionRemoveLog());
 			Builder.addEventListeners(new Filechecker());
-			Builder.addEventListeners(new OnEmoteSentEvent());
+			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());
 

@@ -35,7 +35,7 @@ public class isMod {
 				ini = new Wini (new File(Main.Pfad + "settings.ini"));
 			} catch (IOException e1) {
 				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.").queue();
-				logger.error("Fehler:", e1);
+				logger.error("IO-Fehler:", e1);
 				return -1;
 			}
 			
@@ -100,8 +100,7 @@ public class isMod {
 			}
 			
 		} catch (Exception e) {
-			logger.error("Fehler:", e);
-			EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.").queue();
+			logger.error("Fehler bei Modkontrolle:", e);
 			return -1;
 		}
 		return 0;

@@ -1,6 +1,7 @@
 package de.Strobl.Events.Nachrichten;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class OnMessageReactionRemoveEvent extends ListenerAdapter {
+public class ReactionRemoveLog extends ListenerAdapter {
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
 		Logger logger = Main.logger;
@@ -18,6 +19,8 @@ public class OnMessageReactionRemoveEvent extends ListenerAdapter {
 //Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353")
 					&& !event.getChannel().getId().equals("720439181696041122")) {
+				
+				
 				EmbedBuilder ReactionRemoved = new EmbedBuilder();
 
 				try {
@@ -33,17 +36,17 @@ public class OnMessageReactionRemoveEvent extends ListenerAdapter {
 						"https://discordapp.com/channels" + "/" + event.getGuild().getId().toString() + "/"
 								+ event.getTextChannel().getId() + "/" + event.getMessageId(),
 						false);
-				Wini ini;
-				try {
-					ini = new Wini(new File(Main.Pfad + "settings.ini"));
-					String ID = ini.get("Settings", "Settings.LogChannel");
-					event.getGuild().getTextChannelById(ID).sendMessageEmbeds(ReactionRemoved.build()).queue();
-					ReactionRemoved.clear();
-				} catch (Exception e) {
-				}
+				Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
+				String ID = ini.get("Settings", "Settings.LogChannel");
+				event.getGuild().getTextChannelById(ID).sendMessageEmbeds(ReactionRemoved.build()).queue();
+				ReactionRemoved.clear();
 			}
-		} catch (Exception e) {
+			
+			
+		} catch (IOException e) {
 			logger.error("IO-Fehler", e);
+		} catch (Exception e) {
+			logger.error("Fehler", e);
 		}
 	}
 }

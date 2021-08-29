@@ -52,9 +52,6 @@ public class FileManagement {
 			if (ini.get("Settings", "Settings.LogChannel") == null) {
 				ini.put("Settings", "Settings.LogChannel", "");
 			}
-			if (ini.get("Settings", "Settings.AFKVoice") == null) {
-				ini.put("Settings", "Settings.AFKVoice", "");
-			}
 			if (ini.get("Settings", "Settings.Status") == null) {
 				ini.put("Settings", "Settings.Status", "ONLINE");
 			}
@@ -151,13 +148,12 @@ public class FileManagement {
 					logger.warn("User-Dateien Ordner nicht gefunden.");
 					logger.warn("Versuche Ordner zu erstellen.");
 				} else {
-					logger.warn("Konnte User-Ordner nicht erstellen!");
+					logger.error("Konnte User-Ordner nicht erstellen!");
 				}
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.fatal("Fehler beim anlegen der Dateien.");
+			logger.fatal("Fehler beim anlegen der Dateien:", e);
 		}
 	}
 }

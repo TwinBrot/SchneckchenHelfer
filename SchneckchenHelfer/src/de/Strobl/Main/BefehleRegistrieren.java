@@ -32,10 +32,8 @@ public class BefehleRegistrieren {
 
 			commands.addCommands(new CommandData("activity", "Konfiguriert die Aktivität des Bots")
 					.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.")
-							.addChoice("playing", "playing")
-							.addChoice("watching", "watching")
-							.addChoice("listening", "listening")
-							.addChoice("streaming", "streaming").setRequired(true))
+							.addChoice("playing", "playing").addChoice("watching", "watching")
+							.addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
 					.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity")
 							.setRequired(true)));
 
@@ -52,11 +50,6 @@ public class BefehleRegistrieren {
 					.addSubcommands(new SubcommandData("add", "Erlaubte Dateiendungen hinzufügen"))
 					.addSubcommands(new SubcommandData("remove", "Erlaubte Dateiendungen entfernen"))
 					.addSubcommands(new SubcommandData("list", "Liste der Erlaubte Dateiendungen")));
-
-			commands.addCommands(new CommandData("afkchannel",
-					"User, die in den AFKChannel gemoved werden, werden automatisch aus dem Voice gekickt.")
-							.addOptions(new OptionData(CHANNEL, "voicechannel", "Wähle den AFK-Voice Channel aus.")
-									.setRequired(true)));
 
 			commands.addCommands(
 					new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.").addOptions(
@@ -119,7 +112,7 @@ public class BefehleRegistrieren {
 //    						.addOptions(new OptionData(STRING,"sonstiges","Alle sonstigen Befehle")
 //    								.addChoice("emotes","Startet die Emoteauswertung")
 //    								.addChoice("help","Öffnet die Hilfe.")));
-			
+
 //Moderation  
 
 			commands.addCommands(new CommandData("info", "Ruft Informationen über einen User ab.")
@@ -152,22 +145,12 @@ public class BefehleRegistrieren {
 			commands.addCommands(new CommandData("removeban", "Entfernt einen Ban aus dem Speicher. KEIN UNBAN!")
 					.addOptions(new OptionData(STRING, "banid", "Wähle den Ban aus! (/bans USER)").setRequired(true)));
 
-//        commands.addCommands(new CommandData("activity", "Ändert die Activity des Bots")
-//    			.addOptions(new OptionData(STRING,"test", "test").addChoice("test1", "Test12").addChoice("test2", "Test22").addChoice("test3", "Test33").setRequired(true)
-//    					)
-//    			);
-
-//			commands.queue(
-//			         (List) -> 
-//						logger.info("Befehle wurden registriert" + List),
-//			         (error) -> error.printStackTrace()
-//			     );
 			commands.queue(success -> logger.info("Befehle wurden registriert: " + success),
-					failure -> failure.printStackTrace());
+					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 
 			logger.info("");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.fatal("Fehler beim Registrieren der Befehle:", e);
 		}
 	}
 }

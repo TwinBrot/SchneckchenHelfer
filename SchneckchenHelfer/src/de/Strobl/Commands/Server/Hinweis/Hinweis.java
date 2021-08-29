@@ -1,8 +1,10 @@
 package de.Strobl.Commands.Server.Hinweis;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -14,6 +16,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Hinweis {
 	public static void hinweis (SlashCommandEvent event, Member member, String Text, InteractionHook EventHook) {
+		Logger logger = Main.logger;
 		try {	
 			try { @SuppressWarnings("unused")
 				Wini WiniID = new Wini(new File(Main.Pfad + "ID.ini"));
@@ -77,8 +80,11 @@ public class Hinweis {
 			event.getChannel().sendMessageEmbeds(Info.build()).queue();
 			Info.clear();
 			
+		} catch (IOException e) {
+			logger.error("IO-Fehler bei Hinweis-Befehl ausführung", e);
+			EventHook.editOriginal("IO-Fehler beim Ausführen. Twin Informieren").queue();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler bei Hinweis-Befehl ausführung", e);
 			EventHook.editOriginal("Unbekannter Fehler. Twin Informieren").queue();
 		}
 	}

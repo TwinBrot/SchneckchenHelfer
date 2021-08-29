@@ -2,6 +2,7 @@ package de.Strobl.Commands.Setup;
 
 import java.io.File;
 
+import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
@@ -13,6 +14,7 @@ public class Aktivität {
 	public static Wini ini;
 
 	public static void aktivität(SlashCommandEvent event) {
+		Logger logger = Main.logger;
 		try {
 			ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			
@@ -44,7 +46,7 @@ public class Aktivität {
 			event.getHook().editOriginal("Erledigt").queue();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Fehler beim Ändern der Aktivity:", e);
 			event.getHook().editOriginal("Irgendwas ist schief gegangen.").queue();
 		}
 	}

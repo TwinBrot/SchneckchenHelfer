@@ -44,6 +44,9 @@ public class BefehleAuswertung extends ListenerAdapter {
 				EventHook.editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
 				return;
 			} else if (Modrolle == -1) {
+				EventHook.editOriginal(
+						"Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.")
+						.queue();
 				return;
 			}
 
@@ -140,9 +143,9 @@ public class BefehleAuswertung extends ListenerAdapter {
 				}
 			}
 			EventHook.sendMessage("Befehl nicht gefunden. Bitte klär das mit Twin.").setEphemeral(false).queue();
-			logger.info(event.getName());
+			logger.error(event.getName());
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("Fehler beim auswerten des Befehls", e);
 		}
 
 	}
