@@ -3,7 +3,7 @@ package de.Strobl.Main;
 import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Commands.Server.Emotes;
-import de.Strobl.Commands.Server.Hinweis.Hinweis;
+import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Instances.getMember;
@@ -120,7 +120,11 @@ public class BefehleAuswertung extends ListenerAdapter {
 					return;
 				case "changeban":
 					return;
-				case "removeban":
+				case "remove":
+					
+					
+					
+					
 					return;
 				}
 			}

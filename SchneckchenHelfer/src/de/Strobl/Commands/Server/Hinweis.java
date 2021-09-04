@@ -1,4 +1,4 @@
-package de.Strobl.Commands.Server.Hinweis;
+package de.Strobl.Commands.Server;
 
 import java.io.File;
 import java.io.IOException;

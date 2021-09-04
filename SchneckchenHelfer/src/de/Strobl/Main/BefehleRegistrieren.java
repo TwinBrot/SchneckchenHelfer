@@ -141,9 +141,9 @@ public class BefehleRegistrieren {
 					.addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
 					.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an")
 							.setRequired(true)));
-
-			commands.addCommands(new CommandData("removeban", "Entfernt einen Ban aus dem Speicher. KEIN UNBAN!")
-					.addOptions(new OptionData(STRING, "banid", "Wähle den Ban aus! (/bans USER)").setRequired(true)));
+			
+			commands.addCommands(new CommandData("remove", "Entfernt gespeicherte Strafen aus dem Log.")
+					.addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe")));
 
 			commands.queue(success -> logger.info("Befehle wurden registriert: " + success),
 					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
