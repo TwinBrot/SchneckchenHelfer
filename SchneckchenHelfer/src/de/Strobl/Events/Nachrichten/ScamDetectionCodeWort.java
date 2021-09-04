@@ -22,10 +22,10 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 //Link enthalten
 			if (message.contains("http")) {
 //Pflichtwörter
-				if (message.contains("free") || message.contains("gift") || message.contains("trade")) {
+				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("giving")) {
 //Mögliche Wörter
 					if (message.contains("discord") || message.contains("steam") || message.contains("nitro")
-							|| message.contains("cs:go") || message.contains("csgo") || message.contains("skin")
+							|| message.contains("cs:go") || message.contains("boost") || message.contains("csgo") || message.contains("skin")
 							|| message.contains("@everyone")) {
 						Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 						event.getMessage().delete().queue(success -> {

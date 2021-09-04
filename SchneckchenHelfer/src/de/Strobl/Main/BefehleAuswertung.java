@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis;
+import de.Strobl.Commands.Server.Remove;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Instances.getMember;
@@ -56,7 +57,8 @@ public class BefehleAuswertung extends ListenerAdapter {
 			if (Modrolle > 0) {
 				switch (event.getName()) {
 				case "hinweis":
-					Member member = getMember.getmember(event, event.getOption("user").getAsString(), EventHook);
+					Member member = getMember.getmember(event, event.getOption("user").getAsString());
+					EventHook.editOriginal("User nicht erkannt").queue();
 					String grundhinweis = event.getOption("grund").getAsString();
 					if (member == null) {
 						EventHook.editOriginal("User nicht erkannt").queue();
@@ -86,7 +88,8 @@ public class BefehleAuswertung extends ListenerAdapter {
 					return;
 
 				case "info":
-					member = getMember.getmember(event, event.getOption("userid").getAsString(), EventHook);
+					member = getMember.getmember(event, event.getOption("userid").getAsString());
+					EventHook.editOriginal("User nicht erkannt").queue();
 					if (!(member == null)) {
 						Info.info(event, member, EventHook);
 					}
@@ -121,10 +124,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 				case "changeban":
 					return;
 				case "remove":
-					
-					
-					
-					
+					Remove.remove(event, event.getHook());
 					return;
 				}
 			}

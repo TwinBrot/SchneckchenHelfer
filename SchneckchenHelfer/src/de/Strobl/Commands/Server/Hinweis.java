@@ -24,7 +24,7 @@ public class Hinweis {
 			    File newFile = new File(Main.Pfad + "ID.ini");
 			    newFile.createNewFile();
 				Wini WiniID = new Wini (new File(Main.Pfad + "ID.ini"));
-				WiniID.put("Hinweise", "Counter", "0");
+				WiniID.put("Counter", "Counter", "0");
 	        	WiniID.store();
 			}
 			try { @SuppressWarnings("unused")
@@ -58,10 +58,10 @@ public class Hinweis {
 			Info.setColor(0x00b806);
 			try {
 				WiniID = new Wini(new File(Main.Pfad + "ID.ini"));
-				ID = Integer.parseInt(WiniID.get("Hinweise", "Counter"))+1;
+				ID = Integer.parseInt(WiniID.get("Counter", "Counter"))+1;
 				WiniUser = new Wini(new File(Main.Userpfad + member.getId() +".ini"));
 				WiniID.put("Hinweise", ID.toString(), member.getId());
-				WiniID.put("Hinweise", "Counter", ID);
+				WiniID.put("Counter", "Counter", ID);
 				WiniID.store();
 				WiniUser.put("Hinweise", ID.toString(), Text);
 				WiniUser.store();
