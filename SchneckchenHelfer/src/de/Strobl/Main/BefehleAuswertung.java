@@ -7,6 +7,7 @@ import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Remove;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
+import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
 import net.dv8tion.jda.api.entities.Member;
@@ -65,9 +66,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 						return;
 					}
 					if (event.getJDA().getSelfUser() == member.getUser()) {
-						EventHook.editOriginal(
-								"Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.")
-								.queue();
+						EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
 						return;
 					}
 					;
@@ -78,9 +77,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 					String grundhinweisn = event.getOption("grund").getAsString();
 					member = event.getOption("user").getAsMember();
 					if (event.getJDA().getSelfUser() == member.getUser()) {
-						EventHook.editOriginal(
-								"Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.")
-								.queue();
+						EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
 						return;
 					}
 					;
@@ -106,8 +103,6 @@ public class BefehleAuswertung extends ListenerAdapter {
 
 			if (Modrolle > 1) {
 				switch (event.getName()) {
-				case "modrolle":
-					return;
 				case "namen":
 					return;
 				case "datei":
@@ -130,11 +125,23 @@ public class BefehleAuswertung extends ListenerAdapter {
 			}
 
 //Admin
-
 			if (Modrolle > 2) {
 				switch (event.getName()) {
 				case "modrolle":
-					return;
+
+					switch (event.getSubcommandName()) {
+					case "add":
+						ModRolle.add(event, event.getHook());
+						return;
+					case "remove":
+						ModRolle.remove(event, event.getHook());
+						return;
+					case "list":
+						ModRolle.list(event, event.getHook());
+						return;
+					default:
+						return;
+					}
 				case "onlinestatus":
 					return;
 				case "activity":

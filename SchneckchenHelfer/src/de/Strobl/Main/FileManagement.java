@@ -56,13 +56,13 @@ public class FileManagement {
 				ini.put("Settings", "Settings.Status", "ONLINE");
 			}
 			if (ini.get("ModRollen", "Admin") == null) {
-				ini.put("ModRollen", "Admin", "[0]");
+				ini.put("ModRollen", "Admin", "");
 			}
 			if (ini.get("ModRollen", "Mod") == null) {
-				ini.put("ModRollen", "Mod", "[0]");
+				ini.put("ModRollen", "Mod", "");
 			}
 			if (ini.get("ModRollen", "Channelmod") == null) {
-				ini.put("ModRollen", "Channelmod", "[0]");
+				ini.put("ModRollen", "Channelmod", "");
 			}
 			if (ini.get("Dateiüberwachung", "Active") == null) {
 				ini.put("Dateiüberwachung", "Active", "false");

@@ -57,14 +57,16 @@ public class BefehleRegistrieren {
 
 			commands.addCommands(new CommandData("modrolle", "Konfiguriert die Modrollen")
 					.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen")
-							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben."))
+							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.")
+									.setRequired(true))
 							.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?")
-									.addChoice("Admin", "Administratoren haben Zugriff auf ALLE Befehle.")
-									.addChoice("Mod", "Moderatoren haben Zugriff auf Befehle zum Moderieren.")
-									.addChoice("ChannelMod",
-											"Channelmoderatoren haben Zugriff auf den Hinweis Befehl.")))
+									.setRequired(true)
+									.addChoice("Admin", "Admin")
+									.addChoice("Mod", "Mod")
+									.addChoice("ChannelMod", "Channelmod")))
 					.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen")
-							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.")))
+							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.")
+									.setRequired(true)))
 					.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf.")));
 
 //Allgemein 
