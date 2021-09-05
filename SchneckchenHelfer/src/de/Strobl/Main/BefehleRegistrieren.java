@@ -25,9 +25,10 @@ public class BefehleRegistrieren {
 //Setup
 			commands.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
 					.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.")
-							.addChoice("online", "Ändert den Onlinestatus des Bots auf Online")
-							.addChoice("nichtstören", "Ändert den Onlinestatus des Bots auf bitte nicht stören.")
-							.addChoice("abwesend", "Ändert den Onlinestatus des Bots auf Abwesend.")
+							.addChoice("online", "ONLINE")
+							.addChoice("nichtstören", "DO_NOT_DISTURB")
+							.addChoice("abwesend", "IDLE")
+							.addChoice("unsichtbar", "INVISIBLE")
 							.setRequired(true)));
 
 			commands.addCommands(new CommandData("activity", "Konfiguriert die Aktivität des Bots")

@@ -138,7 +138,16 @@ public class Main {
 //Befehle anmelden
 
 			BefehleRegistrieren.register(jda);
-
+			jda.getGuilds().get(0).updateCommands()
+			
+//			.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
+//					.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.")
+//							.addChoice("online", "ONLINE")
+//							.addChoice("nichtstören", "DO_NOT_DISTURB")
+//							.addChoice("abwesend", "IDLE")
+//							.addChoice("unsichtbar", "INVISIBLE")
+//							.setRequired(true)))
+			.queue();
 //Loops starten
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
