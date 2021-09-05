@@ -22,7 +22,6 @@ public class BotIsOfflineAlarm extends ListenerAdapter {
 				BotOffline.addField("Betroffener Bot:", event.getMember().getAsMention(), true);
 				BotOffline.addField("Online Status", event.getNewValue().toString(), true);
 				BotOffline.setColor(0x110acc);
-				event.getGuild().getTextChannelById(ini.get("Settings", "Settings.LogChannel")).sendMessage("<@227131380058947584>").queue();
 				event.getGuild().getTextChannelById(ini.get("Settings", "Settings.LogChannel")).sendMessageEmbeds(BotOffline.build()).queue();
 				BotOffline.clear();
 			}
