@@ -10,6 +10,7 @@ import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Commands.Setup.LogChannel;
 import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Commands.Setup.Onlinestatus;
+import de.Strobl.Exceptions.MissingPermException;
 import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
 import net.dv8tion.jda.api.Permission;
@@ -22,9 +23,9 @@ public class BefehleAuswertung extends ListenerAdapter {
 
 	public void onSlashCommand(SlashCommandEvent event) {
 		Logger logger = Main.logger;
+		InteractionHook EventHook = event.getHook();
 		try {
 			event.deferReply(true).queue();
-			InteractionHook EventHook = event.getHook();
 
 // Only accept commands from guilds
 
@@ -38,14 +39,12 @@ public class BefehleAuswertung extends ListenerAdapter {
 			logger.info("Befehl: " + event.getName() + "   " + event.getOptions());
 
 // Block Commands in Channels i cant Write in.
-			
+
 			if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.MESSAGE_WRITE, Permission.MESSAGE_READ)) {
-				EventHook.editOriginal("Ich habe leider keine Rechte in diesem Channel zu schreiben. Bitte versuche es in einem anderen Channel erneut.")
-						.queue();
-				logger.error(
-						"SlashCommand wurde in einem Channel gesendet, in dem ich keine Rechte zu schreiben habe. Befehl wurde ***NICHT*** ausgeführt:");
+				EventHook.editOriginal("Ich habe nicht die nötigen Rechte, diesen Befehl auszuführen.").queue();
 				logger.error("GuildChannel: " + event.getGuildChannel());
 				logger.error("Permissions: " + event.getGuild().getSelfMember().getPermissions());
+				throw new MissingPermException("MISSING_PERM_EXCEPTION", "Kann keine Nachricht in " + event.getChannel().getName() +  " schreiben.");
 			}
 
 
@@ -169,6 +168,8 @@ public class BefehleAuswertung extends ListenerAdapter {
 			}
 			EventHook.sendMessage("Befehl nicht gefunden. Bitte klär das mit Twin.").setEphemeral(false).queue();
 			logger.error(event.getName());
+		} catch (MissingPermException e) {
+			logger.error("Fehlende Berechtigungen:", e);
 		} catch (Exception e) {
 			logger.error("Fehler beim auswerten des Befehls", e);
 		}
