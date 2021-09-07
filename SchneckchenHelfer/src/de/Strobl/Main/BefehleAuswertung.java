@@ -7,10 +7,12 @@ import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Remove;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
+import de.Strobl.Commands.Setup.LogChannel;
 import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -35,6 +37,18 @@ public class BefehleAuswertung extends ListenerAdapter {
 			logger.info("Author: " + event.getMember());
 			logger.info("Befehl: " + event.getName() + "   " + event.getOptions());
 
+// Block Commands in Channels i cant Write in.
+			
+			if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.MESSAGE_WRITE, Permission.MESSAGE_READ)) {
+				EventHook.editOriginal("Ich habe leider keine Rechte in diesem Channel zu schreiben. Bitte versuche es in einem anderen Channel erneut.")
+						.queue();
+				logger.error(
+						"SlashCommand wurde in einem Channel gesendet, in dem ich keine Rechte zu schreiben habe. Befehl wurde ***NICHT*** ausgeführt:");
+				logger.error("GuildChannel: " + event.getGuildChannel());
+				logger.error("Permissions: " + event.getGuild().getSelfMember().getPermissions());
+			}
+
+
 // Modrollen Abfragen
 //-1 = Fehler		
 //0 = User
@@ -47,11 +61,10 @@ public class BefehleAuswertung extends ListenerAdapter {
 				EventHook.editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
 				return;
 			} else if (Modrolle == -1) {
-				EventHook.editOriginal(
-						"Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.")
-						.queue();
+				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Wende dich bitte an Twin.").queue();
 				return;
 			}
+
 
 //Auslesen der Befehle
 
@@ -149,9 +162,8 @@ public class BefehleAuswertung extends ListenerAdapter {
 				case "activity":
 					Aktivität.aktivität(event);
 					return;
-				case "afkchannel":
-					return;
 				case "logchannel":
+					LogChannel.setup(event);
 					return;
 				}
 			}

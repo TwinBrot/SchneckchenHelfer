@@ -2,6 +2,7 @@ package de.Strobl.Commands.Setup;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
@@ -36,6 +37,8 @@ public class Onlinestatus {
 			Erfolg.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 			Erfolg.addField("Onlinestatus eingestellt: ", status, true);
 			Erfolg.setColor(0x00c42b);
+			Erfolg.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
+			Erfolg.setTimestamp(ZonedDateTime.now().toInstant());
 			event.getChannel().sendMessageEmbeds(Erfolg.build()).queue();
 			Erfolg.clear();
 			event.getHook().editOriginal("Erledigt").queue();

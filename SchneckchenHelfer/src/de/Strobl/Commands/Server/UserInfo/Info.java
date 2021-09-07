@@ -67,6 +67,7 @@ public class Info {
 				info.addField("Hinweise:", "Keine", true);
 			}
 			event.getChannel().sendMessageEmbeds(info.build()).queue();
+			info.clear();
 			EventHook.editOriginal("Erledigt.").queue();
 
 

@@ -50,6 +50,7 @@ public class Emotes {
 					EmbedEmotes.clear();
 				}
 			});
+			EmbedEmotes.clear();
 		} catch (IOException e) {
 			event.getHook().editOriginal("IO-Fehler beim Ausführen").queue();
 			logger.error("IO-Fehler beim Auswerten der Emotenutzung:", e);

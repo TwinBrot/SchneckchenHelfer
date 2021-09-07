@@ -54,7 +54,8 @@ public class BefehleRegistrieren {
 
 			commands.addCommands(
 					new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.").addOptions(
-							new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true)));
+							new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.")
+							.setRequired(true)));
 
 			commands.addCommands(new CommandData("modrolle", "Konfiguriert die Modrollen")
 					.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen")

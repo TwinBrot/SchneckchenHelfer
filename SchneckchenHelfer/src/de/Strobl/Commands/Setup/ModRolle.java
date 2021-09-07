@@ -170,6 +170,7 @@ public class ModRolle {
 
 
 			event.getChannel().sendMessageEmbeds(Response.build()).queue();
+			Response.clear();
 			Hook.editOriginal("Erfolg.").queue();
 
 

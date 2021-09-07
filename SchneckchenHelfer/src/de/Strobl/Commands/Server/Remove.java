@@ -58,6 +58,7 @@ public class Remove extends ListenerAdapter {
 			Erfolg.setFooter("Gelöscht von: " + event.getMember().getEffectiveName());
 			Erfolg.setTimestamp(ZonedDateTime.now().toInstant());
 			event.getChannel().sendMessageEmbeds(Erfolg.build()).queue();
+			Erfolg.clear();
 			Hook.editOriginal("Erledigt").queue();
 			
 		} catch (IOException e) {
