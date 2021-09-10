@@ -44,7 +44,7 @@ public class Main {
 	public static String Pfad = "./";
 	public static String Userpfad = "./users/";
 	public static JDA jda;
-	public static String version = "v1.6.3";
+	public static String version = "v1.6.4";
 	public static List<String> ServerEmotesID;
 	public static Boolean PingPause = false;
 	public static final Logger logger = LogManager.getLogger(Main.class);
