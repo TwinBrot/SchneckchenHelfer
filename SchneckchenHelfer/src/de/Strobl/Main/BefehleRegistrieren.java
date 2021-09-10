@@ -24,19 +24,14 @@ public class BefehleRegistrieren {
 
 //Setup
 			commands.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
-					.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.")
-							.addChoice("online", "ONLINE")
-							.addChoice("nichtstören", "DO_NOT_DISTURB")
-							.addChoice("abwesend", "IDLE")
-							.addChoice("unsichtbar", "INVISIBLE")
+					.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.").addChoice("online", "ONLINE")
+							.addChoice("nichtstören", "DO_NOT_DISTURB").addChoice("abwesend", "IDLE").addChoice("unsichtbar", "INVISIBLE")
 							.setRequired(true)));
 
 			commands.addCommands(new CommandData("activity", "Konfiguriert die Aktivität des Bots")
-					.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.")
-							.addChoice("playing", "playing").addChoice("watching", "watching")
-							.addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
-					.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity")
-							.setRequired(true)));
+					.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
+							.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
+					.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true)));
 
 			commands.addCommands(new CommandData("namen", "Konfiguriert die Namensüberwachung")
 					.addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
@@ -52,23 +47,16 @@ public class BefehleRegistrieren {
 					.addSubcommands(new SubcommandData("remove", "Erlaubte Dateiendungen entfernen"))
 					.addSubcommands(new SubcommandData("list", "Liste der Erlaubte Dateiendungen")));
 
-			commands.addCommands(
-					new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.").addOptions(
-							new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.")
-							.setRequired(true)));
+			commands.addCommands(new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.")
+					.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true)));
 
 			commands.addCommands(new CommandData("modrolle", "Konfiguriert die Modrollen")
 					.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen")
-							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.")
-									.setRequired(true))
-							.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?")
-									.setRequired(true)
-									.addChoice("Admin", "Admin")
-									.addChoice("Mod", "Mod")
-									.addChoice("ChannelMod", "Channelmod")))
+							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true))
+							.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true)
+									.addChoice("Admin", "Admin").addChoice("Mod", "Mod").addChoice("ChannelMod", "Channelmod")))
 					.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen")
-							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.")
-									.setRequired(true)))
+							.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
 					.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf.")));
 
 //Allgemein 
@@ -125,12 +113,8 @@ public class BefehleRegistrieren {
 			commands.addCommands(new CommandData("infon", "Ruft Informationen über einen User ab.")
 					.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true)));
 
-			commands.addCommands(new CommandData("hinweisn", "Schickt einem User einen Hinweis")
-					.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
-					.addOptions(new OptionData(STRING, "grund", "Gib hier den Hinweis-Text an.").setRequired(true)));
-
 			commands.addCommands(new CommandData("hinweis", "Schickt einem User einen Hinweis")
-					.addOptions(new OptionData(STRING, "user", "Gib hier die User-ID an.").setRequired(true))
+					.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 					.addOptions(new OptionData(STRING, "grund", "Gib hier den Hinweis-Text an.").setRequired(true)));
 
 			commands.addCommands(new CommandData("kick", "Kickt den ausgewählten User")
@@ -143,9 +127,8 @@ public class BefehleRegistrieren {
 
 			commands.addCommands(new CommandData("changeban", "Ändert die Dauer eines Tempbans.")
 					.addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
-					.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an")
-							.setRequired(true)));
-			
+					.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true)));
+
 			commands.addCommands(new CommandData("remove", "Entfernt gespeicherte Strafen aus dem Log.")
 					.addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe")));
 

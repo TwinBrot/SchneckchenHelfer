@@ -44,7 +44,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 				EventHook.editOriginal("Ich habe nicht die nötigen Rechte, diesen Befehl auszuführen.").queue();
 				logger.error("GuildChannel: " + event.getGuildChannel());
 				logger.error("Permissions: " + event.getGuild().getSelfMember().getPermissions());
-				throw new MissingPermException("MISSING_PERM_EXCEPTION", "Kann keine Nachricht in " + event.getChannel().getName() +  " schreiben.");
+				throw new MissingPermException("MISSING_PERM_EXCEPTION", "Kann keine Nachricht in " + event.getChannel().getName() + " schreiben.");
 			}
 
 
@@ -84,17 +84,6 @@ public class BefehleAuswertung extends ListenerAdapter {
 					}
 					;
 					Hinweis.hinweis(event, member, grundhinweis, EventHook);
-					return;
-
-				case "hinweisn":
-					String grundhinweisn = event.getOption("grund").getAsString();
-					member = event.getOption("user").getAsMember();
-					if (event.getJDA().getSelfUser() == member.getUser()) {
-						EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
-						return;
-					}
-					;
-					Hinweis.hinweis(event, member, grundhinweisn, EventHook);
 					return;
 
 				case "info":
