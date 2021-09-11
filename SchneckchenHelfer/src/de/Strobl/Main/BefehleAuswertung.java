@@ -87,14 +87,6 @@ public class BefehleAuswertung extends ListenerAdapter {
 					return;
 
 				case "info":
-					member = getMember.getmember(event, event.getOption("userid").getAsString());
-					EventHook.editOriginal("User nicht erkannt").queue();
-					if (!(member == null)) {
-						Info.info(event, member, EventHook);
-					}
-					return;
-
-				case "infon":
 					member = event.getOption("user").getAsMember();
 					Info.info(event, member, EventHook);
 					return;

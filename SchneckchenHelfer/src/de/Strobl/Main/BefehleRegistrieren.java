@@ -108,9 +108,6 @@ public class BefehleRegistrieren {
 //Moderation  
 
 			commands.addCommands(new CommandData("info", "Ruft Informationen über einen User ab.")
-					.addOptions(new OptionData(STRING, "userid", "Wähle hier den User aus.").setRequired(true)));
-
-			commands.addCommands(new CommandData("infon", "Ruft Informationen über einen User ab.")
 					.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true)));
 
 			commands.addCommands(new CommandData("hinweis", "Schickt einem User einen Hinweis")
