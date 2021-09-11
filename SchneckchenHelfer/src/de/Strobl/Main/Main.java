@@ -18,7 +18,7 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
-import de.Strobl.Commands.Server.UserInfo.Warns;
+import de.Strobl.Commands.Server.UserInfo.WarnsMessage;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
@@ -95,7 +95,7 @@ public class Main {
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());
-			Builder.addEventListeners(new Warns());
+			Builder.addEventListeners(new WarnsMessage());
 
 //Activity
 			String Typ = ini.get("Settings", "Settings.AktivitätTyp");
@@ -142,13 +142,16 @@ public class Main {
 			SlashCommandRegister.register(jda);
 			jda.getGuilds().get(0).updateCommands()
 			
-//			.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
-//					.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.")
-//							.addChoice("online", "ONLINE")
-//							.addChoice("nichtstören", "DO_NOT_DISTURB")
-//							.addChoice("abwesend", "IDLE")
-//							.addChoice("unsichtbar", "INVISIBLE")
-//							.setRequired(true)))
+//			.addCommands(new CommandData("datei", "Konfiguriert die Dateiüberwachung")
+//					.addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
+//					.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
+//					.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
+//							.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
+//					.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
+//							.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
+//					.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen")))
+			
+			
 			.queue();
 //Loops starten
 

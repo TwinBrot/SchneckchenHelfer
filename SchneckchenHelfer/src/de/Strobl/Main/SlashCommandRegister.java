@@ -36,16 +36,21 @@ public class SlashCommandRegister {
 			commands.addCommands(new CommandData("namen", "Konfiguriert die Namensüberwachung")
 					.addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
 					.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
-					.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen"))
-					.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen"))
+					.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
+							.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
+					.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
+							.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
 					.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen")));
 
+
 			commands.addCommands(new CommandData("datei", "Konfiguriert die Dateiüberwachung")
-					.addSubcommands(new SubcommandData("activate", "Dateiüberwachung aktivieren"))
-					.addSubcommands(new SubcommandData("deactivate", "Dateiüberwachung deaktivieren"))
-					.addSubcommands(new SubcommandData("add", "Erlaubte Dateiendungen hinzufügen"))
-					.addSubcommands(new SubcommandData("remove", "Erlaubte Dateiendungen entfernen"))
-					.addSubcommands(new SubcommandData("list", "Liste der Erlaubte Dateiendungen")));
+					.addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
+					.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
+					.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
+							.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
+					.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
+							.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
+					.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen")));
 
 			commands.addCommands(new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.")
 					.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true)));

@@ -7,8 +7,10 @@ import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Remove;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
+import de.Strobl.Commands.Setup.Dateiüberwachung;
 import de.Strobl.Commands.Setup.LogChannel;
 import de.Strobl.Commands.Setup.ModRolle;
+import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Exceptions.MissingPermException;
 import de.Strobl.Instances.getMember;
@@ -34,9 +36,22 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				logger.info("Befehl in den Privatnachrichten erkannt. Abbruch");
 				return;
 			}
+			
+//Console Output
+			
+			String CommandData = "Befehl: " + event.getName();
+			if (event.getSubcommandGroup() != null) {
+				CommandData = CommandData + "  SubCommandGroup: " + event.getSubcommandGroup();
+			}
+			if (event.getSubcommandName() != null) {
+				CommandData = CommandData + "  SubCommandName: " + event.getSubcommandName();
+			}
+			CommandData = CommandData + "  Options: " + event.getOptions();
+
+			logger.info("");
 			logger.info("Befehl erkannt:");
 			logger.info("Author: " + event.getMember());
-			logger.info("Befehl: " + event.getName() + "   " + event.getOptions());
+			logger.info(CommandData);
 
 // Block Commands in Channels i cant Write in.
 
@@ -46,7 +61,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				logger.error("Permissions: " + event.getGuild().getSelfMember().getPermissions());
 				throw new MissingPermException("MISSING_PERM_EXCEPTION", "Kann keine Nachricht in " + event.getChannel().getName() + " schreiben.");
 			}
-
 
 // Modrollen Abfragen
 //-1 = Fehler		
@@ -63,7 +77,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Wende dich bitte an Twin.").queue();
 				return;
 			}
-
 
 //Auslesen der Befehle
 
@@ -86,7 +99,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 					;
 					Hinweis.hinweis(event, member, grundhinweis, EventHook);
 					return;
-
 				case "info":
 					member = event.getOption("user").getAsMember();
 					Info.slashcommandevent(event, member, EventHook);
@@ -95,15 +107,38 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 			}
 
 //Moderator
-
+			String SubCommandName;
 			if (Modrolle > 1) {
 				switch (event.getName()) {
 				case "namen":
+					SubCommandName = event.getSubcommandName();
+					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate") ) {
+						Namensüberwachung.onoff(event, EventHook);
+					} else if (SubCommandName.equals("add")) {
+						Namensüberwachung.add(event, EventHook);
+					} else if (SubCommandName.equals("remove")) {
+						Namensüberwachung.remove(event, EventHook);
+					} else if (SubCommandName.equals("list")) {
+						Namensüberwachung.list(event, EventHook);
+					}
 					return;
 				case "datei":
+					SubCommandName = event.getSubcommandName();
+					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate") ) {
+						Dateiüberwachung.onoff(event, EventHook);
+					} else if (SubCommandName.equals("add")) {
+						Dateiüberwachung.add(event, EventHook);
+					} else if (SubCommandName.equals("remove")) {
+						Dateiüberwachung.remove(event, EventHook);
+					} else if (SubCommandName.equals("list")) {
+						Dateiüberwachung.list(event, EventHook);
+					}
 					return;
 				case "emotes":
 					Emotes.emotes(event);
+					return;
+				case "remove":
+					Remove.remove(event, event.getHook());
 					return;
 				case "help":
 					return;
@@ -113,9 +148,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 					return;
 				case "changeban":
 					return;
-				case "remove":
-					Remove.remove(event, event.getHook());
-					return;
 				}
 			}
 
@@ -123,20 +155,14 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 			if (Modrolle > 2) {
 				switch (event.getName()) {
 				case "modrolle":
-
-					switch (event.getSubcommandName()) {
-					case "add":
+					if (event.getSubcommandName().equals("add")) {
 						ModRolle.add(event, event.getHook());
-						return;
-					case "remove":
+					} else if (event.getSubcommandName().equals("remove")) {
 						ModRolle.remove(event, event.getHook());
-						return;
-					case "list":
+					} else if (event.getSubcommandName().equals("list")) {
 						ModRolle.list(event, event.getHook());
-						return;
-					default:
-						return;
 					}
+					return;
 				case "onlinestatus":
 					Onlinestatus.change(event);
 					return;
