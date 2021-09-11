@@ -47,7 +47,7 @@ public class Remove extends ListenerAdapter {
 			ID.remove(Typ, StrafenID);
 			User.store();
 			ID.store();
-			Member member = getMember.getmember(event, UserID);
+			Member member = getMember.getmember(event.getGuild(), UserID);
 			EmbedBuilder Erfolg = new EmbedBuilder();
 			Erfolg.setAuthor("Hinweis " + StrafenID + " gelöscht!");
 			if (member==null) {

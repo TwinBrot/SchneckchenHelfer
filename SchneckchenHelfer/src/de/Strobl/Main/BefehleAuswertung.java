@@ -55,7 +55,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 //2 = Mod
 //3 = Admin
 
-			Integer Modrolle = isMod.check(event, EventHook);
+			Integer Modrolle = isMod.check(event.getMember());
 			if (Modrolle == 0) {
 				EventHook.editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
 				return;
@@ -71,7 +71,7 @@ public class BefehleAuswertung extends ListenerAdapter {
 			if (Modrolle > 0) {
 				switch (event.getName()) {
 				case "hinweis":
-					Member member = getMember.getmember(event, event.getOption("user").getAsString());
+					Member member = getMember.getmember(event.getGuild(), event.getOption("user").getAsString());
 					EventHook.editOriginal("User nicht erkannt").queue();
 					String grundhinweis = event.getOption("grund").getAsString();
 					if (member == null) {

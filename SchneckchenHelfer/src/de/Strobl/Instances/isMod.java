@@ -8,12 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.entities.Member;
 
 public class isMod {
-	public static Wini ini;
-	public static Integer check (SlashCommandEvent event, InteractionHook EventHook) {
+	public static Integer check (Member member) {
 		Logger logger = Main.logger;
 		
 //-1 = Fehler		
@@ -23,28 +21,18 @@ public class isMod {
 //3 = User ist Admin
 		
 		try {
-		
 //Owner
-			if (event.getMember().isOwner()) {
+			if (member.isOwner()) {
 				return 3;
 			}
+			Wini ini = new Wini (new File(Main.Pfad + "settings.ini"));
 			
-//Wini ini
-			
-			try {
-				ini = new Wini (new File(Main.Pfad + "settings.ini"));
-			} catch (IOException e1) {
-				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Versuche es bitte erneut. Wenn das Problem dadurch nicht behoben wird, wende dich bitte an Twin.").queue();
-				logger.error("IO-Fehler:", e1);
-				return -1;
-			}
-			
-//Userrollen auslesen  HIER WIEDERHOLT FEHLER, DAHER TRY CATCH
+//Userrollen auslesen
 			
 			ArrayList <String> UserRollen = new ArrayList<String>();
 
-			for (int i=0; i < event.getMember().getRoles().size(); i++) {
-				UserRollen.add(event.getMember().getRoles().get(i).getId().toString());
+			for (int i=0; i < member.getRoles().size(); i++) {
+				UserRollen.add(member.getRoles().get(i).getId().toString());
 			}
 			
 //Administrator
@@ -59,7 +47,7 @@ public class isMod {
 				
 				Admins.set(0, "0");	
 				UserRollen.removeAll(Admins);
-				if (!(UserRollen.size() == event.getMember().getRoles().size())) {
+				if (!(UserRollen.size() == member.getRoles().size())) {
 					return 3;
 				}
 			}
@@ -77,7 +65,7 @@ public class isMod {
 				
 				Mods.set(0, "0");	
 				UserRollen.removeAll(Mods);
-				if (!(UserRollen.size() == event.getMember().getRoles().size())) {
+				if (!(UserRollen.size() == member.getRoles().size())) {
 					return 2;
 				}
 			}
@@ -94,11 +82,14 @@ public class isMod {
 				
 				Channelmods.set(0, "0");	
 				UserRollen.removeAll(Channelmods);
-				if (!(UserRollen.size() == event.getMember().getRoles().size())) {
+				if (!(UserRollen.size() == member.getRoles().size())) {
 					return 1;
 				}
 			}
 			
+		} catch (IOException e) {
+			logger.error("IO-Fehler bei Modkontrolle:", e);
+			return -1;
 		} catch (Exception e) {
 			logger.error("Fehler bei Modkontrolle:", e);
 			return -1;
