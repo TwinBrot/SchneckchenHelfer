@@ -19,41 +19,33 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 		Logger logger = Main.logger;
 		try {
 			String message = event.getMessage().getContentRaw().toLowerCase();
-//Link enthalten
 			if (message.contains("http")) {
-//Pflichtwörter
 				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("giving")) {
-//Mögliche Wörter
-					if (message.contains("discord") || message.contains("steam") || message.contains("nitro")
-							|| message.contains("cs:go") || message.contains("boost") || message.contains("csgo") || message.contains("skin")
-							|| message.contains("@everyone")) {
+					if (message.contains("discord") || message.contains("steam") || message.contains("nitro") || message.contains("cs:go")
+							|| message.contains("boost") || message.contains("csgo") || message.contains("skin") || message.contains("@everyone")) {
 						Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 						event.getMessage().delete().queue(success -> {
 							try {
-
+								String LogChannel = ini.get("Settings", "Settings.LogChannel");
 								Guild guild = event.getGuild();
 								EmbedBuilder Info = new EmbedBuilder();
-								Info.setDescription("Nachricht von " + event.getAuthor().getAsMention()
-										+ " gelöscht, weil Schlüsselwörter erkannt wurden!");
+								Info.setDescription("Nachricht von " + event.getAuthor().getAsMention() + " gelöscht! Schlüsselwörter erkannt!");
 								Info.setTimestamp(ZonedDateTime.now().toInstant());
-								Info.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl(),
-										event.getAuthor().getAvatarUrl());
+								Info.setAuthor(event.getAuthor().getName(), event.getAuthor().getAvatarUrl(), event.getAuthor().getAvatarUrl());
 								Info.addField("UserID:", event.getAuthor().getId(), false);
 								Info.addField("Nachrichten Inhalt:", message, false);
-								guild.getTextChannelById(ini.get("Settings", "Settings.LogChannel"))
-										.sendMessageEmbeds(Info.build()).queue();
+								guild.getTextChannelById(LogChannel).sendMessageEmbeds(Info.build()).queue();
 								if (!Main.PingPause) {
 									Main.PingPause = true;
-									guild.getTextChannelById(ini.get("Settings", "Settings.LogChannel"))
-											.sendMessage("<@227131380058947584> <@140206875596685312>").queue();
+									guild.getTextChannelById(LogChannel).sendMessage("<@227131380058947584> <@140206875596685312>").queue();
 									PingPauseReset Reset = new PingPauseReset();
 									Reset.start();
 								}
 							} catch (Exception e) {
-								logger.error("Fehler", e);
+								logger.error("Fehler ScamDetection", e);
 							}
 						}, failure -> {
-							logger.error("Fehler", failure);
+							logger.error("Fehler ScamDetection", failure);
 						});
 					}
 				}
