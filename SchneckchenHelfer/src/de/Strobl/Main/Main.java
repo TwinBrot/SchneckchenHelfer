@@ -18,6 +18,7 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
+import de.Strobl.Commands.Server.UserInfo.Warns;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
@@ -94,7 +95,7 @@ public class Main {
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());
-			Builder.addEventListeners(new MessageReceivedAuswertung());
+			Builder.addEventListeners(new Warns());
 
 //Activity
 			String Typ = ini.get("Settings", "Settings.AktivitätTyp");

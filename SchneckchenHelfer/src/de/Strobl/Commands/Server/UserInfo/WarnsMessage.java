@@ -1,17 +1,17 @@
-package de.Strobl.Main;
+package de.Strobl.Commands.Server.UserInfo;
 
 import org.apache.logging.log4j.Logger;
 
-import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Exceptions.MissingPermException;
 import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
+import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class MessageReceivedAuswertung extends ListenerAdapter {
+public class WarnsMessage extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		Logger logger = Main.logger;
 		if (event.getMessage().getContentRaw().startsWith("*warns")) {
