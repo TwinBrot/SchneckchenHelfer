@@ -27,9 +27,10 @@ public class EmoteTracking extends ListenerAdapter {
 			}
 
 			Wini emoteslog = new Wini(new File(Main.Pfad + "Emotes.ini"));
-			
 
-				Emotes.forEach(emote -> {
+
+			Emotes.forEach(emote -> {
+				try {
 					if (Main.ServerEmotesID.contains(emote)) {
 						try {
 							emoteslog.put("Emotes", emote, Integer.valueOf(emoteslog.get("Emotes", emote)) + 1);
@@ -43,8 +44,12 @@ public class EmoteTracking extends ListenerAdapter {
 						}
 					} else {
 					}
-				});
-			
+				} catch (NullPointerException e) {
+					logger.error("NullPointerException beim EmoteTracking. "
+							+ "(Mögliche Ursache: Bot neu gestartet. Emote wurde abgeschickt, bevor die Emoteliste erstellt wurde)", e);
+				}
+			});
+
 
 		} catch (IOException e) {
 			logger.error("IO-Fehler", e);

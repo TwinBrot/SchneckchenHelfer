@@ -137,7 +137,6 @@ public class SlashCommandRegister {
 			commands.queue(success -> logger.info("Befehle wurden registriert: " + success),
 					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 
-			logger.info("");
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Registrieren der Befehle:", e);
 		}
