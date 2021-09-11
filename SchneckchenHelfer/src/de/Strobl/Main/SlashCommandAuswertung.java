@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
-public class BefehleAuswertung extends ListenerAdapter {
+public class SlashCommandAuswertung extends ListenerAdapter {
 
 	public void onSlashCommand(SlashCommandEvent event) {
 		Logger logger = Main.logger;

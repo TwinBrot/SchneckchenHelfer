@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-public class BefehleRegistrieren {
+public class SlashCommandRegister {
 
 	public static void register(JDA jda) {
 		Logger logger = Main.logger;

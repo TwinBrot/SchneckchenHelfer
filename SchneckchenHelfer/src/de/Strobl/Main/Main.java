@@ -82,7 +82,7 @@ public class Main {
 
 			Builder.addEventListeners(new CatBoy());
 			Builder.addEventListeners(new CatGirl());
-			Builder.addEventListeners(new BefehleAuswertung());
+			Builder.addEventListeners(new SlashCommandAuswertung());
 			Builder.addEventListeners(new ScamDetectionLink());
 			Builder.addEventListeners(new ScamDetectionCodeWort());
 			Builder.addEventListeners(new BotIsOfflineAlarm());
@@ -137,7 +137,7 @@ public class Main {
 
 //Befehle anmelden
 
-			BefehleRegistrieren.register(jda);
+			SlashCommandRegister.register(jda);
 			jda.getGuilds().get(0).updateCommands()
 			
 //			.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
