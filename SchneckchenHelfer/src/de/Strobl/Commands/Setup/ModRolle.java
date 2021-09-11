@@ -2,6 +2,7 @@ package de.Strobl.Commands.Setup;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Profile.Section;
@@ -35,7 +36,7 @@ public class ModRolle {
 				ini.put("ModRollen", Stufe, Old + ", " + event.getOption("rolle").getAsRole().getId());
 			}
 			ini.store();
-			event.getChannel().sendMessage("Rolle " + NewRole.getId() + " hinzugefügt!").queue();
+			event.getChannel().sendMessage("Rolle " + NewRole.getName() + "(" + NewRole.getId() + ")" + " als " + Stufe + " hinzugefügt!").queue();
 			list(event, Hook);
 		} catch (IOException e) {
 			Hook.editOriginal("IO Fehler Beim Auslesen").queue();
@@ -167,8 +168,8 @@ public class ModRolle {
 				Response.addField("Channelmods:", "Fehler beim Auslesen", false);
 			}
 
-
-
+			Response.setFooter("Ausgeführt von " + event.getMember().getEffectiveName());
+			Response.setTimestamp(LocalDateTime.now());
 			event.getChannel().sendMessageEmbeds(Response.build()).queue();
 			Response.clear();
 			Hook.editOriginal("Erfolg.").queue();

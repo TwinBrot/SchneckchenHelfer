@@ -1,13 +1,11 @@
 package de.Strobl.Commands.Server.UserInfo;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -72,15 +70,13 @@ public class Info {
 		UserInfo.setFooter("Angefragt von: " + mod.getEffectiveName());
 		UserInfo.setTimestamp(LocalDateTime.now());
 
-
-		
-		try {
-			Wini ini1 = null;
-			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
-			UserInfo.addField("Bans:", ini1.get("Bans").size() + "", true);
-		} catch (Exception e) {
-			UserInfo.addField("Bans:", "Keine", true);
-		}
+//		try {
+//			Wini ini1 = null;
+//			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
+//			UserInfo.addField("Bans:", ini1.get("Bans").size() + "", true);
+//		} catch (Exception e) {
+//			UserInfo.addField("Bans:", "Keine", true);
+//		}
 //		try {
 //			Wini ini1 = null;
 //	  		ini1 = new Wini (new File(SchneckchenHelfer.Userpfad + member.getId() + ".ini"));
@@ -88,17 +84,13 @@ public class Info {
 //		}catch (Exception e) {
 //			UserInfo.addField("Verwarnungen:", "Es liegen keine Verwarnungen vor", true);
 //		}
-		try {
-			Wini ini1 = null;
-			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
-			UserInfo.addField("Hinweise:", ini1.get("Hinweise").size() + "", true);
-		} catch (Exception e) {
-			UserInfo.addField("Hinweise:", "Keine", true);
-		}
-		
-		
-
-
+//		try {
+//			Wini ini1 = null;
+//			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
+//			UserInfo.addField("Hinweise:", ini1.get("Hinweise").size() + "", true);
+//		} catch (Exception e) {
+//			UserInfo.addField("Hinweise:", "Keine", true);
+//		}
 		return UserInfo;
 	}
 }
