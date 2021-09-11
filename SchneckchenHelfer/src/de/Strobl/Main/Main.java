@@ -94,6 +94,7 @@ public class Main {
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());
+			Builder.addEventListeners(new MessageReceivedAuswertung());
 
 //Activity
 			String Typ = ini.get("Settings", "Settings.AktivitätTyp");

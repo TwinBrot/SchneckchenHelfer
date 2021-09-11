@@ -68,10 +68,11 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 //Auslesen der Befehle
 
 //Channelmod
+			Member member;
 			if (Modrolle > 0) {
 				switch (event.getName()) {
 				case "hinweis":
-					Member member = getMember.getmember(event.getGuild(), event.getOption("user").getAsString());
+					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsString());
 					EventHook.editOriginal("User nicht erkannt").queue();
 					String grundhinweis = event.getOption("grund").getAsString();
 					if (member == null) {
@@ -88,7 +89,7 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 
 				case "info":
 					member = event.getOption("user").getAsMember();
-					Info.info(event, member, EventHook);
+					Info.slashcommandevent(event, member, EventHook);
 					return;
 				}
 			}
