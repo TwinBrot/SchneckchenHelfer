@@ -2,6 +2,7 @@ package de.Strobl.Main;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -30,6 +31,7 @@ import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.JoinNamensüberwachung;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
 import de.Strobl.Events.User.UserInfoJoin;
+import de.Strobl.Instances.SQL;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
@@ -59,14 +61,15 @@ public class Main {
 //logger.info("Information");
 //logger.debug("DEBUG");
 //logger.trace("TRACE");
-
-			FileManagement.Update();
-
+			
+			logger.info("----------------------------------------------");
+			logger.info("----------------------------------------------");
+			SettingsManagement.Update();
+			SQL.initialize();
+			
 //JDA Builder
 
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			logger.info("----------------------------------------------");
-			logger.info("----------------------------------------------");
 			logger.info("JDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS,
@@ -98,9 +101,11 @@ public class Main {
 			Builder.addEventListeners(new WarnsMessage());
 
 //Activity
+			
 			String Typ = ini.get("Settings", "Settings.AktivitätTyp");
 			String Text = ini.get("Settings", "Settings.AktivitätText");
 			String URL = ini.get("Settings", "Settings.StreamLink");
+			
 			switch (Typ) {
 			case "playing":
 				Builder.setActivity(Activity.playing(Text));
@@ -117,6 +122,7 @@ public class Main {
 			}
 
 //Status
+			
 			switch (ini.get("Settings", "Settings.Status")) {
 			case "ONLINE":
 				Builder.setStatus(OnlineStatus.ONLINE);
@@ -136,23 +142,17 @@ public class Main {
 
 			jda = Builder.build().awaitReady();
 			logger.info("JDA wurde gestartet");
-
+			
 //Befehle anmelden
 
 			SlashCommandRegister.register(jda);
 			jda.getGuilds().get(0).updateCommands()
 			
-//			.addCommands(new CommandData("datei", "Konfiguriert die Dateiüberwachung")
-//					.addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
-//					.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
-//					.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
-//							.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
-//					.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
-//							.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
-//					.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen")))
+//			.addCommands(new CommandData("jassy", "Food Jassy UwU"))
 			
 			
 			.queue();
+			
 //Loops starten
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
@@ -177,11 +177,14 @@ public class Main {
 					ServerEmotesID.add(Emote.getId());
 				});
 			});
-
+			
 //Fehler Management
 
 		} catch (IOException e) {
 			logger.fatal("IOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?", e);
+
+		} catch (SQLException e) {
+			logger.fatal("SQL-Fehler", e);
 
 		} catch (LoginException | InterruptedException e) {
 			logger.fatal("Fehler beim Initialisieren des Bots. Ist der Token richtig:", e);

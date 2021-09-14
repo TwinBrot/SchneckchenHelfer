@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 
-public class FileManagement {
+public class SettingsManagement {
 	@SuppressWarnings("unused")
 	public static void Update() {
 		Logger logger = Main.logger;
