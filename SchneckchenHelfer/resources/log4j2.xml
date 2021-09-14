@@ -4,14 +4,14 @@
 		<Console name="Console-Appender" target="SYSTEM_OUT">
 			<PatternLayout>
 				<pattern>
-					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %c{1} - %msg%n
+					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %msg%n
 				</pattern>>
 			</PatternLayout>
 		</Console>
 		<RollingFile name="RollFile-Appender" fileName="./log/log.log" filePattern="./log/%d{yyyy.MM.dd HH.mm.ss}.%i.log.gz">
 			<PatternLayout>
 				<pattern>
-					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %c{1} - %msg%n
+					[%-5level] %d{yyyy-MM-dd HH:mm:ss} - %msg%n
 				</pattern>
 			</PatternLayout>
 		<Policies>
