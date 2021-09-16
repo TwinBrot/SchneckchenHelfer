@@ -20,7 +20,8 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 		try {
 			String message = event.getMessage().getContentRaw().toLowerCase();
 			if (message.contains("http")) {
-				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("giving")) {
+				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("distrib")
+						|| message.contains("giving")) {
 					if (message.contains("discord") || message.contains("steam") || message.contains("nitro") || message.contains("cs:go")
 							|| message.contains("boost") || message.contains("csgo") || message.contains("skin") || message.contains("@everyone")) {
 						Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
@@ -42,7 +43,7 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 									Reset.start();
 								}
 							} catch (Exception e) {
-								logger.error("Fehler ScamDetection", e);
+								logger.error("Fehler ScamDetection LogChannel", e);
 							}
 						}, failure -> {
 							logger.error("Fehler ScamDetection", failure);

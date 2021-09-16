@@ -44,7 +44,7 @@ public class ScamDetectionLink extends ListenerAdapter {
 								Reset.start();
 							}
 						} catch (Exception e) {
-							logger.error("Fehler ScamDetection", e);
+							logger.error("Fehler ScamDetection LogChannel", e);
 						}
 					}, failure -> {
 						logger.error("Fehler Link Scam Protection", failure);
