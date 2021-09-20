@@ -5,14 +5,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Main.Main;
 
-@SuppressWarnings("unused")
 public class SQL {
 	public static String classname = "org.sqlite.JDBC";
 	public static String connectionname = "jdbc:sqlite:userdata.db";
@@ -42,7 +39,7 @@ public class SQL {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
-//			stat.executeUpdate("INSERT INTO strafen (id, userid, typ, text) VALUES ('"+ id +"','"+ userid +"','"+ typ +"','"+ text +"');");
+			stat.executeUpdate("INSERT INTO strafen (id, userid, typ, text) VALUES ('"+ id +"','"+ userid +"','"+ typ +"','"+ text +"');");
 		} catch (Exception e) {
 			logger.error("Unbekannter Fehler beim hinzufügen des Datensatzes:", e);
 			throw new SQLException();
@@ -64,64 +61,78 @@ public class SQL {
 			throw new SQLException();
 		}
 	}
+	
 
-//	public static ArrayList<String> strafengetid(String id) throws SQLException {
-//		Logger logger = Main.logger;
-//		try {
-//			logger.info("Lese Daten aus Datenbank:");
-//			logger.info("ID = " + id);
-//			Class.forName(classname);
-//			Connection conn = DriverManager.getConnection(connectionname);
-//			Statement stat = conn.createStatement();
-//	        ResultSet rs = stat.executeQuery("select * from strafen where id = '" + id + "';");
-//			while (rs.next()) {
-//				System.out.println("ID: = " + rs.getString("id"));
-//				System.out.println("typ = " + rs.getString("typ"));
-//				System.out.println("userid = " + rs.getString("userid"));
-//				System.out.println("text = " + rs.getString("text"));
-//			}
-//			conn.close();
-//		} catch (Exception e) {
-//			logger.error("Unbekannter Fehler beim auslesen eines Datensatzes:", e);
-//			throw new SQLException();
-//		}
-//		return null;
-//	}
+//String[] temp = result.split(",", 4);
+//temp[0] = ID
+//temp[1] = Typ
+//temp[2] = UserID
+//temp[3] = Text
 
-//	public static List<ArrayList<String>> strafengetuserid(String userid) throws SQLException {
-//		Logger logger = Main.logger;
-//		try {
-//			logger.info("Lese Daten aus Datenbank:");
-//			logger.info("ID = " + userid);
-//			Class.forName(classname);
-//			Connection conn = DriverManager.getConnection(connectionname);
-//			Statement stat = conn.createStatement();
-//
-//	        ResultSet rs = stat.executeQuery("select * from strafen where userid = '" + userid + "';");
-//
-//	        
-//	        ArrayList<ArrayList<String>> test = new ArrayList<ArrayList<String>>();
-//	        while (rs.next()) {
-//	        	ArrayList<String> temp = new ArrayList<String>();
-//	            System.out.println("ID: = " + rs.getString("id"));
-//	            System.out.println("typ = " + rs.getString("typ"));
-//	            System.out.println("userid = " + rs.getString("userid"));
-//	            System.out.println("text = " + rs.getString("text"));
-//	        	temp.add(rs.getString("id"));
-//	        	temp.add(rs.getString("userid"));
-//	        	temp.add(rs.getString("typ"));
-//	        	temp.add(rs.getString("text"));
-//	            test.add(temp);
-//	        }
-//	        
-//			
-//			
-//			conn.close();
-//		} catch (Exception e) {
-//			logger.error("Unbekannter Fehler beim hinzufügen des Datensatzes:", e);
-//			throw new SQLException();
-//		}
-//		return null;
-//	}
+	public static String strafengetid(String id) throws SQLException {
+		Logger logger = Main.logger;
+		try {
+			logger.info("Lese Daten aus Datenbank:");
+			logger.info("ID = " + id);
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+	        ResultSet rs = stat.executeQuery("select * from strafen where id = '" + id + "';");
+	        String result = "";
+			while (rs.next()) {
+		        result = rs.getString("id") + "," + rs.getString("typ") + "," + rs.getString("userid") + "," + rs.getString("text");
+			}
+			if (result.equals("")) {
+				throw new SQLException();
+			}
+			rs.close();
+			conn.close();
+			return result;
+		} catch (Exception e) {
+			logger.error("Unbekannter Fehler beim auslesen eines Datensatzes:", e);
+			throw new SQLException();
+		}
+	}
+
+
+	public static String[] strafengetuserid(String userid) throws SQLException {
+		Logger logger = Main.logger;
+		try {
+			logger.info("Lese Daten aus Datenbank:");
+			logger.info("User-ID = " + userid);
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+	        ResultSet size = stat.executeQuery("select * from strafen where userid = '" + userid + "';");
+	        int length = 0;
+			while (size.next()) {
+				length = size.getRow();
+			}
+			System.out.println("Länge:" + length);
+			size.close();
+			
+	        ResultSet rs = stat.executeQuery("select * from strafen where userid = '" + userid + "';");
+	        if (rs == null) {
+				throw new SQLException();
+	        }
+	        String result[] = new String[length];
+			while (rs.next()) {
+				System.out.println("Row:" + rs.getRow());
+		        result[rs.getRow()-1] = rs.getString("id") + "," + rs.getString("typ") + "," + rs.getString("userid") + "," + rs.getString("text");
+			}
+			
+			
+			if (result.length == 0) {
+				throw new SQLException();
+			}
+			
+			rs.close();
+			conn.close();
+			return result;
+		} catch (Exception e) {
+			logger.error("Unbekannter Fehler beim auslesen eines Datensatzes:", e);
+			throw new SQLException();
+		}
+	}
 
 }
