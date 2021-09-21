@@ -4,7 +4,9 @@ import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis;
+import de.Strobl.Commands.Server.Kick;
 import de.Strobl.Commands.Server.Remove;
+import de.Strobl.Commands.Server.Ban.Ban;
 import de.Strobl.Commands.Server.UserInfo.Info;
 import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Commands.Setup.Dateiüberwachung;
@@ -13,6 +15,7 @@ import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Exceptions.MissingPermException;
+import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,7 +25,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class SlashCommandAuswertung extends ListenerAdapter {
-
+	@Override
 	public void onSlashCommand(SlashCommandEvent event) {
 		Logger logger = Main.logger;
 		InteractionHook EventHook = event.getHook();
@@ -78,7 +81,8 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 			}
 
 //Auslesen der Befehle
-
+			Member member;
+			String text;
 //Channelmod
 			if (Modrolle > 0) {
 				switch (event.getName()) {
@@ -88,7 +92,7 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 					Hinweis.hinweis(event, user, grundhinweis, EventHook);
 					return;
 				case "info":
-					Member member = event.getOption("user").getAsMember();
+					member = event.getOption("user").getAsMember();
 					Info.slashcommandevent(event, member, EventHook);
 					return;
 				}
@@ -128,11 +132,34 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				case "remove":
 					Remove.remove(event, EventHook);
 					return;
-				case "help":
-					return;
 				case "kick":
+					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsUser());
+					try {
+						text = event.getOption("grund").getAsString();
+					} catch (NullPointerException e) {
+						text = "";
+					}
+					if (member == null) {
+						EventHook.editOriginal("Konnte den User nicht finden").queue();
+						return;
+					}
+					Kick.onSlashCommand(event, member, text, EventHook);
 					return;
 				case "ban":
+					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsUser());
+					try {
+						text = event.getOption("grund").getAsString();
+					} catch (NullPointerException e) {
+						text = "";
+					}
+					if (member == null) {
+						EventHook.editOriginal("Konnte den User nicht finden").queue();
+						return;
+					}
+//TODO: Ban = Kick
+					Ban.onSlashCommand(event, member, text, EventHook);
+					return;
+				case "help":
 					return;
 				case "changeban":
 					return;

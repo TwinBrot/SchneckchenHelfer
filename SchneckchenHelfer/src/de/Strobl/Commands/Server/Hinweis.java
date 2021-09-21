@@ -38,7 +38,7 @@ public class Hinweis {
 							SQL.strafenadd(ID, user.getId(), "Hinweis", Text);
 							SQL.strafencounterup();
 							Info.addField("User hat einen Hinweis erhalten", "\n**Hinweis-ID:** " + ID, false);
-							Info.addField(user.getName() + "'s Hinweis Nr. ", "**Grund:** " + Text, true);
+							Info.addField(user.getName() + "'s Hinweis Nr. "+ SQL.strafengetusersize(user, "Hinweis"), "**Grund:** " + Text, true);
 						} catch (SQLException e) {
 							logger.error("SQL-Fehler beim Speichern des Hinweises", e);
 							Info.setColor(0xd41406);

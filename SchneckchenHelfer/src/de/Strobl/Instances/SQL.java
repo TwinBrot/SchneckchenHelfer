@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Exceptions.SQLDataNotFound;
 import de.Strobl.Main.Main;
+import net.dv8tion.jda.api.entities.User;
 
 public class SQL {
 	private static String classname = "org.sqlite.JDBC";
@@ -24,9 +25,10 @@ public class SQL {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
-			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid, count);");
 			stat.executeUpdate("CREATE TABLE if not exists strafen (ID, userid, typ, text);");
 			stat.executeUpdate("CREATE INDEX if not exists Strafen_ID_UserID ON strafen (id, userid); ");
+			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid, count);");
+			stat.executeUpdate("CREATE INDEX if not exists emotes_id ON emotes (emoteid); ");
 			
 //Check if Strafen-Counter Exists
 			ResultSet size = stat.executeQuery("select * from strafen where userid = '" + 0 + "';");
@@ -50,6 +52,8 @@ public class SQL {
 		}
 	}
 
+//Strafen
+	
 	public static void strafenadd(String id, String userid, String typ, String text) throws SQLException {
 		Logger logger = Main.logger;
 		try {
@@ -68,6 +72,14 @@ public class SQL {
 
 	public static void strafenadd(Integer id, String userid, String typ, String text) throws SQLException {
 		strafenadd(id.toString(), userid, typ, text);
+	}
+
+	public static void strafenadd(Integer id, Integer userid, String typ, String text) throws SQLException {
+		strafenadd(id.toString(), userid.toString(), typ, text);
+	}
+
+	public static void strafenadd(String id, Integer userid, String typ, String text) throws SQLException {
+		strafenadd(id, userid.toString(), typ, text);
 	}
 
 	public static String strafengetid(String id) throws SQLException, SQLDataNotFound {
@@ -141,6 +153,34 @@ public class SQL {
 			throw new SQLException();
 		}
 	}
+
+	public static Integer strafengetusersize(String userid, String typ) throws SQLException {
+		Logger logger = Main.logger;
+		try {
+			logger.info("Lese Daten aus Datenbank:");
+			logger.info("User-ID = " + userid);
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+			String Query = "select * from strafen where userid = '" + userid +"'";
+			if (typ != null) {
+				Query = Query + " AND typ = '" + typ + "'";
+			}
+			ResultSet size = stat.executeQuery(Query + ";");
+			int length = 0;
+			while (size.next()) {
+				length = size.getRow();
+			}
+			size.close();
+			return length;
+		} catch (Exception e) {
+			logger.error("Unbekannter Fehler beim auslesen eines Datensatzes:", e);
+			throw new SQLException();
+		}
+	}
+	public static Integer strafengetusersize(User user, String typ) throws SQLException {
+		return strafengetusersize(user.getId(), typ);
+	}
 	
 	public static Integer strafengetcounter() throws SQLException {
 		Logger logger = Main.logger;
@@ -197,7 +237,9 @@ public class SQL {
 			throw new SQLException();
 		}
 	}	
-	
+
+//Emotes
+
 	public static void emoteup (String emoteid) throws SQLException {
 		Logger logger = Main.logger;
 		try {
@@ -267,7 +309,5 @@ public class SQL {
 			throw new SQLException();
 		}
 	}
-	
-	
-	
+
 }

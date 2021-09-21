@@ -124,11 +124,11 @@ public class SlashCommandRegister {
 
 			commands.addCommands(new CommandData("kick", "Kickt den ausgewählten User")
 					.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
-					.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Kicks an.")));
+					.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Kicks an.").setRequired(true)));
 
 			commands.addCommands(new CommandData("ban", "Bannt den ausgewählten User")
 					.addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
-					.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.")));
+					.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true)));
 
 			commands.addCommands(new CommandData("changeban", "Ändert die Dauer eines Tempbans.")
 					.addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
