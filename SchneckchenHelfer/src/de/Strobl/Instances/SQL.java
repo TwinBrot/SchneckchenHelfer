@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +15,7 @@ import de.Strobl.Main.Main;
 
 public class SQL {
 	private static String classname = "org.sqlite.JDBC";
-	private static String connectionname = "jdbc:sqlite:userdata.db";
+	private static String connectionname = "jdbc:sqlite:data.db";
 
 	public static void initialize() throws SQLException {
 		Logger logger = Main.logger;
@@ -22,9 +24,10 @@ public class SQL {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
+			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid, count);");
 			stat.executeUpdate("CREATE TABLE if not exists strafen (ID, userid, typ, text);");
 			stat.executeUpdate("CREATE INDEX if not exists Strafen_ID_UserID ON strafen (id, userid); ");
-		
+			
 //Check if Strafen-Counter Exists
 			ResultSet size = stat.executeQuery("select * from strafen where userid = '" + 0 + "';");
 			int length = 0;
@@ -85,10 +88,6 @@ public class SQL {
 			}
 			rs.close();
 			conn.close();
-			Boolean test = 1==0;
-			if (test) {
-				throw new SQLException();
-			}
 			return result;
 		} catch (SQLDataNotFound e) {
 			throw new SQLDataNotFound("Datensatz nicht gefunden!", "", e);
@@ -197,5 +196,78 @@ public class SQL {
 			logger.error("Unbekannter Fehler beim hinzufügen des Datensatzes:", e);
 			throw new SQLException();
 		}
+	}	
+	
+	public static void emoteup (String emoteid) throws SQLException {
+		Logger logger = Main.logger;
+		try {
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery("select * from emotes where emoteid = '" + emoteid + "';");
+			String result = "";
+			while (rs.next()) {
+				result = rs.getString("count");
+				if (rs.getRow() > 1) {
+					throw new SQLException("Mehrere Datensätze mit dieser ID gefunden!","");
+				}
+			}
+			if (result.equals("")) {
+				stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('"+ emoteid +"','1');");
+				return;
+			}
+			Integer count = Integer.parseInt(result);
+			count++;
+			stat.executeUpdate("DELETE FROM emotes WHERE emoteid = '" + emoteid + "';");
+			stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('"+ emoteid +"','" + count + "');");
+		} catch (Exception e) {
+			logger.error("Unbekannter Fehler beim Emotecounter erhöhen:", e);
+			throw new SQLException();
+		}
 	}
+
+	public static Map<String, Integer> emotesget() throws SQLException {
+		Logger logger = Main.logger;
+		try {
+			logger.info("Lese alle Emotes aus Datenbank");
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+			ResultSet size = stat.executeQuery("select * from emotes ;");
+			int length = 0;
+			while (size.next()) {
+				length = size.getRow();
+			}
+			size.close();
+			
+			if (length == 0) {
+				return null;
+			}
+			
+			ResultSet rs = stat.executeQuery("select * from emotes;");
+			if (rs == null) {
+				throw new SQLException();
+			}
+			Map<String, Integer> Emotelist = new HashMap<String, Integer>();
+			while (rs.next()) {
+				Integer count = Integer.parseInt(rs.getString("count"));
+				Emotelist.put(rs.getString("emoteid"), count);
+			}
+
+
+			if (Emotelist.size() == 0) {
+				throw new SQLDataNotFound("", "");
+			}
+
+			rs.close();
+			conn.close();
+			return Emotelist;
+		} catch (Exception e) {
+			logger.error("Unbekannter Fehler beim auslesen eines Datensatzes:", e);
+			throw new SQLException();
+		}
+	}
+	
+	
+	
 }

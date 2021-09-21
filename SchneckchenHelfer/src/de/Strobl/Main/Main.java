@@ -19,14 +19,12 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.DM.CatBoy;
 import de.Strobl.Commands.DM.CatGirl;
-import de.Strobl.Commands.Server.UserInfo.WarnsMessage;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
 import de.Strobl.Events.Nachrichten.Filechecker;
 import de.Strobl.Events.Nachrichten.ReactionRemoveLog;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
-import de.Strobl.Events.Nachrichten.ScamDetectionLink;
 import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.JoinNamensüberwachung;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
@@ -44,7 +42,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	public static String Pfad = "./";
-//	public static String Userpfad = "./users/";
 	public static JDA jda;
 	public static String version = "v1.6.5";
 	public static List<String> ServerEmotesID;
@@ -86,7 +83,6 @@ public class Main {
 			Builder.addEventListeners(new CatBoy());
 			Builder.addEventListeners(new CatGirl());
 			Builder.addEventListeners(new SlashCommandAuswertung());
-			Builder.addEventListeners(new ScamDetectionLink());
 			Builder.addEventListeners(new ScamDetectionCodeWort());
 			Builder.addEventListeners(new BotIsOfflineAlarm());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
@@ -96,7 +92,6 @@ public class Main {
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new EmoteAdded());
 			Builder.addEventListeners(new EmoteRemoved());
-			Builder.addEventListeners(new WarnsMessage());
 
 //Activity
 			
@@ -145,8 +140,8 @@ public class Main {
 
 			SlashCommandRegister.register(jda);
 			jda.getGuilds().get(0).updateCommands()
-			
-//			.addCommands(new CommandData("jassy", "Food Jassy UwU"))
+
+//			.addCommands(new CommandData("emotes", "Startet die Emoteauswertung"))
 			
 			
 			.queue();

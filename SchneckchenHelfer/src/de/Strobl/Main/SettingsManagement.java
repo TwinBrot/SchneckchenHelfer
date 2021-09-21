@@ -68,7 +68,8 @@ public class SettingsManagement {
 				ini.put("Dateiüberwachung", "Active", "false");
 			}
 			if (ini.get("Dateiüberwachung", "Allowed") == null) {
-				ini.put("Dateiüberwachung", "Allowed", "jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp");
+				ini.put("Dateiüberwachung", "Allowed",
+						"jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp");
 			}
 			if (ini.get("Namensüberwachung", "Active") == null) {
 				ini.put("Namensüberwachung", "Active", "false");
@@ -78,70 +79,8 @@ public class SettingsManagement {
 			}
 			ini.store();
 
-// Read Emotes.ini File
-			try {
-				Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
-			} catch (IOException e) {
-				logger.warn("Emotes.ini nicht gefunden.");
-				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Emotes.ini");
-				newFile.createNewFile();
-			}
-			Wini emotes = new Wini(new File(Pfad + "Emotes.ini"));
-			if (emotes.get("Embed", "Count") == null) {
-				emotes.put("Embed", "Count", "24");
-			}
-			emotes.store();
-
-// Read ID.ini File
-			try {
-				Wini ID = new Wini(new File(Pfad + "ID.ini"));
-			} catch (IOException e) {
-				logger.warn("ID.ini nicht gefunden.");
-				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "ID.ini");
-				newFile.createNewFile();
-			}
-			Wini Auswertung = new Wini(new File(Pfad + "ID.ini"));
-			if (Auswertung.get("Hinweise", "Counter") == null) {
-				Auswertung.put("Hinweise", "Counter", "0");
-			}
-			Auswertung.store();
-
-// Read Link.ini File
-			try {
-				Wini Link = new Wini(new File(Pfad + "Link.ini"));
-			} catch (IOException e) {
-				logger.warn("Link.ini nicht gefunden.");
-				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Link.ini");
-				newFile.createNewFile();
-			}
-			Wini Link = new Wini(new File(Pfad + "Link.ini"));
-			if (Link.isEmpty()) {
-				Link.clear();
-				Link.putComment("Links", "Add Links like this:   COUNTER = LINK");
-				Link.put("Links", "1", "discorcl.link/");
-			} else if (Link.get("Links").size() == 0) {
-				Link.clear();
-				Link.putComment("Links", "Add Links like this:   COUNTER = LINK");
-				Link.put("Links", "1", "discorcl.link/");
-			}
-			Link.store();
-
-// Users Ordner Anlegen
-//			File file = new File(Main.Userpfad);
-//			if (!file.exists()) {
-//				if (file.mkdir()) {
-//					logger.warn("User-Dateien Ordner nicht gefunden.");
-//					logger.warn("Versuche Ordner zu erstellen.");
-//				} else {
-//					logger.error("Konnte User-Ordner nicht erstellen!");
-//				}
-//			}
-
 		} catch (Exception e) {
-			logger.fatal("Fehler beim anlegen der Dateien:", e);
+			logger.fatal("Fehler beim anlegen/updaten der Settings-Dateien:", e);
 		}
 	}
 }
