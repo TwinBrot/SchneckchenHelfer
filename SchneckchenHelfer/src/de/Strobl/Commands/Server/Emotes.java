@@ -1,5 +1,6 @@
 package de.Strobl.Commands.Server;
 
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,13 @@ import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.ListedEmote;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Emotes {
 	public static int counter;
 	public static EmbedBuilder EmbedEmotes = new EmbedBuilder();
 
-	public static void emotes(SlashCommandEvent event) {
+	public static void emotes(SlashCommandEvent event, InteractionHook EventHook) {
 		Logger logger = Main.logger;
 		try {
 			counter = 0;
@@ -46,12 +48,14 @@ public class Emotes {
 					EmbedEmotes.setAuthor(event.getJDA().getSelfUser().getName() + " Emote-Auswertung", event.getGuild().getIconUrl(),
 							event.getGuild().getIconUrl());
 					EmbedEmotes.setColor(0x00c42b);
+					EmbedEmotes.setTimestamp(ZonedDateTime.now().toInstant());
+					EmbedEmotes.setFooter("Angefragt von " + event.getMember().getEffectiveName());
 					channel.sendMessageEmbeds(EmbedEmotes.build()).queue();
 					EmbedEmotes.clear();
 				}
 			});
-			EmbedEmotes.clear();
-
+			EventHook.editOriginal("Erledigt.").queue();
+			
 		} catch (Exception e) {
 			event.getHook().editOriginal("Fehler beim Ausführen").queue();
 			logger.error("Fehler beim Auswerten der Emotenutzung:", e);
