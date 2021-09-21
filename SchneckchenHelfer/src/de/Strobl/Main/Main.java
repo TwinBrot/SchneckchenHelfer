@@ -30,7 +30,6 @@ import de.Strobl.Events.Nachrichten.ScamDetectionLink;
 import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.JoinNamensüberwachung;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
-import de.Strobl.Events.User.UserInfoJoin;
 import de.Strobl.Instances.SQL;
 import de.Strobl.Loops.TempBan;
 import de.Strobl.Loops.TempMute;
@@ -45,7 +44,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	public static String Pfad = "./";
-	public static String Userpfad = "./users/";
+//	public static String Userpfad = "./users/";
 	public static JDA jda;
 	public static String version = "v1.6.4";
 	public static List<String> ServerEmotesID;
@@ -92,7 +91,6 @@ public class Main {
 			Builder.addEventListeners(new BotIsOfflineAlarm());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
 			Builder.addEventListeners(new JoinNamensüberwachung());
-			Builder.addEventListeners(new UserInfoJoin());
 			Builder.addEventListeners(new ReactionRemoveLog());
 			Builder.addEventListeners(new Filechecker());
 			Builder.addEventListeners(new EmoteTracking());

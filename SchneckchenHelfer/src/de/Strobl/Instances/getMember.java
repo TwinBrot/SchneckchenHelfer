@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 public class getMember {
 	public static Member getmember(Guild guild, String UserID) {
@@ -22,5 +23,8 @@ public class getMember {
 			}
 		}
 		return member;
+	}
+	public static Member getmember(Guild guild, User user) {
+		return getmember(guild, user.getId());
 	}
 }

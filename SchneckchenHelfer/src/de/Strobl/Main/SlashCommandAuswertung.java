@@ -13,10 +13,10 @@ import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Exceptions.MissingPermException;
-import de.Strobl.Instances.getMember;
 import de.Strobl.Instances.isMod;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -49,7 +49,7 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 			CommandData = CommandData + "  Options: " + event.getOptions();
 
 			logger.info("");
-			logger.info("Befehl erkannt:");
+			logger.info("Befehl erkannt: _______________________________________________________________________");
 			logger.info("Author: " + event.getMember());
 			logger.info(CommandData);
 
@@ -81,26 +81,20 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 //Auslesen der Befehle
 
 //Channelmod
-			Member member;
 			if (Modrolle > 0) {
 				switch (event.getName()) {
 				case "hinweis":
-					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsString());
-					EventHook.editOriginal("User nicht erkannt").queue();
+					User user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
-					if (member == null) {
-						EventHook.editOriginal("User nicht erkannt").queue();
-						return;
-					}
-					if (event.getJDA().getSelfUser() == member.getUser()) {
+					if (event.getJDA().getSelfUser() == user) {
 						EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
 						return;
 					}
 					;
-					Hinweis.hinweis(event, member, grundhinweis, EventHook);
+					Hinweis.hinweis(event, user, grundhinweis, EventHook);
 					return;
 				case "info":
-					member = event.getOption("user").getAsMember();
+					Member member = event.getOption("user").getAsMember();
 					Info.slashcommandevent(event, member, EventHook);
 					return;
 				}

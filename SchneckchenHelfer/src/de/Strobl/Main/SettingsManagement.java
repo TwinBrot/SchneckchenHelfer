@@ -93,18 +93,6 @@ public class SettingsManagement {
 			}
 			emotes.store();
 
-// Read Strafen.ini File
-			try {
-				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
-			} catch (IOException e) {
-				logger.warn("Strafen.ini nicht gefunden.");
-				logger.warn("Versuche Datei zu erstellen.");
-				File newFile = new File(Pfad + "Strafen.ini");
-				newFile.createNewFile();
-				Wini Strafen = new Wini(new File(Pfad + "Strafen.ini"));
-				Strafen.store();
-			}
-
 // Read ID.ini File
 			try {
 				Wini ID = new Wini(new File(Pfad + "ID.ini"));
@@ -142,15 +130,15 @@ public class SettingsManagement {
 			Link.store();
 
 // Users Ordner Anlegen
-			File file = new File(Main.Userpfad);
-			if (!file.exists()) {
-				if (file.mkdir()) {
-					logger.warn("User-Dateien Ordner nicht gefunden.");
-					logger.warn("Versuche Ordner zu erstellen.");
-				} else {
-					logger.error("Konnte User-Ordner nicht erstellen!");
-				}
-			}
+//			File file = new File(Main.Userpfad);
+//			if (!file.exists()) {
+//				if (file.mkdir()) {
+//					logger.warn("User-Dateien Ordner nicht gefunden.");
+//					logger.warn("Versuche Ordner zu erstellen.");
+//				} else {
+//					logger.error("Konnte User-Ordner nicht erstellen!");
+//				}
+//			}
 
 		} catch (Exception e) {
 			logger.fatal("Fehler beim anlegen der Dateien:", e);
