@@ -16,6 +16,10 @@ public class Hinweis {
 	public static void hinweis(SlashCommandEvent event, User user, String Text, InteractionHook EventHook) {
 		Logger logger = Main.logger;
 		try {
+			if (event.getJDA().getSelfUser() == user) {
+				EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
+				return;
+			};
 			EmbedBuilder Nachricht = new EmbedBuilder();
 			Nachricht.setColor(0xd41406);
 			Nachricht.setAuthor(event.getGuild().getName(), event.getGuild().getIconUrl(), event.getGuild().getIconUrl());

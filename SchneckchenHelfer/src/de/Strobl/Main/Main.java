@@ -139,12 +139,6 @@ public class Main {
 //Befehle anmelden
 
 			SlashCommandRegister.register(jda);
-			jda.getGuilds().get(0).updateCommands()
-
-//			.addCommands(new CommandData("emotes", "Startet die Emoteauswertung"))
-			
-			
-			.queue();
 			
 //Loops starten
 

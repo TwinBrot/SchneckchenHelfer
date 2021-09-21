@@ -36,9 +36,9 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				logger.info("Befehl in den Privatnachrichten erkannt. Abbruch");
 				return;
 			}
-			
+
 //Console Output
-			
+
 			String CommandData = "Befehl: " + event.getName();
 			if (event.getSubcommandGroup() != null) {
 				CommandData = CommandData + "  SubCommandGroup: " + event.getSubcommandGroup();
@@ -48,7 +48,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 			}
 			CommandData = CommandData + "  Options: " + event.getOptions();
 
-			logger.info("");
 			logger.info("Befehl erkannt: _______________________________________________________________________");
 			logger.info("Author: " + event.getMember());
 			logger.info(CommandData);
@@ -86,11 +85,6 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				case "hinweis":
 					User user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
-					if (event.getJDA().getSelfUser() == user) {
-						EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
-						return;
-					}
-					;
 					Hinweis.hinweis(event, user, grundhinweis, EventHook);
 					return;
 				case "info":
@@ -106,7 +100,7 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				switch (event.getName()) {
 				case "namen":
 					SubCommandName = event.getSubcommandName();
-					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate") ) {
+					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate")) {
 						Namensüberwachung.onoff(event, EventHook);
 					} else if (SubCommandName.equals("add")) {
 						Namensüberwachung.add(event, EventHook);
@@ -118,7 +112,7 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 					return;
 				case "datei":
 					SubCommandName = event.getSubcommandName();
-					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate") ) {
+					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate")) {
 						Dateiüberwachung.onoff(event, EventHook);
 					} else if (SubCommandName.equals("add")) {
 						Dateiüberwachung.add(event, EventHook);
@@ -129,10 +123,10 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 					}
 					return;
 				case "emotes":
-					Emotes.emotes(event);
+					Emotes.emotes(event, EventHook);
 					return;
 				case "remove":
-					Remove.remove(event, event.getHook());
+					Remove.remove(event, EventHook);
 					return;
 				case "help":
 					return;
@@ -150,11 +144,11 @@ public class SlashCommandAuswertung extends ListenerAdapter {
 				switch (event.getName()) {
 				case "modrolle":
 					if (event.getSubcommandName().equals("add")) {
-						ModRolle.add(event, event.getHook());
+						ModRolle.add(event, EventHook);
 					} else if (event.getSubcommandName().equals("remove")) {
-						ModRolle.remove(event, event.getHook());
+						ModRolle.remove(event, EventHook);
 					} else if (event.getSubcommandName().equals("list")) {
-						ModRolle.list(event, event.getHook());
+						ModRolle.list(event, EventHook);
 					}
 					return;
 				case "onlinestatus":
