@@ -20,7 +20,10 @@ public class SlashCommandRegister {
 		try {
 			logger.info("");
 			logger.info("Befehle werden registriert");
-			CommandListUpdateAction commands = jda.updateCommands();
+
+			CommandListUpdateAction test = jda.updateCommands();
+			test.queue();
+			CommandListUpdateAction commands = jda.getGuilds().get(0).updateCommands();
 
 //Setup
 			commands.addCommands(new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots")
