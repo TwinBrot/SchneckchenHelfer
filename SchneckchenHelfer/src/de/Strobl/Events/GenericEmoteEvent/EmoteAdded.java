@@ -14,9 +14,9 @@ public class EmoteAdded extends ListenerAdapter {
 	public void onEmoteAdded(EmoteAddedEvent event) {
 		Logger logger = Main.logger;
 		try {
-			Main.ServerEmotesID.clear();
 			event.getGuild().retrieveEmotes().queue(GuildEmotes -> {
 				List<ListedEmote> ServerEmotes = GuildEmotes;
+				Main.ServerEmotesID.clear();
 				ServerEmotes.forEach(Emote -> {
 					Main.ServerEmotesID.add(Emote.getId());
 				});
