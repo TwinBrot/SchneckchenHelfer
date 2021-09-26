@@ -21,9 +21,10 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 			String message = event.getMessage().getContentRaw().toLowerCase();
 			if (message.contains("http")) {
 				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("distrib")
-						|| message.contains("giving")) {
+						|| message.contains("hack") || message.contains("money") || message.contains("installer") || message.contains("giving")) {
 					if (message.contains("discord") || message.contains("steam") || message.contains("nitro") || message.contains("cs:go")
-							|| message.contains("boost") || message.contains("csgo") || message.contains("skin") || message.contains("@everyone")) {
+							|| message.contains("boost") || message.contains("csgo") || message.contains("valorant") || message.contains("skin")
+							|| message.contains("Game") || message.contains("@everyone")) {
 						Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 						event.getMessage().delete().queue(success -> {
 							try {

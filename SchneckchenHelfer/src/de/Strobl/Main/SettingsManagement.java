@@ -41,10 +41,10 @@ public class SettingsManagement {
 				ini.put("Setup", "Token", "INPUT_TOKEN_HERE");
 			}
 			if (ini.get("Settings", "Settings.AktivitätText") == null) {
-				ini.put("Settings", "Settings.AktivitätText", "playing");
+				ini.put("Settings", "Settings.AktivitätText", "/hilfe");
 			}
 			if (ini.get("Settings", "Settings.AktivitätTyp") == null) {
-				ini.put("Settings", "Settings.AktivitätTyp", "/hilfe");
+				ini.put("Settings", "Settings.AktivitätTyp", "playing");
 			}
 			if (ini.get("Settings", "Settings.StreamLink") == null) {
 				ini.put("Settings", "Settings.StreamLink", "https://www.twitch.tv/maudado");
