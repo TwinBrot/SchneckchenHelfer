@@ -21,8 +21,6 @@ public class SlashCommandRegister {
 			logger.info("");
 			logger.info("Befehle werden registriert");
 
-			CommandListUpdateAction test = jda.updateCommands();
-			test.queue();
 			CommandListUpdateAction commands = jda.getGuilds().get(0).updateCommands();
 
 //Setup

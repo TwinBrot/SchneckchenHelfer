@@ -150,7 +150,7 @@ public class Main {
 
 // Update für den Bot verfügbar?
 
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
 				logger.warn("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle zu Updaten.");
