@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Instances.SQL;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -18,6 +19,10 @@ public class Kick {
 		try {
 			if (event.getJDA().getSelfUser() == member.getUser()) {
 				EventHook.editOriginal("Wolltest du wirklich mich kicken? 🙄  Vergiss das mal gleich wieder.").queue();
+				return;
+			}
+			if (!event.getGuild().getSelfMember().hasPermission(Permission.KICK_MEMBERS)) {
+				EventHook.editOriginal("Meine Rechte reichen nicht aus, um User zu kicken.").queue();
 				return;
 			}
 			if (!event.getMember().canInteract(member)) {
@@ -68,11 +73,11 @@ public class Kick {
 					info.addField("User wurde vom Server gekickt", "User konnte NICHT informiert werden! Privatnachrichten aus?", false);
 				}
 				try {
-					Integer size = SQL.strafengetusersize(member.getId(), null);
+					Integer size = SQL.strafengetusersize(member.getId(), "Kick")+1;
 					Integer ID = SQL.strafengetcounter();
 					SQL.strafenadd(ID, member.getId(), "Kick", text);
 					SQL.strafencounterup();
-					info.addField("Kick-ID " + ID, member.getEffectiveName() + " 's Kick Nr." + size, false);
+					info.addField("Kick-ID: " + ID, member.getEffectiveName() + " 's Kick Nr." + size, false);
 				} catch (SQLException e1) {
 					info.addField("SQL Fehler beim Speichern des Kicks!", "User wurde erfolgreich gekickt!", false);
 				}

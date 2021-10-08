@@ -29,6 +29,8 @@ public class SQL {
 			stat.executeUpdate("CREATE INDEX if not exists Strafen_ID_UserID ON strafen (id, userid); ");
 			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid, count);");
 			stat.executeUpdate("CREATE INDEX if not exists emotes_id ON emotes (emoteid); ");
+			stat.executeUpdate("CREATE TABLE if not exists temp (ID, userid, typ, time);");
+			stat.executeUpdate("CREATE INDEX if not exists temp_time ON temp (time); ");
 			
 //Check if Strafen-Counter Exists
 			ResultSet size = stat.executeQuery("select * from strafen where userid = '" + 0 + "';");
