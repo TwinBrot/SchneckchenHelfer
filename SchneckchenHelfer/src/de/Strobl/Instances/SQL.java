@@ -7,21 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.joda.time.DateTime;
 import de.Strobl.Exceptions.SQLDataNotFound;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.entities.User;
 
 public class SQL {
 	private static String classname = "org.sqlite.JDBC";
 	private static String connectionname = "jdbc:sqlite:data.db";
+	private static final Logger logger = LogManager.getLogger(SQL.class);
 
 	public static void initialize() throws SQLException {
-		Logger logger = Main.logger;
 		try {
-			logger.info("SQL Datenbank wird erstellt, wenn nicht existent.");
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
@@ -29,18 +27,17 @@ public class SQL {
 			stat.executeUpdate("CREATE INDEX if not exists Strafen_ID_UserID ON strafen (id, userid); ");
 			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid, count);");
 			stat.executeUpdate("CREATE INDEX if not exists emotes_id ON emotes (emoteid); ");
-			stat.executeUpdate("CREATE TABLE if not exists temp (ID, userid, typ, time);");
-			stat.executeUpdate("CREATE INDEX if not exists temp_time ON temp (time); ");
-			
-//Check if Strafen-Counter Exists
+			stat.executeUpdate("CREATE TABLE if not exists temp (userid, typ, time);");
+
+// Check if Strafen-Counter Exists
 			ResultSet size = stat.executeQuery("select * from strafen where userid = '" + 0 + "';");
 			int length = 0;
 			while (size.next()) {
 				length = size.getRow();
 			}
 			size.close();
-			
-//If no Counter exists, Create One
+
+// If no Counter exists, Create One
 			if (length == 0) {
 				logger.warn("Strafenzähler nicht gefunden. Lege neuen Zähler an.");
 				stat.executeUpdate("INSERT INTO strafen (id, userid, typ, text) VALUES ('1','0','COUNTER','COUNTER');");
@@ -54,10 +51,9 @@ public class SQL {
 		}
 	}
 
-//Strafen
-	
+// Strafen
+
 	public static void strafenadd(String id, String userid, String typ, String text) throws SQLException {
-		Logger logger = Main.logger;
 		try {
 			logger.info("Füge Datensatz der Strafen-Datenbank hinzu:");
 			logger.info("ID = " + id + "     User-ID = " + userid + "     Strafen-Typ = " + typ);
@@ -85,7 +81,6 @@ public class SQL {
 	}
 
 	public static String strafengetid(String id) throws SQLException, SQLDataNotFound {
-		Logger logger = Main.logger;
 		try {
 			logger.info("Lese Daten aus Datenbank:");
 			logger.info("ID = " + id);
@@ -117,7 +112,6 @@ public class SQL {
 		// temp[1] = Typ
 		// temp[2] = UserID
 		// temp[3] = Text
-		Logger logger = Main.logger;
 		try {
 			logger.info("Lese Daten aus Datenbank:");
 			logger.info("User-ID = " + userid);
@@ -140,7 +134,6 @@ public class SQL {
 				result[rs.getRow() - 1] = rs.getString("id") + "," + rs.getString("typ") + "," + rs.getString("userid") + "," + rs.getString("text");
 			}
 
-
 			if (result.length == 0) {
 				throw new SQLDataNotFound("", "");
 			}
@@ -157,14 +150,13 @@ public class SQL {
 	}
 
 	public static Integer strafengetusersize(String userid, String typ) throws SQLException {
-		Logger logger = Main.logger;
 		try {
 			logger.info("Lese Daten aus Datenbank:");
 			logger.info("User-ID = " + userid);
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
-			String Query = "select * from strafen where userid = '" + userid +"'";
+			String Query = "select * from strafen where userid = '" + userid + "'";
 			if (typ != null) {
 				Query = Query + " AND typ = '" + typ + "'";
 			}
@@ -183,9 +175,8 @@ public class SQL {
 	public static Integer strafengetusersize(User user, String typ) throws SQLException {
 		return strafengetusersize(user.getId(), typ);
 	}
-	
+
 	public static Integer strafengetcounter() throws SQLException {
-		Logger logger = Main.logger;
 		try {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
@@ -207,24 +198,48 @@ public class SQL {
 		}
 	}
 
+	public static String strafengettemp() throws SQLException {
+		try {
+			Class.forName(classname);
+			Connection conn = DriverManager.getConnection(connectionname);
+			Statement stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery("select * from temp;");
+			while (rs.next()) {
+				DateTime unbantime = DateTime.parse(rs.getString("time"));
+				if (!unbantime.isAfterNow()) {
+					String result = rs.getString("userid") + "," + rs.getString("typ");
+					stat.executeUpdate("delete from temp where userid = '" + rs.getString("userid") + "';");
+					rs.close();
+					conn.close();
+					return result;
+				}
+			}
+			rs.close();
+			conn.close();
+		} catch (Exception e) {
+			logger.error("SQL Fehler Temp Check:", e);
+			throw new SQLException();
+		}
+		return "";
+
+	}
+
 	public static void strafenremove(String id) throws SQLException {
-		Logger logger = Main.logger;
 		try {
 			logger.info("Entferne Datensatz aus der Datenbank:");
 			logger.info("ID = " + id);
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
 			Statement stat = conn.createStatement();
-			stat.executeUpdate("delete from strafen where id = '"+ id +"';");
+			stat.executeUpdate("delete from strafen where id = '" + id + "';");
 			conn.close();
 		} catch (Exception e) {
 			logger.error("Unbekannter Fehler beim hinzufügen des Datensatzes:", e);
 			throw new SQLException();
 		}
 	}
-	
-	public static void strafencounterup () throws SQLException {
-		Logger logger = Main.logger;
+
+	public static void strafencounterup() throws SQLException {
 		try {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
@@ -232,18 +247,17 @@ public class SQL {
 			Integer ID = strafengetcounter();
 			ID++;
 			stat.executeUpdate("DELETE FROM strafen WHERE userid = '0';");
-			stat.executeUpdate("INSERT INTO strafen (id, userid, typ, text) VALUES ('"+ ID +"','0','COUNTER','COUNTER');");
+			stat.executeUpdate("INSERT INTO strafen (id, userid, typ, text) VALUES ('" + ID + "','0','COUNTER','COUNTER');");
 			conn.close();
 		} catch (Exception e) {
 			logger.error("Unbekannter Fehler beim hinzufügen des Datensatzes:", e);
 			throw new SQLException();
 		}
-	}	
+	}
 
-//Emotes
+// Emotes
 
-	public static void emoteup (String emoteid) throws SQLException {
-		Logger logger = Main.logger;
+	public static void emoteup(String emoteid) throws SQLException {
 		try {
 			Class.forName(classname);
 			Connection conn = DriverManager.getConnection(connectionname);
@@ -253,17 +267,17 @@ public class SQL {
 			while (rs.next()) {
 				result = rs.getString("count");
 				if (rs.getRow() > 1) {
-					throw new SQLException("Mehrere Datensätze mit dieser ID gefunden!","");
+					throw new SQLException("Mehrere Datensätze mit dieser ID gefunden!", "");
 				}
 			}
 			if (result.equals("")) {
-				stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('"+ emoteid +"','1');");
+				stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('" + emoteid + "','1');");
 				return;
 			}
 			Integer count = Integer.parseInt(result);
 			count++;
 			stat.executeUpdate("DELETE FROM emotes WHERE emoteid = '" + emoteid + "';");
-			stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('"+ emoteid +"','" + count + "');");
+			stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('" + emoteid + "','" + count + "');");
 		} catch (Exception e) {
 			logger.error("Unbekannter Fehler beim Emotecounter erhöhen:", e);
 			throw new SQLException();
@@ -271,7 +285,6 @@ public class SQL {
 	}
 
 	public static Map<String, Integer> emotesget() throws SQLException {
-		Logger logger = Main.logger;
 		try {
 			logger.info("Lese alle Emotes aus Datenbank");
 			Class.forName(classname);
@@ -283,11 +296,11 @@ public class SQL {
 				length = size.getRow();
 			}
 			size.close();
-			
+
 			if (length == 0) {
 				return null;
 			}
-			
+
 			ResultSet rs = stat.executeQuery("select * from emotes;");
 			if (rs == null) {
 				throw new SQLException();
@@ -297,7 +310,6 @@ public class SQL {
 				Integer count = Integer.parseInt(rs.getString("count"));
 				Emotelist.put(rs.getString("emoteid"), count);
 			}
-
 
 			if (Emotelist.size() == 0) {
 				throw new SQLDataNotFound("", "");

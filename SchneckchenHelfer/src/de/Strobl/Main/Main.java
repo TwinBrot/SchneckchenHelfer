@@ -8,29 +8,23 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javax.security.auth.login.LoginException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
-
-import de.Strobl.Commands.DM.CatBoy;
-import de.Strobl.Commands.DM.CatGirl;
 import de.Strobl.Events.GenericEmoteEvent.EmoteAdded;
 import de.Strobl.Events.GenericEmoteEvent.EmoteRemoved;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
 import de.Strobl.Events.Nachrichten.Filechecker;
 import de.Strobl.Events.Nachrichten.ReactionRemoveLog;
 import de.Strobl.Events.Nachrichten.ScamDetectionCodeWort;
+import de.Strobl.Events.Nachrichten.ScamDetectionLink;
 import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.JoinNamensüberwachung;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
 import de.Strobl.Instances.SQL;
-import de.Strobl.Loops.TempBan;
-import de.Strobl.Loops.TempMute;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -41,32 +35,21 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
-	public static String Pfad = "./";
-	public static JDA jda;
-	public static String version = "v1.6.5";
+	private static final Logger logger = LogManager.getLogger(Main.class);
+	private static String version = "v1.6.5";
 	public static List<String> ServerEmotesID;
-	public static Boolean PingPause = false;
-	public static final Logger logger = LogManager.getLogger(Main.class);
+	public static JDA jda;
+	public static String Pfad = "./";
 
 	public static void main(String[] arguments) {
 		try {
-//Logger Levels:
-//logger.fatal("Bot funktioniert nicht mehr");
-//logger.error("Funktion ist fehlgeschlagen");
-//logger.warn("Veraltet, Bot musste Dateien erstellen");
-//logger.info("Information");
-//logger.debug("DEBUG");
-//logger.trace("TRACE");
 			
-			logger.info("----------------------------------------------");
-			logger.info("----------------------------------------------");
-			SettingsManagement.Update();
+			Settings.Update();
 			SQL.initialize();
 			
 //JDA Builder
 
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			logger.info("JDA wird gestartet");
 			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS,
 					GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
@@ -80,10 +63,9 @@ public class Main {
 
 //Event Listener
 
-			Builder.addEventListeners(new CatBoy());
-			Builder.addEventListeners(new CatGirl());
-			Builder.addEventListeners(new SlashCommandAuswertung());
+			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new ScamDetectionCodeWort());
+			Builder.addEventListeners(new ScamDetectionLink());
 			Builder.addEventListeners(new BotIsOfflineAlarm());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
 			Builder.addEventListeners(new JoinNamensüberwachung());
@@ -134,19 +116,15 @@ public class Main {
 //JDA Starten und fertigstellung abwarten
 
 			jda = Builder.build().awaitReady();
-			logger.info("JDA wurde gestartet");
 			
 //Befehle anmelden
 
-			SlashCommandRegister.register(jda);
+			SlashCommand.startupcheck(jda);
 			
 //Loops starten
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
-			Loops.scheduleAtFixedRate(new TempBan(), 10, 60, TimeUnit.SECONDS);
-			logger.info("TempBan-Loop wurde gestartet");
-			Loops.scheduleAtFixedRate(new TempMute(), 10, 60, TimeUnit.SECONDS);
-			logger.info("TempMute-Loop wurde gestartet");
+			Loops.scheduleAtFixedRate(new LoopCheckTemp(), 10, 60, TimeUnit.SECONDS);
 
 // Update für den Bot verfügbar?
 
@@ -166,6 +144,9 @@ public class Main {
 			});
 			
 //Fehler Management
+			
+		} catch (IllegalStateException e) {
+			logger.fatal("IllegalStateException - 'Presence Intent' und 'Server Members Intent' im Discord Developer Portal aktiviert? ", e);
 
 		} catch (IOException e) {
 			logger.fatal("IOException - Hat der Bot Berechtigungen, um Dateien zu erstellen?", e);

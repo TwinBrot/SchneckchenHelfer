@@ -4,20 +4,18 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Info {
+	private static final Logger logger = LogManager.getLogger(Info.class);
 	public static void slashcommandevent(SlashCommandEvent event, Member member, InteractionHook EventHook) {
-		Logger logger = Main.logger;
 		try {
 			EmbedBuilder UserInfo = new EmbedBuilder();
 			instance(UserInfo, member, event.getMember());
@@ -31,8 +29,10 @@ public class Info {
 
 	}
 
-	public static void messagereceivedevent(GuildMessageReceivedEvent event, Member member) {
-		Logger logger = Main.logger;
+	public static void messagereceivedevent(MessageReceivedEvent event, Member member) {
+		if (!event.isFromGuild()) {
+			return;
+		}
 		try {
 			EmbedBuilder UserInfo = new EmbedBuilder();
 			instance(UserInfo, member, event.getMember());

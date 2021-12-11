@@ -4,11 +4,9 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.SQL;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.ListedEmote;
@@ -19,9 +17,9 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class Emotes {
 	public static int counter;
 	public static EmbedBuilder EmbedEmotes = new EmbedBuilder();
+	private static final Logger logger = LogManager.getLogger(Emotes.class);
 
 	public static void emotes(SlashCommandEvent event, InteractionHook EventHook) {
-		Logger logger = Main.logger;
 		try {
 			counter = 0;
 			MessageChannel channel = event.getChannel();

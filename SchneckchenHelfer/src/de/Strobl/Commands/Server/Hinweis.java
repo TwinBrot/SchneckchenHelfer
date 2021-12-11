@@ -2,19 +2,17 @@ package de.Strobl.Commands.Server;
 
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.SQL;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Hinweis {
+	private static final Logger logger = LogManager.getLogger(Hinweis.class);
 	public static void hinweis(SlashCommandEvent event, User user, String Text, InteractionHook EventHook) {
-		Logger logger = Main.logger;
 		try {
 			if (event.getJDA().getSelfUser() == user) {
 				EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();

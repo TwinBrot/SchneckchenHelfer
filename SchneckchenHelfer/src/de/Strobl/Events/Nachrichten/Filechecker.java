@@ -4,19 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
-
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message.Attachment;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Filechecker extends ListenerAdapter {
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		Logger logger = Main.logger;
+	private static final Logger logger = LogManager.getLogger(Filechecker.class);
+	public void onGuildMessageReceived(MessageReceivedEvent event) {
+		if (!event.isFromGuild()) {
+			return;
+		}
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			Boolean inactive = !ini.get("Dateiüberwachung", "Active").equals("true");

@@ -2,11 +2,9 @@ package de.Strobl.Commands.Server.Ban;
 
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.SQL;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,8 +12,8 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Ban {
+	private static final Logger logger = LogManager.getLogger(Ban.class);
 	public static void onSlashCommand(SlashCommandEvent event, Member member, String Text, InteractionHook EventHook) {
-		Logger logger = Main.logger;
 		try {
 			if (event.getJDA().getSelfUser() == member.getUser()) {
 				EventHook.editOriginal("Wolltest du wirklich mich bannen? 🙄  Vergiss das mal gleich wieder.").queue();
@@ -57,7 +55,6 @@ public class Ban {
 	}
 
 	public static void baninstance(SlashCommandEvent event, Member member, String text, InteractionHook EventHook, Boolean dm) {
-		Logger logger = Main.logger;
 		try {
 			String membername = member.getEffectiveName();
 			String useravatarurl = member.getUser().getAvatarUrl();

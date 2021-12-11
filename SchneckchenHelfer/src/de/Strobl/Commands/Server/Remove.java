@@ -2,13 +2,11 @@ package de.Strobl.Commands.Server;
 
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Exceptions.SQLDataNotFound;
 import de.Strobl.Instances.SQL;
 import de.Strobl.Instances.getMember;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -16,8 +14,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Remove extends ListenerAdapter {
+	private static final Logger logger = LogManager.getLogger(Remove.class);
 	public static void remove(SlashCommandEvent event, InteractionHook Hook) {
-		Logger logger = Main.logger;
 		String StrafenID = event.getOption("id").getAsString();
 		try {
 			String Strafe = SQL.strafengetid(StrafenID);

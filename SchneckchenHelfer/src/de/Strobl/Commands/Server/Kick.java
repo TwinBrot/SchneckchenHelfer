@@ -2,11 +2,9 @@ package de.Strobl.Commands.Server;
 
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.SQL;
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,8 +12,8 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Kick {
+	private static final Logger logger = LogManager.getLogger(Kick.class);
 	public static void onSlashCommand(SlashCommandEvent event, Member member, String Text, InteractionHook EventHook) {
-		Logger logger = Main.logger;
 		try {
 			if (event.getJDA().getSelfUser() == member.getUser()) {
 				EventHook.editOriginal("Wolltest du wirklich mich kicken? 🙄  Vergiss das mal gleich wieder.").queue();
@@ -57,7 +55,6 @@ public class Kick {
 	}
 
 	public static void kick(SlashCommandEvent event, Member member, String text, InteractionHook EventHook, Boolean dm) {
-		Logger logger = Main.logger;
 		try {
 //User Kicken
 			member.kick(text).queue(success -> {

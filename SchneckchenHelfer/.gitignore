@@ -17,3 +17,5 @@
 /userdata.db
 /todo-upgrade.txt
 /data.db
+/pom.xml.versionsBackup
+/dependency-reduced-pom.xml

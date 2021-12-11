@@ -1,15 +1,14 @@
 package de.Strobl.Instances;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 public class getMember {
+	private static final Logger logger = LogManager.getLogger(getMember.class);
 	public static Member getmember(Guild guild, String UserID) {
-		Logger logger = Main.logger;
 		logger.info("getMember: " + UserID);
 		Member member = null;
 		try {

@@ -3,10 +3,9 @@ package de.Strobl.Events.User;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
-
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -15,10 +14,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class OnuserUpdateNameEvent extends ListenerAdapter {
 	public Wini ini;
+	private static final Logger logger = LogManager.getLogger(OnuserUpdateNameEvent.class);
 
 	@Override
 	public void onUserUpdateName(UserUpdateNameEvent event) {
-		Logger logger = Main.logger;
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 //Namensüberwachung aktiv

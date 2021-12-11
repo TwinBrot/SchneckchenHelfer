@@ -3,18 +3,20 @@ package de.Strobl.Events.Nachrichten;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.SQL;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EmoteTracking extends ListenerAdapter {
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		Logger logger = Main.logger;
+	private static final Logger logger = LogManager.getLogger(EmoteTracking.class);
+	public void onGuildMessageReceived(MessageReceivedEvent event) {
+		if (!event.isFromGuild()) {
+			return;
+		}
 		try {
 			if (event.getAuthor().isBot()) {
 				return;

@@ -2,19 +2,18 @@ package de.Strobl.Events.Nachrichten;
 
 import java.io.File;
 import java.io.IOException;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
-
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ReactionRemoveLog extends ListenerAdapter {
+	private static final Logger logger = LogManager.getLogger(ReactionRemoveLog.class);
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-		Logger logger = Main.logger;
 		try {
 //Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353") && !event.getChannel().getId().equals("720439181696041122")) {
