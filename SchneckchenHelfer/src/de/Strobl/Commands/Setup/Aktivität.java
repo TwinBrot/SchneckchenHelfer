@@ -39,7 +39,6 @@ public class Aktivität {
 			} else if (typ.equals("streaming")) {
 				event.getJDA().getPresence().setActivity(Activity.streaming(text, URL));
 			}
-			event.getHook().editOriginal("Erledigt").queue();
 
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Aktivität eingestellt: " + typ, event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 			builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(),	event.getUser().getAvatarUrl());

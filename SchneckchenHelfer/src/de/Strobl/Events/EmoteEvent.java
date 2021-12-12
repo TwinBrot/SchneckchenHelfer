@@ -1,4 +1,4 @@
-package de.Strobl.Events.GenericEmoteEvent;
+package de.Strobl.Events;
 
 import java.util.List;
 

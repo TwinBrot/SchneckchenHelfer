@@ -17,7 +17,7 @@ import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
-import de.Strobl.Events.GenericEmoteEvent.EmoteEvent;
+import de.Strobl.Events.EmoteEvent;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
 import de.Strobl.Events.Nachrichten.Filechecker;
 import de.Strobl.Events.Nachrichten.ReactionRemoveLog;

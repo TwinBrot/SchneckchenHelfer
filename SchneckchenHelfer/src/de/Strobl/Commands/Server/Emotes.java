@@ -1,11 +1,14 @@
 package de.Strobl.Commands.Server;
 
-import java.time.ZonedDateTime;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.SQL;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
@@ -36,23 +39,20 @@ public class Emotes {
 					Emotelist.put(ListedEmote, Integer.valueOf(Emoteslist.get(ListedEmote.getId())));
 				}
 			});
-
+			EmbedEmotes = Discord.standardEmbed(Color.GREEN, "Emote-Auswertung", event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			EmbedEmotes.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 // Emoteliste Sortieren und Feld im Embed hinzufügen
 			Emotelist.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach((i) -> {
 				counter++;
 				EmbedEmotes.addField("", i.getKey().getAsMention() + Emoteslist.get(i.getKey().getId()), true);
 // Embed abschicken und leeren, wenn durch 24 Teilbar oder Liste leer
 				if (counter % 24 == 0 || counter == Emotelist.size()) {
-					EmbedEmotes.setAuthor(event.getJDA().getSelfUser().getName() + " Emote-Auswertung", event.getGuild().getIconUrl(),
-							event.getGuild().getIconUrl());
-					EmbedEmotes.setColor(0x00c42b);
-					EmbedEmotes.setTimestamp(ZonedDateTime.now().toInstant());
-					EmbedEmotes.setFooter("Angefragt von " + event.getMember().getEffectiveName());
+					
 					channel.sendMessageEmbeds(EmbedEmotes.build()).queue();
-					EmbedEmotes.clear();
+					EmbedEmotes.clearFields();
 				}
 			});
-			EventHook.editOriginal("Erledigt.").queue();
+			EventHook.deleteOriginal().queue();
 			
 		} catch (Exception e) {
 			event.getHook().editOriginal("Fehler beim Ausführen").queue();

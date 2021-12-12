@@ -26,7 +26,7 @@ public class ScamDetectionCodeWort extends ListenerAdapter {
 			String message = event.getMessage().getContentRaw().toLowerCase();
 			if (message.contains("http")) {
 				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("distrib")
-						|| message.contains("hack") || message.contains("money") || message.contains("installer") || message.contains("giving")) {
+						|| message.contains("hack") || message.contains("money") || message.contains("installer") || message.contains("giving") || message.contains("over")) {
 					if (message.contains("disc") || message.contains("steam") || message.contains("nitro") || message.contains("cs:go")
 							|| message.contains("boost") || message.contains("csgo") || message.contains("valorant") || message.contains("skin")
 							|| message.contains("Game") || message.contains("@everyone")) {
