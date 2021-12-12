@@ -1,27 +1,36 @@
 package de.Strobl.Commands.Server.UserInfo;
 
-import java.time.LocalDateTime;
+import java.awt.Color;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
-public class Info {
+public class Info extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(Info.class);
-	public static void slashcommandevent(SlashCommandEvent event, Member member, InteractionHook EventHook) {
+
+	public static void slashcommandevent(SlashCommandEvent event, Member member, User user, InteractionHook EventHook) {
 		try {
-			EmbedBuilder UserInfo = new EmbedBuilder();
-			instance(UserInfo, member, event.getMember());
-			event.getChannel().sendMessageEmbeds(UserInfo.build()).queue();
-			UserInfo.clear();
-			EventHook.editOriginal("Erledigt.").queue();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Userinformationen:", user.getId(),
+					user.getEffectiveAvatarUrl());
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			instance(builder, member, user);
+			EventHook.editOriginal(user.getAsMention()).setEmbeds(builder.build()).queue();
+			builder.clear();
 		} catch (Exception e) {
 			logger.error("Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("Fehler beim Ausführen.").queue();
@@ -29,68 +38,54 @@ public class Info {
 
 	}
 
-	public static void messagereceivedevent(MessageReceivedEvent event, Member member) {
-		if (!event.isFromGuild()) {
-			return;
-		}
+	public static void messagereceivedevent(MessageReceivedEvent event, Member member, User user) {
 		try {
-			EmbedBuilder UserInfo = new EmbedBuilder();
-			instance(UserInfo, member, event.getMember());
-			event.getChannel().sendMessageEmbeds(UserInfo.build()).queue();
-			UserInfo.clear();
+			if (!event.isFromGuild()) {
+				return;
+			}
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Userinformationen:", user.getId(),
+					user.getEffectiveAvatarUrl());
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			instance(builder, member, user);
+			event.getChannel().sendMessage(user.getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
+			builder.clear();
 		} catch (Exception e) {
 			logger.error("Fehler beim Abrufen der Userdaten:", e);
 			event.getChannel().sendMessage("Fehler beim Auslesen der Userdaten!").queue();
 		}
 	}
-	
-	public static EmbedBuilder instance(EmbedBuilder UserInfo, Member member, Member mod) throws Exception {
+
+	public static EmbedBuilder instance(EmbedBuilder builder, Member member, User user) throws Exception {
 		ZoneId zone = ZoneId.of("Europe/Paris");
 		DateTimeFormatter date = DateTimeFormatter.ofPattern("dd.MM.yyyy \n HH:mm").withZone(zone);
 
-		List<Role> rolesList = member.getRoles();
-		String roles;
+		builder.addField("Account erstellt:", user.getTimeCreated().format(date), true);
 
-		if (!rolesList.isEmpty()) {
-			Role tempRole = (Role) rolesList.get(0);
-			roles = tempRole.getAsMention();
-			for (int i = 1; i < rolesList.size(); i++) {
-				tempRole = (Role) rolesList.get(i);
-				roles = roles + ", " + tempRole.getAsMention();
-			}
+		if (member == null) {
+
 		} else {
-			roles = "Keine Rollen";
+			builder.setColor(member.getColor());
+			builder.addField("Serverbeitritt:", member.getTimeJoined().format(date), true);
+
+			List<Role> rolesList = member.getRoles();
+			String roles;
+
+			if (!rolesList.isEmpty()) {
+				Role tempRole = (Role) rolesList.get(0);
+				roles = tempRole.getAsMention();
+				for (int i = 1; i < rolesList.size(); i++) {
+					tempRole = (Role) rolesList.get(i);
+					roles = roles + ", " + tempRole.getAsMention();
+				}
+			} else {
+				roles = "Keine Rollen";
+			}
+
+			builder.addField("Rollen:", roles, true);
 		}
 
-		UserInfo.setAuthor(member.getEffectiveName() + "     UserID: " + member.getId(), member.getUser().getAvatarUrl(), member.getUser().getAvatarUrl());
-		UserInfo.addField("Serverbeitritt:", member.getTimeJoined().format(date), true);
-		UserInfo.addField("Account erstellt:", member.getUser().getTimeCreated().format(date), true);
-		UserInfo.setColor(member.getColor());
-		UserInfo.addField("Rollen:", roles, true);
-		UserInfo.setFooter("Angefragt von: " + mod.getEffectiveName());
-		UserInfo.setTimestamp(LocalDateTime.now());
+		// TODO Warns, Hinweise etc
 
-//		try {
-//			Wini ini1 = null;
-//			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
-//			UserInfo.addField("Bans:", ini1.get("Bans").size() + "", true);
-//		} catch (Exception e) {
-//			UserInfo.addField("Bans:", "Keine", true);
-//		}
-//		try {
-//			Wini ini1 = null;
-//	  		ini1 = new Wini (new File(SchneckchenHelfer.Userpfad + member.getId() + ".ini"));
-//			UserInfo.addField("Verwarnungen:", ini1.get("Warns").size() + "", true);
-//		}catch (Exception e) {
-//			UserInfo.addField("Verwarnungen:", "Es liegen keine Verwarnungen vor", true);
-//		}
-//		try {
-//			Wini ini1 = null;
-//			ini1 = new Wini(new File(Main.Userpfad + member.getId() + ".ini"));
-//			UserInfo.addField("Hinweise:", ini1.get("Hinweise").size() + "", true);
-//		} catch (Exception e) {
-//			UserInfo.addField("Hinweise:", "Keine", true);
-//		}
-		return UserInfo;
+		return builder;
 	}
 }

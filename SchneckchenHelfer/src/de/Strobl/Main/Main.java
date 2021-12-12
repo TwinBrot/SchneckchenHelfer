@@ -76,6 +76,7 @@ public class Main {
 //Event Listener
 
 			Builder.addEventListeners(new SlashCommand());
+			Builder.addEventListeners(new MessageReceived());
 			Builder.addEventListeners(new ScamDetectionCodeWort());
 			Builder.addEventListeners(new ScamDetectionLink());
 			Builder.addEventListeners(new BotIsOfflineAlarm());

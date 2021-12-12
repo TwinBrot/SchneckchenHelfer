@@ -95,18 +95,20 @@ public class SlashCommand extends ListenerAdapter {
 // Auslesen der Befehle
 			event.deferReply(false).queue();
 			Member member;
+			User user;
 			String text;
 // Channelmod
 			if (Modrolle > 0) {
 				switch (event.getName()) {
 				case "hinweis":
-					User user = event.getOption("user").getAsUser();
+					user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
 					Hinweis.hinweis(event, user, grundhinweis, EventHook);
 					return;
 				case "info":
 					member = event.getOption("user").getAsMember();
-					Info.slashcommandevent(event, member, EventHook);
+					user = event.getOption("user").getAsUser();
+					Info.slashcommandevent(event, member, user, EventHook);
 					return;
 				}
 			}

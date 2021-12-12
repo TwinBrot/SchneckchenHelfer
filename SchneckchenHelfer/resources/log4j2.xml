@@ -8,7 +8,7 @@
 				</pattern>>
 			</PatternLayout>
 		</Console>
-		<RollingFile name="RollFile-Appender" fileName="./log/log.log" filePattern="./log/%d{yyyy.MM.dd HH.mm.ss}.%i.log.gz">
+		<RollingFile name="RollFile-Appender" fileName="./log/log.log" filePattern="./log/%d{yyyy.MM.dd HH.mm.ss}.gz">
 			<PatternLayout>
 				<pattern>
 					[%-5level] %d{yy-MM-dd HH:mm:ss} - %msg%n
@@ -20,7 +20,7 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="Info">
+		<Root level="Debug">
 		<AppenderRef ref="Console-Appender" />
 		<AppenderRef ref="RollFile-Appender" />
 		</Root>
