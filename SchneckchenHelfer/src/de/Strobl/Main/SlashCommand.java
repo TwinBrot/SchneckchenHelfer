@@ -4,9 +4,12 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.CHANNEL;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.ROLE;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
+
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Kick;
@@ -19,8 +22,7 @@ import de.Strobl.Commands.Setup.LogChannel;
 import de.Strobl.Commands.Setup.ModRolle;
 import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
-import de.Strobl.Instances.getMember;
-import de.Strobl.Instances.isMod;
+import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -79,7 +81,7 @@ public class SlashCommand extends ListenerAdapter {
 // 2 = Mod
 // 3 = Admin
 
-			Integer Modrolle = isMod.check(event.getMember());
+			Integer Modrolle = Discord.isMod(event.getMember());
 			if (Modrolle == 0) {
 				event.reply("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").setEphemeral(true).queue();
 				return;
@@ -144,7 +146,7 @@ public class SlashCommand extends ListenerAdapter {
 					Remove.remove(event, EventHook);
 					return;
 				case "kick":
-					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsUser());
+					member = Discord.getmember(event.getGuild(), event.getOption("user").getAsUser());
 					try {
 						text = event.getOption("grund").getAsString();
 					} catch (NullPointerException e) {
@@ -157,7 +159,7 @@ public class SlashCommand extends ListenerAdapter {
 					Kick.onSlashCommand(event, member, text, EventHook);
 					return;
 				case "ban":
-					member = getMember.getmember(event.getGuild(), event.getOption("user").getAsUser());
+					member = Discord.getmember(event.getGuild(), event.getOption("user").getAsUser());
 					try {
 						text = event.getOption("grund").getAsString();
 					} catch (NullPointerException e) {

@@ -1,11 +1,14 @@
 package de.Strobl.Events.User;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -32,18 +35,14 @@ public class JoinNamensüberwachung extends ListenerAdapter {
 //Namens erkennung
 					for (int i = 0; i < Namen.size(); i++) {
 						if (event.getUser().getName().toLowerCase().contains(Namen.get(i))) {
-							String LogChannel = ini.get("Settings", "Settings.LogChannel");
-							if (!LogChannel.equals("")) {
-								EmbedBuilder join = new EmbedBuilder();
-								join.setColor(0x110acc);
-								join.setAuthor("Neuer User mit verbotenem Namen", event.getJDA().getGuilds().get(0).getIconUrl(),
-										event.getJDA().getGuilds().get(0).getIconUrl());
-								join.addField("UserID: " + event.getMember().getId(), "User: " + event.getMember().getAsMention(), false);
-								join.setFooter("Name: " + event.getMember().getUser().getName());
-								event.getGuild().getTextChannelById(LogChannel).sendMessageEmbeds(join.build()).queue();
-								event.getGuild().getTextChannelById(LogChannel)
-										.sendMessage(event.getJDA().getGuilds().get(0).getMemberById("227131380058947584").getAsMention()).queue();
-								join.clear();
+							String LogChannelID = ini.get("Settings", "Settings.LogChannel");
+							if (!LogChannelID.equals("")) {
+								
+								EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Neuer User mit verbotenem Namen", ID, event.getMember().getEffectiveAvatarUrl());
+								builder.addField("Username: " + event.getMember().getEffectiveName(), "Erkannter Bestandteil: " + Namen.get(i), true);
+								event.getGuild().getTextChannelById(LogChannelID).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
+								builder.clear();
+								return;
 							}
 						}
 					}

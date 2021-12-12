@@ -2,11 +2,13 @@ package de.Strobl.Commands.Server;
 
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import de.Strobl.Exceptions.SQLDataNotFound;
+import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.SQL;
-import de.Strobl.Instances.getMember;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -24,7 +26,7 @@ public class Remove extends ListenerAdapter {
 			String Typ = result[1];
 			String UserID = result[2];
 			String Grund = result[3];
-			Member member = getMember.getmember(event.getGuild(), UserID);
+			Member member = Discord.getmember(event.getGuild(), UserID);
 			EmbedBuilder Erfolg = new EmbedBuilder();
 			Erfolg.setAuthor(Typ + ": " + StrafenID + " gelöscht!");
 			if (member == null) {

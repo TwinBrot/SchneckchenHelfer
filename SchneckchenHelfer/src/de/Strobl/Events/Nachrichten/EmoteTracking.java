@@ -13,7 +13,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EmoteTracking extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(EmoteTracking.class);
-	public void onGuildMessageReceived(MessageReceivedEvent event) {
+	@Override
+	public void onMessageReceived(MessageReceivedEvent event) {
 		if (!event.isFromGuild()) {
 			return;
 		}
@@ -27,16 +28,15 @@ public class EmoteTracking extends ListenerAdapter {
 				Emotes.add(eventEmotes.get(i).getId());
 			}
 
-
+			if (Main.ServerEmotesID.size() == 0) {
+				return;
+			}
 
 			Emotes.forEach(emote -> {
 				try {
 					if (Main.ServerEmotesID.contains(emote)) {
 						SQL.emoteup(emote);
 					}
-				} catch (NullPointerException e) {
-					logger.error("NullPointerException beim EmoteTracking. "
-							+ "(Mögliche Ursache: Bot neu gestartet. Emote wurde abgeschickt, bevor die Emoteliste erstellt wurde)", e);
 				} catch (SQLException e) {
 					logger.error("Unbekannter Fehler beim Emotecounter erhöhen:", e);
 				}

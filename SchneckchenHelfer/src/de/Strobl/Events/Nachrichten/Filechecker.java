@@ -1,5 +1,6 @@
 package de.Strobl.Events.Nachrichten;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message.Attachment;
@@ -15,7 +18,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Filechecker extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(Filechecker.class);
-	public void onGuildMessageReceived(MessageReceivedEvent event) {
+	@Override
+	public void onMessageReceived(MessageReceivedEvent event) {
 		if (!event.isFromGuild()) {
 			return;
 		}
@@ -24,7 +28,6 @@ public class Filechecker extends ListenerAdapter {
 			Boolean inactive = !ini.get("Dateiüberwachung", "Active").equals("true");
 			Boolean Bot = event.getAuthor().isBot();
 			Boolean NoFile = event.getMessage().getAttachments().isEmpty();
-
 			if (inactive) {
 				return;
 			} else if (Bot) {
@@ -44,18 +47,11 @@ public class Filechecker extends ListenerAdapter {
 				if (!DateiEndungen.contains(Dateien.get(i).getFileExtension().toLowerCase())) {
 					event.getMessage().delete().queue(success -> {
 						String ID = ini.get("Settings", "Settings.LogChannel");
-						EmbedBuilder Dateigelöscht = new EmbedBuilder();
-						Dateigelöscht.setColor(0xd41406);
-						Dateigelöscht.setAuthor("Nachricht mit Datei gelöscht", event.getGuild().getIconUrl(),
-								event.getGuild().getIconUrl());
-						Dateigelöscht.addField("User:",
-								event.getAuthor().getAsMention() + "             " + event.getAuthor().getName(),
-								false);
-						Dateigelöscht.addField("Channel:", event.getChannel().getAsMention(), true);
-						Dateigelöscht.addField("DateiName:", event.getMessage().getAttachments().get(0).getFileName(),
-								true);
-						event.getGuild().getTextChannelById(ID).sendMessageEmbeds(Dateigelöscht.build()).queue();
-						event.getGuild().getTextChannelById(ID).sendMessage("<@227131380058947584>").queue();
+						EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Unerlaubte Dateiendung erkannt. Nachricht gelöscht!", event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
+						builder.addField("Channel:", event.getChannel().getAsMention(), true);
+						builder.addField("DateiName:", event.getMessage().getAttachments().get(0).getFileName(), true);
+						event.getGuild().getTextChannelById(ID).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
+						builder.clear();
 					}, failure -> {
 						logger.error("Fehler bei der Dateiüberwachung", failure);
 					});

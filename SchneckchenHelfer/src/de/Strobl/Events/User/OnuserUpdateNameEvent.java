@@ -1,14 +1,17 @@
 package de.Strobl.Events.User;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -38,16 +41,12 @@ public class OnuserUpdateNameEvent extends ListenerAdapter {
 						if (event.getUser().getName().toLowerCase().contains(Namen.get(i))) {
 							String LogChannelID = ini.get("Settings", "Settings.LogChannel");
 							if (!LogChannelID.equals("")) {
-								EmbedBuilder join = new EmbedBuilder();
-								join.setColor(0x110acc);
-								join.setAuthor("Neuer User mit verbotenem Namen", event.getJDA().getGuilds().get(0).getIconUrl(),
-										event.getJDA().getGuilds().get(0).getIconUrl());
-								join.addField("UserID: " + event.getUser().getId(), "User: " + event.getUser().getAsMention(), false);
-								join.setFooter("Name: " + event.getUser().getName());
-								TextChannel LogChannel = event.getJDA().getGuilds().get(0).getTextChannelById(LogChannelID);
-								LogChannel.sendMessageEmbeds(join.build()).queue();
-								LogChannel.sendMessage("<@227131380058947584>").queue();
-								join.clear();
+
+								EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Illegaler Name nach Namensänderung", ID, event.getUser().getEffectiveAvatarUrl());
+								builder.addField("Username: " + event.getUser().getName(), "Erkannter Bestandteil: " + Namen.get(i), true);
+								event.getJDA().getGuilds().get(0).getTextChannelById(LogChannelID).sendMessage("User: " + event.getUser().getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
+								builder.clear();
+								return;
 							}
 						}
 					}
