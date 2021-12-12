@@ -1,11 +1,14 @@
 package de.Strobl.Commands.Setup;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.time.ZonedDateTime;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,6 +16,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Dateiüberwachung {
 	private static final Logger logger = LogManager.getLogger(Dateiüberwachung.class);
+
 	public static void add(SlashCommandEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
@@ -27,7 +31,8 @@ public class Dateiüberwachung {
 				if (Allowed[i].equals(newname)) {
 					EventHook.editOriginal("Datei bereits Erlaubt!").queue();
 					return;
-				};
+				}
+				;
 				list = list + Allowed[i] + "\n";
 			}
 			list = list + newname;
@@ -37,16 +42,16 @@ public class Dateiüberwachung {
 				ini.put("Dateiüberwachung", "Allowed", ini.get("Dateiüberwachung", "Allowed") + ", " + newname);
 			}
 			ini.store();
-			EmbedBuilder List = new EmbedBuilder();
-			List.setAuthor("Dateiüberwachung Liste (Erlaubt):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-			List.setDescription(list);
-			List.setTitle("(Alle Dateien kleingeschrieben! Das ist gewollt!)");
-			List.addField("Hinzugefügt: ", newname,true);
-			List.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Dateiüberwachung Liste (Erlaubt) \n (Alle Endungen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.addField("Hinzugefügt: ", newname, true);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
+
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -65,14 +70,15 @@ public class Dateiüberwachung {
 			Boolean vorhanden = false;
 			for (int i = 0; i < Allowed.length; i++) {
 				if (!Allowed[i].equals(oldname)) {
-					if (i==0) {
+					if (i == 0) {
 						list = list + Allowed[i];
 					} else {
 						list = list + "\n" + Allowed[i];
 					}
 				} else {
 					vorhanden = true;
-				};
+				}
+				;
 			}
 			if (!vorhanden) {
 				EventHook.editOriginal("Name war nicht erlaubt!").queue();
@@ -80,17 +86,16 @@ public class Dateiüberwachung {
 			}
 			ini.put("Dateiüberwachung", "Allowed", list.replaceAll("\n", ", "));
 			ini.store();
-			
-			EmbedBuilder List = new EmbedBuilder();
-			List.setAuthor("Dateiüberwachung Liste (Erlaubt):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-			List.setDescription(list);
-			List.setTitle("(Alle Namen kleingeschrieben! Das ist gewollt!)");
-			List.addField("Entfernt: ", oldname,true);
-			List.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Dateiüberwachung Liste (Erlaubt) \n (Alle Endungen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.addField("Entfernt: ", oldname, true);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
+
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -104,21 +109,19 @@ public class Dateiüberwachung {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Allowed = ini.get("Dateiüberwachung", "Allowed").split(",\\s+");
-			EmbedBuilder List = new EmbedBuilder();
-
-			List.setAuthor("Dateiüberwachung Liste (Erlaubt):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
 
 			String list = "";
 			for (int i = 0; i < Allowed.length; i++) {
 				list = list + Allowed[i] + "\n";
 			}
-			List.setDescription(list);
-			List.setTitle("(Alle Endungen kleingeschrieben! Das ist gewollt!)");
-			List.setFooter("Angefragt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Dateiüberwachung Liste (Erlaubt) \n (Alle Endungen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -147,15 +150,11 @@ public class Dateiüberwachung {
 			} else {
 				ini.put("Dateiüberwachung", "Active", statenew);
 				ini.store();
-				EmbedBuilder Response = new EmbedBuilder();
-				Response.setAuthor("Dateiüberwachung", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-				Response.setDescription("Dateiüberwachung jetzt " + state);
-				Response.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-				Response.setTimestamp(ZonedDateTime.now().toInstant());
-				event.getTextChannel().sendMessageEmbeds(Response.build()).queue();
-				EventHook.editOriginal("Erfolgreich").queue();
-				;
-				Response.clear();
+				EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Dateiüberwachung", event.getGuild().getSelfMember().getEffectiveName(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+				builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+				builder.setDescription("Dateiüberwachung jetzt " + state);
+				EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+				builder.clear();
 			}
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
@@ -166,4 +165,3 @@ public class Dateiüberwachung {
 		}
 	}
 }
-

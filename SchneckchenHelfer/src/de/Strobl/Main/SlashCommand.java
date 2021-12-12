@@ -93,7 +93,7 @@ public class SlashCommand extends ListenerAdapter {
 			
 
 // Auslesen der Befehle
-			event.deferReply(true).queue();
+			event.deferReply(false).queue();
 			Member member;
 			String text;
 // Channelmod
@@ -202,8 +202,8 @@ public class SlashCommand extends ListenerAdapter {
 					return;
 				}
 			}
-			event.reply("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").setEphemeral(false).queue();
-			logger.error(event.getName());
+			event.getHook().editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
+			logger.warn("Befehl konnte nicht ausgeführt werden. Hatte der User die notwendigen Rechte: " + event.getName());
 		} catch (Exception e) {
 			logger.error("Fehler beim auswerten des Befehls", e);
 		}
@@ -292,7 +292,7 @@ public class SlashCommand extends ListenerAdapter {
 						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true)
 								.addChoice("Admin", "Admin").addChoice("Mod", "Mod").addChoice("ChannelMod", "Channelmod")))
 				.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen")
-						.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
+						.addOptions(new OptionData(STRING, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf."));
 	}
 	private static CommandData emotes() {

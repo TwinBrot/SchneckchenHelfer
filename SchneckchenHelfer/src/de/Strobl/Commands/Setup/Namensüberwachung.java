@@ -1,11 +1,14 @@
 package de.Strobl.Commands.Setup;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.time.ZonedDateTime;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
+
+import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,6 +16,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Namensüberwachung {
 	private static final Logger logger = LogManager.getLogger(Namensüberwachung.class);
+
 	public static void add(SlashCommandEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
@@ -27,26 +31,28 @@ public class Namensüberwachung {
 				if (Verboten[i].equals(newname)) {
 					EventHook.editOriginal("Name bereits verboten!").queue();
 					return;
-				};
+				}
+				;
 				list = list + Verboten[i] + "\n";
 			}
 			list = list + newname;
-			if (ini.get("Namensüberwachung", "Verboten") == null || ini.get("Namensüberwachung", "Verboten").equals("")) {
+			if (ini.get("Namensüberwachung", "Verboten") == null
+					|| ini.get("Namensüberwachung", "Verboten").equals("")) {
 				ini.put("Namensüberwachung", "Verboten", newname);
 			} else {
 				ini.put("Namensüberwachung", "Verboten", ini.get("Namensüberwachung", "Verboten") + ", " + newname);
 			}
 			ini.store();
-			EmbedBuilder List = new EmbedBuilder();
-			List.setAuthor("Namensüberwachung Liste (Verboten):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-			List.setDescription(list);
-			List.setTitle("(Alle Namen kleingeschrieben! Das ist gewollt!)");
-			List.addField("Hinzugefügt: ", newname,true);
-			List.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.addField("Hinzugefügt: ", newname, true);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
+
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -65,14 +71,15 @@ public class Namensüberwachung {
 			Boolean vorhanden = false;
 			for (int i = 0; i < Verboten.length; i++) {
 				if (!Verboten[i].equals(oldname)) {
-					if (i==0) {
+					if (i == 0) {
 						list = list + Verboten[i];
 					} else {
 						list = list + "\n" + Verboten[i];
 					}
 				} else {
 					vorhanden = true;
-				};
+				}
+				;
 			}
 			if (!vorhanden) {
 				EventHook.editOriginal("Name war nicht verboten!").queue();
@@ -80,17 +87,15 @@ public class Namensüberwachung {
 			}
 			ini.put("Namensüberwachung", "Verboten", list.replaceAll("\n", ", "));
 			ini.store();
-			
-			EmbedBuilder List = new EmbedBuilder();
-			List.setAuthor("Namensüberwachung Liste (Verboten):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-			List.setDescription(list);
-			List.setTitle("(Alle Namen kleingeschrieben! Das ist gewollt!)");
-			List.addField("Entfernt: ", oldname,true);
-			List.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Namensüberwachung Liste (verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.addField("Entfernt: ", oldname, true);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -104,21 +109,18 @@ public class Namensüberwachung {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Verboten = ini.get("Namensüberwachung", "Verboten").split(",\\s+");
-			EmbedBuilder List = new EmbedBuilder();
-
-			List.setAuthor("Namensüberwachung Liste (Verboten):", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-
 			String list = "";
 			for (int i = 0; i < Verboten.length; i++) {
 				list = list + Verboten[i] + "\n";
 			}
-			List.setDescription(list);
-			List.setTitle("(Alle Namen kleingeschrieben! Das ist gewollt!)");
-			List.setFooter("Angefragt von: " + event.getMember().getEffectiveName());
-			List.setTimestamp(ZonedDateTime.now().toInstant());
-			event.getTextChannel().sendMessageEmbeds(List.build()).queue();
-			EventHook.editOriginal("Erfolg.").queue();
-			List.clear();
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
+					"Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
+					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			builder.setDescription(list);
+			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
+			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+			builder.clear();
+
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
@@ -147,15 +149,14 @@ public class Namensüberwachung {
 			} else {
 				ini.put("Namensüberwachung", "Active", statenew);
 				ini.store();
-				EmbedBuilder Response = new EmbedBuilder();
-				Response.setAuthor("Namensüberwachung", event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-				Response.setDescription("Namensüberwachung jetzt " + state);
-				Response.setFooter("Eingestellt von: " + event.getMember().getEffectiveName());
-				Response.setTimestamp(ZonedDateTime.now().toInstant());
-				event.getTextChannel().sendMessageEmbeds(Response.build()).queue();
-				EventHook.editOriginal("Erfolgreich").queue();
-				;
-				Response.clear();
+				EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung",
+						event.getGuild().getSelfMember().getEffectiveName(),
+						event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+				builder.setAuthor(event.getMember().getEffectiveName(), null,
+						event.getMember().getEffectiveAvatarUrl());
+				builder.setDescription("Namensüberwachung jetzt " + state);
+				EventHook.editOriginal("").setEmbeds(builder.build()).queue();
+				builder.clear();
 			}
 		} catch (IOException e) {
 			logger.error("IO-Fehler bei Info-Befehl", e);
