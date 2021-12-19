@@ -1,5 +1,0 @@
-package de.Strobl.Commands.Server.UserInfo;
-
-public class Mutes {
-
-}
