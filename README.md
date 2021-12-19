@@ -1,0 +1,2 @@
+# SchneckchenHelfer
+Schneckchencord Bot
