@@ -25,6 +25,7 @@ import de.Strobl.Commands.Setup.Aktivität;
 import de.Strobl.Commands.Setup.Dateiüberwachung;
 import de.Strobl.Commands.Setup.LogChannel;
 import de.Strobl.Commands.Setup.ModRolle;
+import de.Strobl.Commands.Setup.MuteRole;
 import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Instances.Discord;
@@ -235,6 +236,9 @@ public class SlashCommand extends ListenerAdapter {
 						ModRolle.list(event, EventHook);
 					}
 					return;
+				case "muterole":
+					MuteRole.onSlashCommand(event, EventHook);
+					return;
 				case "onlinestatus":
 					Onlinestatus.change(event);
 					return;
@@ -268,6 +272,7 @@ public class SlashCommand extends ListenerAdapter {
 			newlist.add(datei());
 			newlist.add(logchannel());
 			newlist.add(modrolle());
+			newlist.add(muterole());
 			newlist.add(emotes());
 			newlist.add(info());
 			newlist.add(hinweis());
@@ -332,6 +337,11 @@ public class SlashCommand extends ListenerAdapter {
 	private static CommandData logchannel() {
 		return new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.")
 				.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true));
+	}
+	
+	private static CommandData muterole() {
+		return new CommandData("muterole", "Einstellen der Muterolle")
+				.addOptions(new OptionData(ROLE, "muterolle", "Muterolle hier angeben"));
 	}
 
 	private static CommandData modrolle() {
