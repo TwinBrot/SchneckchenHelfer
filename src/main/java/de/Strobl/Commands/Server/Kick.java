@@ -1,11 +1,12 @@
 package de.Strobl.Commands.Server;
 
+import java.awt.Color;
 import java.sql.SQLException;
-import java.time.ZonedDateTime;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import de.Strobl.Instances.StrafenTyp;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,6 +17,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Kick {
 	private static final Logger logger = LogManager.getLogger(Kick.class);
+
 	public static void onSlashCommand(SlashCommandEvent event, Member member, String Text, InteractionHook EventHook) {
 		try {
 			if (event.getJDA().getSelfUser() == member.getUser()) {
@@ -35,17 +37,17 @@ public class Kick {
 				return;
 			}
 //Nachricht an User vorbereiten
-			EmbedBuilder Nachricht = new EmbedBuilder();
-			Nachricht.setColor(0xd41406);
-			Nachricht.setAuthor(event.getGuild().getName(), event.getGuild().getIconUrl(), event.getGuild().getIconUrl());
-			Nachricht.addField("Kick vom Server:", Text, true);
-			Nachricht.setTimestamp(ZonedDateTime.now().toInstant());
+			EmbedBuilder builderuser = Discord.standardEmbed(Color.RED, "Kick vom Server", member.getId(), member.getEffectiveAvatarUrl());
+			builderuser.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
+			Discord.SplitTexttoField(Text, "Grund:").forEach(field -> {
+				builderuser.addField(field);
+			});
 //DMs öffnen & abschicken
-			member.getUser().openPrivateChannel().queue(test -> {
-				test.sendMessageEmbeds(Nachricht.build()).queue(success -> {
-					kick(event, member, Text, EventHook, true);
+			member.getUser().openPrivateChannel().queue(userchannel -> {
+				userchannel.sendMessageEmbeds(builderuser.build()).queue(success -> {
+					kick(event.getMember(), member, Text, EventHook, true);
 				}, e -> {
-					kick(event, member, Text, EventHook, false);
+					kick(event.getMember(), member, Text, EventHook, false);
 				});
 			}, e -> {
 				EventHook.editOriginal("Fehler beim kick. User wurde nicht gekickt.").queue();
@@ -57,42 +59,47 @@ public class Kick {
 		}
 	}
 
-	public static void kick(SlashCommandEvent event, Member member, String text, InteractionHook EventHook, Boolean dm) {
-		try {
+	private static void kick(Member modmember, Member banmember, String text, InteractionHook EventHook, Boolean dm) {
 //User Kicken
-			member.kick(text).queue(success -> {
+		banmember.kick(Discord.trim(text)).queue(success -> {
+			try {
+				EmbedBuilder builderintern = Discord.standardEmbed(Color.GREEN, "User wurde vom Server gekickt", banmember.getId(), banmember.getEffectiveAvatarUrl());
+				builderintern.setAuthor(modmember.getEffectiveName(), null, modmember.getEffectiveAvatarUrl());
+				String sql = "";
 				try {
-				EmbedBuilder info = new EmbedBuilder();
-				info.setColor(0x00b806);
-				info.setAuthor(member.getEffectiveName(), member.getUser().getAvatarUrl(), member.getUser().getAvatarUrl());
-				info.setFooter("Gekickt von " + event.getMember().getEffectiveName());
-				info.setTimestamp(ZonedDateTime.now().toInstant());
-				if (dm) {
-					info.addField("User wurde vom Server gekickt", "", false);
-				} else {
-					info.addField("User wurde vom Server gekickt", "User konnte NICHT informiert werden! Privatnachrichten aus?", false);
-				}
-				try {
-					Integer size = Strafe.getSQLSize(member.getId(), StrafenTyp.KICK);
-					Strafe strafe = new Strafe(member.getId(), StrafenTyp.KICK, text, event.getMember().getId()).save();
+					Integer size = Strafe.getSQLSize(banmember.getId(), StrafenTyp.KICK);
+					Strafe strafe = new Strafe(banmember.getId(), StrafenTyp.KICK, text, modmember.getId()).save();
 					String id = strafe.getId();
-					info.addField("Kick-ID: " + id, member.getEffectiveName() + " 's Kick Nr." + size, false);
-				} catch (SQLException e1) {
-					info.addField("SQL Fehler beim Speichern des Kicks!", "User wurde erfolgreich gekickt!", false);
+
+					sql = "Kick-ID: " + id + "\n" + banmember.getEffectiveName() + " 's Kick Nr." + size;
+
+				} catch (SQLException e) {
+					builderintern.setColor(Color.RED);
+					sql = "SQL Fehler beim Speichern des Kicks!";
+					logger.error("Fehler beim Speichern des Kicks", e);
 				}
-				info.addField("Grund:", text, false);
-				event.getChannel().sendMessageEmbeds(info.build()).queue();
-				EventHook.editOriginal("Erfolg.").queue();
-				} catch (Exception e) {
-					event.getChannel().sendMessage("User wurde gekickt. Fehler bei der Rückmeldung!").queue();
+
+				String pm = "";
+				if (dm) {
+					pm = "";
+				} else {
+					builderintern.setColor(Color.YELLOW);
+					pm = "User konnte NICHT informiert werden! Privatnachrichten aus?";
 				}
-			}, e -> {
-				EventHook.editOriginal("Fehler beim kick. User wurde nicht gekickt.").queue();
-				logger.error("Fehler beim Kicken von " + member.getEffectiveName(), e);
-			});
-		} catch (Exception e) {
+				builderintern.addField(sql, pm, false);
+
+				Discord.SplitTexttoField(text, "Grund:").forEach(field -> {
+					builderintern.addField(field);
+				});
+				EventHook.editOriginal("User: <@" + banmember.getId() + ">").setEmbeds(builderintern.build()).queue();
+				builderintern.clear();
+			} catch (Exception e) {
+				EventHook.editOriginal("User wurde gekickt. Fehler bei der Rückmeldung!").queue();
+				logger.error("User wurde gekickt. Fehler bei der Rückmeldung!", e);
+			}
+		}, e -> {
 			EventHook.editOriginal("Fehler beim kick. User wurde nicht gekickt.").queue();
-			logger.error("Fehler beim Kicken von " + member.getEffectiveName(), e);
-		}
+			logger.error("Fehler beim Kicken von " + banmember.getEffectiveName(), e);
+		});
 	}
 }

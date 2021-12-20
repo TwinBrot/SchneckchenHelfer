@@ -25,8 +25,9 @@ public class Warn {
 			}
 			;
 
-			EmbedBuilder builderuser = Discord.standardEmbed(Color.RED, "SchneckchenCord ", user.getId(), user.getEffectiveAvatarUrl());
-			Discord.SplitTexttoField(Text, "Verwarnung vom Serverteam:").forEach(field -> {
+			EmbedBuilder builderuser = Discord.standardEmbed(Color.RED, "Verwarnung vom Serverteam:", user.getId(), user.getEffectiveAvatarUrl());
+			builderuser.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
+			Discord.SplitTexttoField(Text, "").forEach(field -> {
 				builderuser.addField(field);
 			});
 			user.openPrivateChannel().queue(channel -> {
