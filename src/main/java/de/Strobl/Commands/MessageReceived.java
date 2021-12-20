@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Commands.Server.Info;
 import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -63,10 +62,9 @@ public class MessageReceived extends ListenerAdapter {
 			}
 
 //Getmember und retrieveuser und info Command auslösen
-			Member member = Discord.getmember(event.getGuild(), args[1]);
 
 			event.getJDA().retrieveUserById(args[1]).queue(user -> {
-				Info.messagereceivedevent(event, member, user);
+				Info.messagereceivedevent(event, user);
 			}, e -> {
 				event.getMessage().reply("Befehl konnte nicht ausgeführt werden. UserID richtig?").queue();
 				logger.error("Fehler beim User-Retrieve", e);
