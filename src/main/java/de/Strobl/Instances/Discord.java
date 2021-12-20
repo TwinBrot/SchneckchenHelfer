@@ -138,7 +138,10 @@ public class Discord {
 		String[] originalsplit = original.split("\\s");
 		ArrayList<Field> list = new ArrayList<Field>();
 		String temp = "";
-		
+		if (original.equals("")) {
+			list.add(new Field(firsttitle, "`Nicht angegeben`", false));
+			return list;
+		}
 		for (int i = 0; i < originalsplit.length; i++) {
 			if (temp.length() + originalsplit[i].length() < 1000) {
 				temp = temp + " " + originalsplit[i];
@@ -159,5 +162,14 @@ public class Discord {
 			}
 		}
 		return list;
+	}
+
+	public static String trim(String text) {
+		if (text.length() <= 512) {
+			return text;
+		} else {
+			String temp = text.substring(0, 509) + "...";
+			return temp;
+		}
 	}
 }
