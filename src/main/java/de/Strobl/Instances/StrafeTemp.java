@@ -19,6 +19,7 @@ public class StrafeTemp {
 	String userid;
 	StrafenTyp typ;
 	DateTime unbantime;
+	Boolean saved = false;
 
 	public StrafeTemp(Strafe strafe, DateTime unbantime) {
 		this.id = strafe.getId();
@@ -29,8 +30,10 @@ public class StrafeTemp {
 
 	private StrafeTemp(String id, String userid, StrafenTyp typ, DateTime unbantime) {
 		this.id = id;
+		this.userid = userid;
 		this.typ = typ;
 		this.unbantime = unbantime;
+		saved = true;
 	}
 
 	public static List<StrafeTemp> getAll() throws SQLException {
@@ -92,12 +95,69 @@ public class StrafeTemp {
 		conn.close();
 	}
 
-	public void save() throws SQLException {
+	public StrafeTemp save() throws SQLException {
 		Connection conn = DriverManager.getConnection(SQL.connectionname);
 		Statement stat = conn.createStatement();
+		if (!saved) {
+			remove();
+		}
 		stat.executeUpdate("INSERT INTO temp (id, userid, typ, time) VALUES ('" + id + "', '" + userid + "','" + typ.toString() + "','" + unbantime + "')");
 		conn.close();
 		stat.close();
+		saved = true;
+		return this;
+	}
+	
+	public static DateTime fromString(String ZeitRaw) {
+		DateTime unbantime = DateTime.now();
+		
+		if (ZeitRaw == "") {
+			return null;
+		}
+		
+		for (int i = 0; i < ZeitRaw.length(); i++) {
+			i--;
+			Integer merker = 0;
+			Integer length = ZeitRaw.length();
+			for (int i1 = 0; i1 < length; i1++) {
+				try {
+					merker = Integer.parseInt(merker + "" + Integer.parseInt("" + ZeitRaw.charAt(0)));
+					ZeitRaw = ZeitRaw.replaceFirst(ZeitRaw.charAt(0) + "", "");
+				} catch (Exception e) {
+					if (i1 == 0) {
+						return null;
+					}
+					i1 = length;
+				}
+			}
+			if (ZeitRaw.startsWith("y")) {
+				unbantime = unbantime.plusYears(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("y", "");
+			} else if (ZeitRaw.startsWith("mon")) {
+				unbantime = unbantime.plusMonths(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("mon", "");
+			} else if (ZeitRaw.startsWith("w")) {
+				unbantime = unbantime.plusWeeks(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("w", "");
+			} else if (ZeitRaw.startsWith("d")) {
+				unbantime = unbantime.plusDays(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("d", "");
+			} else if (ZeitRaw.startsWith("h")) {
+				unbantime = unbantime.plusHours(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("h", "");
+			} else if (ZeitRaw.startsWith("min")) {
+				unbantime = unbantime.plusMinutes(merker);
+				ZeitRaw = ZeitRaw.replaceFirst("min", "");
+			} else {
+				return null;
+			}
+		}
+		
+		
+		
+		
+		
+		return unbantime;
 	}
 
 	private static StrafenTyp getEnum(String typ) {
