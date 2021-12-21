@@ -34,7 +34,6 @@ public class Settings {
 			create(ini, "Settings", "StreamLink", "https://www.twitch.tv/maudado");
 			create(ini, "Settings", "Status", "ONLINE");
 			create(ini, "Settings", "LogChannel", "");
-			create(ini, "Settings", "Muterolle", "");
 			create(ini, "ModRollen", "Admin", "");
 			create(ini, "ModRollen", "Mod", "");
 			create(ini, "ModRollen", "Channelmod", "");
