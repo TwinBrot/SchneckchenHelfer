@@ -22,10 +22,9 @@ public class BotIsOfflineAlarm extends ListenerAdapter {
 				
 				EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Bot ändert Online-Status", event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
 				
-				builder.addField("Betroffener Bot:", event.getMember().getAsMention(), true);
 				builder.addField("Online Status", event.getNewValue().toString(), true);
 				
-				event.getGuild().getTextChannelById(ini.get("Settings", "LogChannel")).sendMessage(event.getMember().getAsMention()).setEmbeds(builder.build()).queue();
+				event.getGuild().getTextChannelById(ini.get("Settings", "LogChannel")).sendMessage("User: " + event.getMember().getAsMention()).setEmbeds(builder.build()).queue();
 				builder.clear();
 			}
 		} catch (IOException e) {

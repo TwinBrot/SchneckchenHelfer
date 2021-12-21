@@ -41,7 +41,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.0.0_beta";
+	public static String version = "2.0.0_beta2";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
