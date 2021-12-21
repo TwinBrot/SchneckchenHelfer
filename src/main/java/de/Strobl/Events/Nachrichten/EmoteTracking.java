@@ -28,7 +28,7 @@ public class EmoteTracking extends ListenerAdapter {
 				Emotes.add(eventEmotes.get(i).getId());
 			}
 
-			if (Main.ServerEmotesID.size() == 0) {
+			if (Main.ServerEmotesID == null) {
 				return;
 			}
 
