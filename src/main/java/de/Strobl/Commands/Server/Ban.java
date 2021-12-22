@@ -77,8 +77,8 @@ public class Ban {
 						builderintern.setAuthor(modmember.getEffectiveName(), null, modmember.getEffectiveAvatarUrl());
 						String sql = "";
 						try {
-							Integer size = Strafe.getSQLSize(banuser.getId(), StrafenTyp.BAN);
 							Strafe strafe = new Strafe(banuser.getId(), StrafenTyp.BAN, text, modmember.getId()).save();
+							Integer size = Strafe.getSQLSize(banuser.getId(), StrafenTyp.BAN);
 							String id = strafe.getId();
 							if (!(unbantime == null)) {
 								new StrafeTemp(strafe, unbantime).save();

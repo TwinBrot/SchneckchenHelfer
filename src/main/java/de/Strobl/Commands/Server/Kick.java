@@ -67,8 +67,8 @@ public class Kick {
 				builderintern.setAuthor(modmember.getEffectiveName(), null, modmember.getEffectiveAvatarUrl());
 				String sql = "";
 				try {
-					Integer size = Strafe.getSQLSize(banmember.getId(), StrafenTyp.KICK);
 					Strafe strafe = new Strafe(banmember.getId(), StrafenTyp.KICK, text, modmember.getId()).save();
+					Integer size = Strafe.getSQLSize(banmember.getId(), StrafenTyp.KICK);
 					String id = strafe.getId();
 
 					sql = "Kick-ID: " + id + "\n" + banmember.getEffectiveName() + " 's Kick Nr." + size;
