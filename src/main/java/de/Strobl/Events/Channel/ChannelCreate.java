@@ -16,7 +16,6 @@ public class ChannelCreate extends ListenerAdapter {
 			if (!event.isFromGuild()) {
 				return;
 			}
-			Thread.sleep(1000);
 			String id = event.getChannel().getId();
 			TextChannel channel = event.getGuild().getTextChannelById(id);
 			String topic = event.getNewValue();
@@ -24,6 +23,7 @@ public class ChannelCreate extends ListenerAdapter {
 				return;
 			}
 			if (topic.startsWith("User ID:")) {
+				Thread.sleep(1000);
 				topic = topic.replaceFirst("User ID: ", "");
 				channel.sendMessage("<@" + topic + ">").queue();
 			} else {
