@@ -41,7 +41,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.0.0";
+	public static String version = "2.0.1";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -133,7 +133,7 @@ public class Main {
 
 			jda = Builder.build().awaitReady();
 			SlashCommand.startupcheck(jda, ini.get("Setup", "Version"), version);
-
+			
 //Cache Emotes
 
 			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
