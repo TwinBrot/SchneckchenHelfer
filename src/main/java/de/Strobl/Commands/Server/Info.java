@@ -1,6 +1,7 @@
 package de.Strobl.Commands.Server;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class Info extends ListenerAdapter {
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Userinformationen:", user.getId(), user.getEffectiveAvatarUrl());
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 			List<Strafe> list = Strafe.getAll(user.getId());
+			ArrayList<EmbedBuilder> embeds = new ArrayList<EmbedBuilder>();
 			list.forEach(strafe -> {
 				List<Field> listfield = Discord.SplitTexttoField(strafe.getText(), strafe.getTypString() + ": " + strafe.getId() + " Zuständiger Mod(ID): " + strafe.getModID());
 				Integer size = 0;
@@ -32,15 +34,28 @@ public class Info extends ListenerAdapter {
 					size = size + listfield.get(i).getValue().length() + listfield.get(i).getName().length();
 				}
 				if (builder.length() + size > 6000) {
-					event.getChannel().sendMessage("User: " + user.getAsMention()).setEmbeds(builder.build()).queue();
+					EmbedBuilder temp = new EmbedBuilder();
+					temp.copyFrom(builder);
+					embeds.add(temp);
 					builder.clearFields();
 				}
 				listfield.forEach(field -> {
 					builder.addField(field);
 				});
 			});
-			EventHook.deleteOriginal().queue();
-			event.getChannel().sendMessage("User: " + user.getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
+			if (!(builder.getFields().size() == 0)) {
+				embeds.add(builder);
+			}
+			if ((embeds.size()==0)) {
+				EventHook.editOriginal("Der User <@" + user.getId() + "> hat keine Hinweise/Warns/Kicks/Bans/Mutes").queue();
+			}
+			for (int i = 0; i< embeds.size(); i++) {
+				if (i == 0) {
+					EventHook.editOriginal("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).queue();
+				} else {
+					event.getChannel().sendMessage("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).allowedMentions(Collections.emptyList()).queue();
+				}
+			}
 			builder.clear();
 		} catch (Exception e) {
 			logger.error("Fehler bei Info-Befehl", e);
