@@ -275,11 +275,6 @@ public class SlashCommand extends ListenerAdapter {
 
 	public static void register(ArrayList<CommandData> list, JDA jda) {
 		try {
-			CommandListUpdateAction commandsglobal = jda.getGuilds().get(0).updateCommands();
-			for (CommandData command : list) {
-				commandsglobal.addCommands(command);
-			}
-			commandsglobal.queue(success -> logger.info("Befehle wurden Global registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 			CommandListUpdateAction commandsguild = jda.getGuilds().get(0).updateCommands();
 			for (CommandData command : list) {
 				commandsguild.addCommands(command);
