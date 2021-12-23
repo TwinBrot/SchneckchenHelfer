@@ -23,7 +23,7 @@ public class BanButton {
 	public static void bancheck(ButtonClickEvent event, InteractionHook hook, String id) {
 		try {
 			event.getMessage().editMessage(event.getMessage().getContentRaw() + " Button clicked!").queue();
-			TextChannel channel = event.getGuild().getTextChannelById("771465048047747112");
+			TextChannel channel = event.getGuild().getTextChannelById("486955077899386909");
 			channel.sendMessage("Bist du dir sicher, dass du den User <@" + id + "> bannen willst?").setActionRow(Button.danger("finalban " + id, "User bannen")).queue();
 		} catch (Exception e) {
 			event.getMessage().reply("Fehler bei der Buttonauswertung!").queue();
