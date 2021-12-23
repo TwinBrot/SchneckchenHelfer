@@ -42,6 +42,7 @@ public class Aktivität {
 
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Aktivität eingestellt: " + typ, event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 			builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(),	event.getUser().getAvatarUrl());
+			builder.addField("Text:", text, true);
 			event.getHook().editOriginal("").setEmbeds(builder.build()).queue();
 			builder.clear();
 		} catch (IOException e) {
