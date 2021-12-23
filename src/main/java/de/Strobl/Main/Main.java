@@ -24,6 +24,7 @@ import de.Strobl.Events.EmoteEvent;
 import de.Strobl.Events.Channel.ChannelCreate;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
 import de.Strobl.Events.Nachrichten.Filechecker;
+import de.Strobl.Events.Nachrichten.InviteDetection;
 import de.Strobl.Events.Nachrichten.ReactionRemoveLog;
 import de.Strobl.Events.Nachrichten.ScamDetection;
 import de.Strobl.Events.User.BotIsOfflineAlarm;
@@ -41,7 +42,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.0.2";
+	public static String version = "2.0.3";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -77,19 +78,23 @@ public class Main {
 			Builder.setAutoReconnect(true);
 
 //Event Listener
-
+			//Commands
 			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new MessageReceived());
-			Builder.addEventListeners(new ScamDetection());
-			Builder.addEventListeners(new BotIsOfflineAlarm());
-			Builder.addEventListeners(new OnuserUpdateNameEvent());
-			Builder.addEventListeners(new JoinNamensüberwachung());
-			Builder.addEventListeners(new ReactionRemoveLog());
-			Builder.addEventListeners(new Filechecker());
-			Builder.addEventListeners(new EmoteTracking());
-			Builder.addEventListeners(new EmoteEvent());
-			Builder.addEventListeners(new ChannelCreate());
 			Builder.addEventListeners(new BanButton());
+			//Message Events
+			Builder.addEventListeners(new EmoteTracking());
+			Builder.addEventListeners(new Filechecker());
+			Builder.addEventListeners(new InviteDetection());
+			Builder.addEventListeners(new ReactionRemoveLog());
+			Builder.addEventListeners(new ScamDetection());
+			//User Events
+			Builder.addEventListeners(new BotIsOfflineAlarm());
+			Builder.addEventListeners(new JoinNamensüberwachung());
+			Builder.addEventListeners(new OnuserUpdateNameEvent());
+			//Channel Events
+			Builder.addEventListeners(new ChannelCreate());
+			Builder.addEventListeners(new EmoteEvent());
 
 //Activity
 
