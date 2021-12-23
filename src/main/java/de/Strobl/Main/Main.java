@@ -17,9 +17,9 @@ import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
+import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
 import de.Strobl.Commands.SlashCommand;
-import de.Strobl.Commands.Buttons.BanButton;
 import de.Strobl.Events.EmoteEvent;
 import de.Strobl.Events.Channel.ChannelCreate;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
@@ -42,13 +42,14 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.0.3";
+	public static String version = "2.0.4";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
 
 	public static void main(String[] arguments) {
 		try {
+			logger.info("Starte Schneckchencord-Bot mit Version " + version);
 // Update für den Bot verfügbar?
 
 			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
@@ -81,7 +82,7 @@ public class Main {
 			//Commands
 			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new MessageReceived());
-			Builder.addEventListeners(new BanButton());
+			Builder.addEventListeners(new ButtonInteraction());
 			//Message Events
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new Filechecker());
