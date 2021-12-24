@@ -63,21 +63,28 @@ public class BanButton {
 		}
 		EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "User wurde vom Server gebannt:", id, avatar);
 		guild.ban(id, 7, "Button Ban durch Scam Detection").queue(success -> {
+			String dm;
+			if (!info) {
+				dm = "User konnte nicht Informiert werden!";
+				builder.setColor(Color.YELLOW);
+			} else {
+				dm = "";
+			}
+			String sql;
 			try {
 				Strafe strafe = new Strafe(id, StrafenTyp.BAN, "Automatischer Ban durch ScamProtection", event.getMember().getId()).save();
 				Integer size = Strafe.getSQLSize(id, StrafenTyp.BAN);
 				if (member == null) {
-					builder.addField("Ban-ID: " + strafe.getId(), id + "'s Ban Nr: " + size, false);
+					sql = "Ban-ID: " + strafe.getId() + "\n" + id + "'s Ban Nr: " + size;
 				} else {
-					builder.addField("Ban-ID: " + strafe.getId(), member.getEffectiveName() + "'s Ban Nr: " + size, false);
+					sql = "Ban-ID: " + strafe.getId() + "\n" + member.getEffectiveName() + "'s Ban Nr. " + size;
 				}
 			} catch (SQLException e) {
 				logger.error("Fehler SQL Ban Button", e);
-				builder.addField("Konnte Strafe nicht in Datenbank abspeichern.", "Ban war erfolgreich", false);
+				sql = "SQL Fehler beim Speichern des Bans!";
 			}
-			if (!info) {
-				builder.setDescription("User konnte nicht Informiert werden!");
-			}
+			
+			builder.addField(sql, dm, false);
 			builder.addField("Grund:", "Automatisch generierter Ban, ausgelöst durch die ScamProtection.\nBestätigt durch " + event.getMember().getAsMention(), true);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 			event.getChannel().sendMessage("User: <@" + id + ">").setEmbeds(builder.build()).queue();

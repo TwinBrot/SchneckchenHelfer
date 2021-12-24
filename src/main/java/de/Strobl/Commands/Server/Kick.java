@@ -71,7 +71,7 @@ public class Kick {
 					Integer size = Strafe.getSQLSize(banmember.getId(), StrafenTyp.KICK);
 					String id = strafe.getId();
 
-					sql = "Kick-ID: " + id + "\n" + banmember.getEffectiveName() + " 's Kick Nr." + size;
+					sql = "Kick-ID: " + id + "\n" + banmember.getEffectiveName() + " 's Kick Nr. " + size;
 
 				} catch (SQLException e) {
 					builderintern.setColor(Color.RED);

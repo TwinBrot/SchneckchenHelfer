@@ -84,7 +84,7 @@ public class Ban {
 								new StrafeTemp(strafe, unbantime).save();
 								builderintern.setDescription("Entbann: " + unbantime.toString("dd.MM.yyyy kk:mm"));
 							}
-							sql = "Ban-ID: " + id + "\n" + banuser.getName() + " 's Ban Nr." + size;
+							sql = "Ban-ID: " + id + "\n" + banuser.getName() + " 's Ban Nr. " + size;
 
 						} catch (SQLException e) {
 							builderintern.setColor(Color.RED);
