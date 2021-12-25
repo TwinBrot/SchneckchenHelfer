@@ -36,15 +36,22 @@ public class InviteDetection extends ListenerAdapter {
 						Invite.resolve(event.getJDA(), splitcontent.replace(invite, "").replaceAll("/", "")).queue(temp -> {
 							try {
 								if (!temp.getGuild().getId().equals(event.getGuild().getId())) {
-									Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-									String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";
-									Member member = event.getMember();
-									EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, title, member.getId(), member.getEffectiveAvatarUrl());
-									builder.addField("Nachrichten Text: ", content, true);
-									TextChannel channel = event.getGuild().getTextChannelById(ini.get("Settings", "LogChannel"));
-									channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
-									event.getMessage().delete().queue(success -> {}, e -> {
-										logger.error("Fehler Invite Detection", e);
+									event.getMessage().delete().queue(success -> {
+										try {
+											Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
+											String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";
+											Member member = event.getMember();
+											EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, title, member.getId(), member.getEffectiveAvatarUrl());
+											builder.addField("Nachrichten Text: ", content, true);
+											TextChannel channel = event.getGuild().getTextChannelById(ini.get("Settings", "LogChannel"));
+											channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
+										} catch (Exception e) {
+											logger.error("Fehler Invite Detection", e);
+										}
+									}, e -> {
+										if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ErrorResponseException")) {
+											logger.error("Fehler Invite Detection", e);
+										}
 									});
 								}
 							} catch (Exception e) {

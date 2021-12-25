@@ -80,8 +80,10 @@ public class ScamDetection extends ListenerAdapter {
 				} catch (Exception e) {
 					logger.error("Fehler ScamDetection LogChannel", e);
 				}
-			}, failure -> {
-				logger.error("Fehler ScamDetection Ban", failure);
+			}, e -> {
+				if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ErrorResponseException")) {
+					logger.error("Fehler ScamDetection Ban", e);
+				}
 			});
 		} catch (Exception e) {
 			logger.error("Fehler ScamDetection", e);

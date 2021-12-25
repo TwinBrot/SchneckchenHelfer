@@ -52,8 +52,10 @@ public class Filechecker extends ListenerAdapter {
 						builder.addField("DateiName:", event.getMessage().getAttachments().get(0).getFileName(), true);
 						event.getGuild().getTextChannelById(ID).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
 						builder.clear();
-					}, failure -> {
-						logger.error("Fehler bei der Dateiüberwachung", failure);
+					}, e -> {
+						if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ErrorResponseException")) {
+							logger.error("Fehler bei der Dateiüberwachung", e);
+						}
 					});
 					return;
 				}

@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
-import org.kohsuke.github.HttpException;
 
 import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
@@ -43,7 +42,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.1.0";
+	public static String version = "2.1.1";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -53,12 +52,12 @@ public class Main {
 			logger.info("Starte Schneckchencord-Bot mit Version " + version);
 // Update für den Bot verfügbar?
 			try {
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
-			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
-			if (!version.equals(neusteversion)) {
-				logger.warn("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle auf Version '" + neusteversion + "' zu Updaten.");
-			}
-			} catch (HttpException e) {
+				GitHub github = new GitHubBuilder().build();
+				String neusteversion = github.getRepository("TwinBrot/Sachneckchencord").getLatestRelease().getTagName();
+				if (!version.equals(neusteversion)) {
+					logger.warn("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle auf Version '" + neusteversion + "' zu Updaten.");
+				}
+			} catch (Exception e) {
 				logger.error("Konnte nicht auf neuste Version überprüfen!", e);
 			}
 
@@ -83,21 +82,21 @@ public class Main {
 			Builder.setAutoReconnect(true);
 
 //Event Listener
-			//Commands
+			// Commands
 			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new MessageReceived());
 			Builder.addEventListeners(new ButtonInteraction());
-			//Message Events
+			// Message Events
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new Filechecker());
 			Builder.addEventListeners(new InviteDetection());
 			Builder.addEventListeners(new ReactionRemoveLog());
 			Builder.addEventListeners(new ScamDetection());
-			//User Events
+			// User Events
 			Builder.addEventListeners(new BotIsOfflineAlarm());
 			Builder.addEventListeners(new JoinNamensüberwachung());
 			Builder.addEventListeners(new OnuserUpdateNameEvent());
-			//Channel Events
+			// Channel Events
 			Builder.addEventListeners(new ChannelCreate());
 			Builder.addEventListeners(new EmoteEvent());
 
@@ -143,7 +142,7 @@ public class Main {
 
 			jda = Builder.build().awaitReady();
 			SlashCommand.startupcheck(jda, ini.get("Setup", "Version"), version);
-			
+
 //Cache Emotes
 
 			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
