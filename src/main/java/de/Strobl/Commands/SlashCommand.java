@@ -189,6 +189,17 @@ public class SlashCommand extends ListenerAdapter {
 					Ban.onSlashCommand(event, user, member, text, EventHook, unbantime);
 					return;
 
+				case "permaban":
+					user = event.getOption("user").getAsUser();
+					member = Discord.getmember(event.getGuild(), user);
+					try {
+						text = event.getOption("grund").getAsString();
+					} catch (NullPointerException e) {
+						text = "";
+					}
+					Ban.onSlashCommand(event, user, member, text, EventHook, null);
+					return;
+
 				case "tempban":
 					user = event.getOption("user").getAsUser();
 					member = Discord.getmember(event.getGuild(), user);
