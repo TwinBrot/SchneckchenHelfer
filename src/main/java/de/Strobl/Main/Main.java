@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.HttpException;
 
 import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
@@ -51,11 +52,14 @@ public class Main {
 		try {
 			logger.info("Starte Schneckchencord-Bot mit Version " + version);
 // Update für den Bot verfügbar?
-
-			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
+			try {
+			GitHub github = new GitHubBuilder().withOAuthToken("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").build();
 			String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
 			if (!version.equals(neusteversion)) {
 				logger.warn("Dein Bot läuft nicht auf der neusten Stable Version. Ich empfehle auf Version '" + neusteversion + "' zu Updaten.");
+			}
+			} catch (HttpException e) {
+				logger.error("Konnte nicht auf neuste Version überprüfen!", e);
 			}
 
 //Settings.ini und SQL starten
