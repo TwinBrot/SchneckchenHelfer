@@ -1,15 +1,13 @@
 package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
-import java.io.File;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Profile.Section;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -52,10 +50,9 @@ public class ScamDetection extends ListenerAdapter {
 
 	private void Link(MessageReceivedEvent event) {
 		try {
-			Wini Link = new Wini(new File(Main.Pfad + "Link.ini"));
-			Section Links = Link.get("Links");
-			for (int i = 1; i <= Links.size(); i++) {
-				if (event.getMessage().getContentRaw().toLowerCase().contains(Links.get(i + "").toLowerCase())) {
+			ArrayList<String> Links = Settings.Links;
+			for (int i = 0; i < Links.size(); i++) {
+				if (event.getMessage().getContentRaw().toLowerCase().contains(Links.get(i).toLowerCase())) {
 					Instance(event, "Nachricht gelöscht! Unerlaubter Link erkannt!");
 				}
 			}
@@ -67,14 +64,12 @@ public class ScamDetection extends ListenerAdapter {
 	private void Instance(MessageReceivedEvent event, String title) {
 		try {
 			String message = event.getMessage().getContentRaw().toLowerCase();
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			event.getMessage().delete().queue(success -> {
 				try {
-					String LogChannel = ini.get("Settings", "LogChannel");
 					Guild guild = event.getGuild();
 					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
 					builder.addField("Nachrichten Inhalt:", message, false);
-					guild.getTextChannelById(LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312> <@81796365214023680>")
+					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312> <@81796365214023680>")
 							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + event.getMember().getId(), "Ban User")).queue();
 					builder.clear();
 				} catch (Exception e) {

@@ -1,17 +1,16 @@
 package de.Strobl.Commands.Setup;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class Aktivität {
@@ -20,15 +19,13 @@ public class Aktivität {
 
 	public static void aktivität(SlashCommandEvent event) {
 		try {
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 
-			String typ = event.getOption("activitytyp").getAsString();
-			String text = event.getOption("activitytext").getAsString();
-			String URL = ini.get("Settings", "StreamLink");
+			String typ = Settings.AktivitätTyp;
+			String text = Settings.AktivitätText;
+			String URL = Settings.StreamLink;
 
-			ini.put("Settings", "AktivitätTyp", typ);
-			ini.put("Settings", "AktivitätText", text);
-			ini.store();
+			Settings.set("Settings", "AktivitätTyp", typ);
+			Settings.set("Settings", "AktivitätTyp", text);
 
 			if (typ.equals("playing")) {
 				event.getJDA().getPresence().setActivity(Activity.playing(text));
@@ -39,9 +36,9 @@ public class Aktivität {
 			} else if (typ.equals("streaming")) {
 				event.getJDA().getPresence().setActivity(Activity.streaming(text, URL));
 			}
-
-			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Aktivität eingestellt: " + typ, event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
-			builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(),	event.getUser().getAvatarUrl());
+			Member self = event.getGuild().getSelfMember();
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Aktivität eingestellt: " + typ, self.getId(), self.getEffectiveAvatarUrl());
+			builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 			builder.addField("Text:", text, true);
 			event.getHook().editOriginal("").setEmbeds(builder.build()).queue();
 			builder.clear();

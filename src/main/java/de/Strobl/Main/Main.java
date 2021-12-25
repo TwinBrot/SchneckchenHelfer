@@ -1,6 +1,5 @@
 package de.Strobl.Main;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
@@ -42,7 +40,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.1.2";
+	public static String version = "2.2.1";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -62,15 +60,15 @@ public class Main {
 			}
 
 //Settings.ini und SQL starten
-
+			
+			
 			Settings.Update();
+			Settings.load();
 			SQL.initialize();
 
 //JDA Builder
 
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-
-			JDABuilder Builder = JDABuilder.createDefault(ini.get("Setup", "Token"));
+			JDABuilder Builder = JDABuilder.createDefault(Settings.Token);
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
 					GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
 			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING,
@@ -102,9 +100,9 @@ public class Main {
 
 //Activity
 
-			String Typ = ini.get("Settings", "AktivitätTyp");
-			String Text = ini.get("Settings", "AktivitätText");
-			String URL = ini.get("Settings", "StreamLink");
+			String Typ = Settings.AktivitätTyp;
+			String Text = Settings.AktivitätText;
+			String URL = Settings.StreamLink;
 
 			switch (Typ) {
 			case "playing":
@@ -123,7 +121,7 @@ public class Main {
 
 //Status
 
-			switch (ini.get("Settings", "Status")) {
+			switch (Settings.Status) {
 			case "ONLINE":
 				Builder.setStatus(OnlineStatus.ONLINE);
 				break;
@@ -141,7 +139,7 @@ public class Main {
 //JDA Starten und fertigstellung abwarten
 
 			jda = Builder.build().awaitReady();
-			SlashCommand.startupcheck(jda, ini.get("Setup", "Version"), version);
+			SlashCommand.startupcheck(jda, version);
 
 //Cache Emotes
 

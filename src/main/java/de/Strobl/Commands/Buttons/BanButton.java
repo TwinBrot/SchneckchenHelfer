@@ -32,11 +32,8 @@ public class BanButton {
 	}
 
 	public static void banchecked(ButtonClickEvent event, InteractionHook hook, String id) {
-		try {
-			Member member = Discord.getmember(event.getGuild(), id);
-			if (member == null) {
-				baninstance(event, hook, id, event.getGuild(), null, false);
-			} else {
+		event.getGuild().retrieveMemberById(id).queue(member -> {
+			try {
 				member.getUser().openPrivateChannel().queue(channel -> {
 					EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Ban vom Server:", id, member.getEffectiveAvatarUrl());
 					builder.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
@@ -49,11 +46,14 @@ public class BanButton {
 				}, e -> {
 					baninstance(event, hook, id, event.getGuild(), member, false);
 				});
+
+			} catch (Exception e) {
+				event.getMessage().reply("Fehler bei Ban Button ausführung! " + event.getMember().getAsMention()).queue();
+				logger.error("Fehler bei Ban Button ausführung checked", e);
 			}
-		} catch (Exception e) {
-			event.getMessage().reply("Fehler bei Ban Button ausführung! " + event.getMember().getAsMention()).queue();
-			logger.error("Fehler bei Ban Button ausführung checked", e);
-		}
+		}, e -> {
+			baninstance(event, hook, id, event.getGuild(), null, false);
+		});
 	}
 
 	private static void baninstance(ButtonClickEvent event, InteractionHook hook, String id, Guild guild, Member member, Boolean info) {
@@ -83,7 +83,7 @@ public class BanButton {
 				logger.error("Fehler SQL Ban Button", e);
 				sql = "SQL Fehler beim Speichern des Bans!";
 			}
-			
+
 			builder.addField(sql, dm, false);
 			builder.addField("Grund:", "Automatisch generierter Ban, ausgelöst durch die ScamProtection.\nBestätigt durch " + event.getMember().getAsMention(), true);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());

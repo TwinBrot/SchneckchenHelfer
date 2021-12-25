@@ -10,6 +10,7 @@ import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -20,7 +21,7 @@ public class Namensüberwachung {
 	public static void add(SlashCommandEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			String[] Verboten = ini.get("Namensüberwachung", "Verboten").split(",\\s+");
+			String[] Verboten = Settings.Namen;
 			String newname = event.getOptionsByName("name").get(0).getAsString().toLowerCase().replaceAll("\\s+", "");
 			if (newname.contains("")) {
 				EventHook.editOriginal("Fehler verhindert. Zeichen '' sorgt für Fehler im Programm.").queue();
@@ -36,17 +37,15 @@ public class Namensüberwachung {
 				list = list + Verboten[i] + "\n";
 			}
 			list = list + newname;
-			if (ini.get("Namensüberwachung", "Verboten") == null
-					|| ini.get("Namensüberwachung", "Verboten").equals("")) {
+			if (ini.get("Namensüberwachung", "Verboten") == null || ini.get("Namensüberwachung", "Verboten").equals("")) {
 				ini.put("Namensüberwachung", "Verboten", newname);
 			} else {
 				ini.put("Namensüberwachung", "Verboten", ini.get("Namensüberwachung", "Verboten") + ", " + newname);
 			}
 			ini.store();
-
-			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
-					"Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
-					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			Settings.load();
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)", event.getGuild().getSelfMember().getId(),
+					event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 			builder.setDescription(list);
 			builder.addField("Hinzugefügt: ", newname, true);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
@@ -87,10 +86,9 @@ public class Namensüberwachung {
 			}
 			ini.put("Namensüberwachung", "Verboten", list.replaceAll("\n", ", "));
 			ini.store();
-
-			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
-					"Namensüberwachung Liste (verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
-					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			Settings.load();
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung Liste (verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)", event.getGuild().getSelfMember().getId(),
+					event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 			builder.setDescription(list);
 			builder.addField("Entfernt: ", oldname, true);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
@@ -107,23 +105,18 @@ public class Namensüberwachung {
 
 	public static void list(SlashCommandEvent event, InteractionHook EventHook) {
 		try {
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			String[] Verboten = ini.get("Namensüberwachung", "Verboten").split(",\\s+");
+			String[] Verboten = Settings.Namen;
 			String list = "";
 			for (int i = 0; i < Verboten.length; i++) {
 				list = list + Verboten[i] + "\n";
 			}
-			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
-					"Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)",
-					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung Liste (Verboten) \n (Alle Namen kleingeschrieben! Das ist gewollt!)", event.getGuild().getSelfMember().getId(),
+					event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 			builder.setDescription(list);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 			EventHook.editOriginal("").setEmbeds(builder.build()).queue();
 			builder.clear();
 
-		} catch (IOException e) {
-			logger.error("IO-Fehler bei Info-Befehl", e);
-			EventHook.editOriginal("IO-Fehler beim Ausführen.").queue();
 		} catch (Exception e) {
 			logger.error("Fehler bei Info-Befehl", e);
 			EventHook.editOriginal("Fehler beim Ausführen.").queue();
@@ -132,28 +125,23 @@ public class Namensüberwachung {
 
 	public static void onoff(SlashCommandEvent event, InteractionHook EventHook) {
 		try {
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-
-			String stateold = ini.get("Namensüberwachung", "Active");
+			Boolean stateold = Settings.NamenActive;
 			String state;
-			String statenew;
+			Boolean statenew;
 			if (event.getSubcommandName().equals("activate")) {
 				state = "Aktiv";
-				statenew = "true";
+				statenew = true;
 			} else {
 				state = "Inaktiv";
-				statenew = "false";
+				statenew = false;
 			}
 			if (stateold.equals(statenew)) {
 				EventHook.editOriginal("Namensüberwachung ist bereits " + state).queue();
 			} else {
-				ini.put("Namensüberwachung", "Active", statenew);
-				ini.store();
-				EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung",
-						event.getGuild().getSelfMember().getEffectiveName(),
+				Settings.set("Namensüberwachung", "Active", statenew.toString().toLowerCase());
+				EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Namensüberwachung", event.getGuild().getSelfMember().getEffectiveName(),
 						event.getGuild().getSelfMember().getEffectiveAvatarUrl());
-				builder.setAuthor(event.getMember().getEffectiveName(), null,
-						event.getMember().getEffectiveAvatarUrl());
+				builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 				builder.setDescription("Namensüberwachung jetzt " + state);
 				EventHook.editOriginal("").setEmbeds(builder.build()).queue();
 				builder.clear();

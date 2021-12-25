@@ -1,14 +1,12 @@
 package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
-import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.Member;
@@ -38,12 +36,11 @@ public class InviteDetection extends ListenerAdapter {
 								if (!temp.getGuild().getId().equals(event.getGuild().getId())) {
 									event.getMessage().delete().queue(success -> {
 										try {
-											Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 											String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";
 											Member member = event.getMember();
 											EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, title, member.getId(), member.getEffectiveAvatarUrl());
 											builder.addField("Nachrichten Text: ", content, true);
-											TextChannel channel = event.getGuild().getTextChannelById(ini.get("Settings", "LogChannel"));
+											TextChannel channel = event.getGuild().getTextChannelById(Settings.LogChannel);
 											channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
 										} catch (Exception e) {
 											logger.error("Fehler Invite Detection", e);

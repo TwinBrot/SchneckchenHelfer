@@ -1,12 +1,10 @@
 package de.Strobl.Main;
 
 import java.awt.Color;
-import java.io.File;
 import java.sql.SQLException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.StrafeTemp;
@@ -34,9 +32,8 @@ public class LoopCheckTemp implements Runnable {
 						guild.unban(userid).queue(success -> {
 							System.out.println("Unbanned");
 							try {
-								Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 								EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, "Tempban User entbannt", userid, null);
-								guild.getTextChannelById(ini.get("Settings", "LogChannel")).sendMessage("User: <@" + userid + ">").setEmbeds(builder.build()).queue();
+								guild.getTextChannelById(Settings.LogChannel).sendMessage("User: <@" + userid + ">").setEmbeds(builder.build()).queue();
 								logger.info(id + " wurde gerade entbannt!");
 								strafeTemp.delete();
 							} catch (SQLException e) {

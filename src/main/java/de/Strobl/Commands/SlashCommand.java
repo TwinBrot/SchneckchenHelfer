@@ -5,12 +5,10 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.ROLE;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 import org.joda.time.DateTime;
 
 import de.Strobl.Commands.Server.Ban;
@@ -28,7 +26,7 @@ import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.StrafeTemp;
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -98,32 +96,26 @@ public class SlashCommand extends ListenerAdapter {
 			}
 
 // Auslesen der Befehle
-			Member member;
-			User user;
-			String text;
 // Channelmod
 			if (Modrolle > 0) {
-				switch (event.getName()) {
-				case "hinweis":
-					user = event.getOption("user").getAsUser();
+				if (event.getName().equals("hinweis")) {
+					User user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
 					Hinweis.onSlashCommand(event, user, grundhinweis, EventHook);
 					return;
-				case "info":
-					user = event.getOption("user").getAsUser();
+				} else if (event.getName().equals("info")) {
+					User user = event.getOption("user").getAsUser();
 					Info.slashcommandevent(event, user, EventHook);
 					return;
 				}
 			}
 
-// Moderator
-			DateTime unbantime = null;
-			String SubCommandName;
+// Modrolle: Moderator
 			if (Modrolle > 1) {
-				// Setup-Commands
-				switch (event.getName()) {
-				case "namen":
-					SubCommandName = event.getSubcommandName();
+// Setup-Commands
+
+				if (event.getName().equals("namen")) {
+					String SubCommandName = event.getSubcommandName();
 					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate")) {
 						Namensüberwachung.onoff(event, EventHook);
 					} else if (SubCommandName.equals("add")) {
@@ -134,9 +126,8 @@ public class SlashCommand extends ListenerAdapter {
 						Namensüberwachung.list(event, EventHook);
 					}
 					return;
-
-				case "datei":
-					SubCommandName = event.getSubcommandName();
+				} else if (event.getName().equals("datei")) {
+					String SubCommandName = event.getSubcommandName();
 					if (SubCommandName.equals("activate") || SubCommandName.equals("deactivate")) {
 						Dateiüberwachung.onoff(event, EventHook);
 					} else if (SubCommandName.equals("add")) {
@@ -147,24 +138,21 @@ public class SlashCommand extends ListenerAdapter {
 						Dateiüberwachung.list(event, EventHook);
 					}
 					return;
-
-				// Moderations-Commands
-				case "emotes":
+// Moderations-Commands
+				} else if (event.getName().equals("emotes")) {
 					Emotes.emotes(event, EventHook);
 					return;
-
-				case "remove":
+				} else if (event.getName().equals("remove")) {
 					Remove.remove(event, EventHook);
 					return;
-
-				case "warn":
-					user = event.getOption("user").getAsUser();
+				} else if (event.getName().equals("warn")) {
+					User user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
 					Warn.onSlashCommand(event, user, grundhinweis, EventHook);
 					return;
-
-				case "kick":
-					member = event.getOption("user").getAsMember();
+				} else if (event.getName().equals("kick")) {
+					Member member = event.getOption("user").getAsMember();
+					String text;
 					try {
 						text = event.getOption("grund").getAsString();
 					} catch (NullPointerException e) {
@@ -177,43 +165,71 @@ public class SlashCommand extends ListenerAdapter {
 					Kick.onSlashCommand(event, member, text, EventHook);
 					return;
 
-				case "ban":
-					user = event.getOption("user").getAsUser();
-					member = Discord.getmember(event.getGuild(), user);
-					try {
-						text = event.getOption("grund").getAsString();
-					} catch (NullPointerException e) {
-						text = "";
-					}
-					unbantime = DateTime.now().plusYears(4);
-					Ban.onSlashCommand(event, user, member, text, EventHook, unbantime);
+				} else if (event.getName().equals("ban")) {
+					DateTime unbantime = DateTime.now().plusYears(4);
+					User user = event.getOption("user").getAsUser();
+					event.getGuild().retrieveMember(user).queue(member -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, member, text, EventHook, unbantime);
+					}, e -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e1) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, null, text, EventHook, unbantime);
+					});
 					return;
-
-				case "permaban":
-					user = event.getOption("user").getAsUser();
-					member = Discord.getmember(event.getGuild(), user);
-					try {
-						text = event.getOption("grund").getAsString();
-					} catch (NullPointerException e) {
-						text = "";
-					}
-					Ban.onSlashCommand(event, user, member, text, EventHook, null);
+				} else if (event.getName().equals("permaban")) {
+					User user = event.getOption("user").getAsUser();
+					event.getGuild().retrieveMember(user).queue(member -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, member, text, EventHook, null);
+					}, e -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e1) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, null, text, EventHook, null);
+					});
 					return;
-
-				case "tempban":
-					user = event.getOption("user").getAsUser();
-					member = Discord.getmember(event.getGuild(), user);
-					try {
-						text = event.getOption("grund").getAsString();
-					} catch (NullPointerException e) {
-						text = "";
-					}
-					unbantime = StrafeTemp.fromString(event.getOption("dauer").getAsString());
+				} else if (event.getName().equals("tempban")) {
+					User user = event.getOption("user").getAsUser();
+					DateTime unbantime = StrafeTemp.fromString(event.getOption("dauer").getAsString());
 					if (unbantime == null) {
 						EventHook.editOriginal("Das Fomat der Dauer ist nicht korrekt! Richtiges Format: 1y1mon1w1d1h1min").queue();
 						return;
 					}
-					Ban.onSlashCommand(event, user, member, text, EventHook, unbantime);
+					event.getGuild().retrieveMember(user).queue(member -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, member, text, EventHook, unbantime);
+					}, e -> {
+						String text;
+						try {
+							text = event.getOption("grund").getAsString();
+						} catch (NullPointerException e1) {
+							text = "";
+						}
+						Ban.onSlashCommand(event, user, null, text, EventHook, unbantime);
+					});
 					return;
 				}
 			}
@@ -250,9 +266,9 @@ public class SlashCommand extends ListenerAdapter {
 
 	}
 
-	public static void startupcheck(JDA jda, String versionini, String versionbot) {
+	public static void startupcheck(JDA jda, String versionbot) {
 		try {
-			if (versionini.equals(versionbot)) {
+			if (Settings.Version.equals(versionbot)) {
 				return;
 			}
 			ArrayList<CommandData> newlist = new ArrayList<CommandData>();
@@ -275,10 +291,7 @@ public class SlashCommand extends ListenerAdapter {
 			newlist.add(remove());
 
 			register(newlist, jda);
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			ini.put("Setup", "Version", versionbot);
-			ini.store();
-
+			Settings.set("Setup", "Version", versionbot);
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Aktuallisieren der Befehle:", e);
 		}

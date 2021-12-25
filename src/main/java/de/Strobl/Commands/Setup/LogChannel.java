@@ -1,15 +1,13 @@
 package de.Strobl.Commands.Setup;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.GuildChannel;
@@ -27,17 +25,11 @@ public class LogChannel {
 				TextChannel textchannel = event.getGuild().getTextChannelById(ChannelID);
 				textchannel.sendMessage(event.getMember().getAsMention()).queue(sucess -> {
 					try {
-						Wini ini;
-						ini = new Wini(new File(Main.Pfad + "settings.ini"));
-						ini.put("Settings", "LogChannel", ChannelID);
-						ini.store();
+						Settings.set("Settings", "LogCHannel", ChannelID);
 
-						EmbedBuilder builder = Discord.standardEmbed(Color.GREEN,
-								"LogChannel eingestellt: " + "`" + textchannel.getName() + "`",
-								event.getGuild().getSelfMember().getId(),
+						EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "LogChannel eingestellt: " + "`" + textchannel.getName() + "`", event.getGuild().getSelfMember().getId(),
 								event.getGuild().getSelfMember().getEffectiveAvatarUrl());
-						builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(),
-								event.getUser().getAvatarUrl());
+						builder.setAuthor(event.getMember().getEffectiveName(), event.getUser().getAvatarUrl(), event.getUser().getAvatarUrl());
 						event.getHook().editOriginal("").setEmbeds(builder.build()).queue();
 						builder.clear();
 
@@ -46,15 +38,11 @@ public class LogChannel {
 						event.getHook().editOriginal("IOFehler beim Ändern des LogChannel.").queue();
 					}
 				}, failure -> {
-					event.getHook().editOriginal(
-							"Fehler beim erstellen des LogChannels. Hat der Bot Berechtigungen in dem Channel zu schreiben?")
-							.queue();
+					event.getHook().editOriginal("Fehler beim erstellen des LogChannels. Hat der Bot Berechtigungen in dem Channel zu schreiben?").queue();
 					logger.error("Fehler beim erstellen des LogChannels:", failure);
 				});
 			} else {
-				event.getHook()
-						.editOriginal("Der Ausgewählte Channel ist kein TextChannel, sondern ein: " + Channel.getType())
-						.queue();
+				event.getHook().editOriginal("Der Ausgewählte Channel ist kein TextChannel, sondern ein: " + Channel.getType()).queue();
 			}
 		} catch (Exception e) {
 			logger.error("Fehler beim Ändern des Onlinestatus:", e);

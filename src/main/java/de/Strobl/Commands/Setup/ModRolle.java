@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Profile.Section;
 import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -37,6 +37,7 @@ public class ModRolle {
 				ini.put("ModRollen", Stufe, Old + ", " + event.getOption("rolle").getAsRole().getId());
 			}
 			ini.store();
+			Settings.load();
 			EmbedBuilder builder = Discord.standardEmbed(Color.CYAN,
 					"Rolle " + NewRole.getName() + "(" + NewRole.getId() + ")" + " als " + Stufe + " hinzugefügt!",
 					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
@@ -56,8 +57,7 @@ public class ModRolle {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String RemoveRole = event.getOption("rolle").getAsString();
 
-			EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "ModRolle Entfernt",
-					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "ModRolle Entfernt", event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 
 			if (ini.get("ModRollen", "Admin").contains(RemoveRole)) {
 				if (ini.get("ModRollen", "Admin").contains(", " + RemoveRole)) {
@@ -83,18 +83,16 @@ public class ModRolle {
 
 			if (ini.get("ModRollen", "Channelmod").contains(RemoveRole)) {
 				if (ini.get("ModRollen", "Channelmod").contains(", " + RemoveRole)) {
-					ini.put("ModRollen", "Channelmod",
-							ini.get("ModRollen", "Channelmod").replace(", " + RemoveRole, ""));
+					ini.put("ModRollen", "Channelmod", ini.get("ModRollen", "Channelmod").replace(", " + RemoveRole, ""));
 				} else if (ini.get("ModRollen", "Channelmod").contains(RemoveRole + ", ")) {
-					ini.put("ModRollen", "Channelmod",
-							ini.get("ModRollen", "Channelmod").replace(RemoveRole + ", ", ""));
+					ini.put("ModRollen", "Channelmod", ini.get("ModRollen", "Channelmod").replace(RemoveRole + ", ", ""));
 				} else {
-					ini.put("ModRollen", "Channelmod",
-							ini.get("ModRollen", "Channelmod").replace(RemoveRole, ""));
+					ini.put("ModRollen", "Channelmod", ini.get("ModRollen", "Channelmod").replace(RemoveRole, ""));
 				}
 				builder.addField("Rolle aus Channelmods Entfernt", RemoveRole, false);
 			}
 			ini.store();
+			Settings.load();
 			if (builder.getFields().size() == 0) {
 				Hook.editOriginal("Angegebene Rolle ist keine ModRolle").queue();
 				return;
@@ -112,15 +110,14 @@ public class ModRolle {
 
 	public static void list(SlashCommandEvent event, InteractionHook Hook) {
 		try {
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
-			Section ModRollen = ini.get("ModRollen");
+			String[] AdminList = Settings.Admin;
+			String[] ModList = Settings.Mod;
+			String[] ChannelModList = Settings.Channelmod;
 
-			EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Modrollen:",
-					event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
+			EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Modrollen:", event.getGuild().getSelfMember().getId(), event.getGuild().getSelfMember().getEffectiveAvatarUrl());
 
 			try {
-				if (!ModRollen.get("Admin").replaceAll("\\s", "").replaceAll(",", "").equals("")) {
-					String[] AdminList = ModRollen.get("Admin").replaceAll("\\s", "").split(",");
+				if (!(AdminList.length == 0)) {
 					String Admin = "";
 					for (int i = 0; i < AdminList.length; i++) {
 						try {
@@ -138,8 +135,7 @@ public class ModRolle {
 			}
 
 			try {
-				if (!ModRollen.get("Mod").replaceAll("\\s", "").replaceAll(",", "").equals("")) {
-					String[] ModList = ModRollen.get("Mod").replaceAll("\\s", "").split(",");
+				if (!(ModList.length == 0)) {
 					String Mod = "";
 					for (int i = 0; i < ModList.length; i++) {
 						try {
@@ -157,14 +153,11 @@ public class ModRolle {
 			}
 
 			try {
-				if (!ModRollen.get("Channelmod").replaceAll("\\s", "").replaceAll(",", "").equals("")) {
-
-					String[] ChannelModList = ModRollen.get("Channelmod").replaceAll("\\s", "").split(",");
+				if (!(ChannelModList.length == 0)) {
 					String ChannelMod = "";
 					for (int i = 0; i < ChannelModList.length; i++) {
 						try {
-							ChannelMod = ChannelMod + "\n"
-									+ event.getGuild().getRoleById(ChannelModList[i]).getAsMention();
+							ChannelMod = ChannelMod + "\n" + event.getGuild().getRoleById(ChannelModList[i]).getAsMention();
 						} catch (NullPointerException e) {
 							ChannelMod = ChannelMod + "\n" + ChannelModList[i];
 						}
@@ -181,10 +174,6 @@ public class ModRolle {
 
 			Hook.editOriginal("").setEmbeds(builder.build()).queue();
 			builder.clear();
-
-		} catch (IOException e) {
-			Hook.editOriginal("IO Fehler Beim Auslesen").queue();
-			logger.error("IO Fehler Beim Auslesen:", e);
 		} catch (Exception e) {
 			Hook.editOriginal("Fehler beim auslesen").queue();
 			logger.error("Fehler beim auslesen:", e);

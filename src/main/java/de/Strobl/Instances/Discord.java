@@ -1,20 +1,16 @@
 package de.Strobl.Instances;
 
 import java.awt.Color;
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
-import de.Strobl.Main.Main;
+import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-import net.dv8tion.jda.api.entities.User;
 
 public class Discord {
 	private static final Logger logger = LogManager.getLogger(Discord.class);
@@ -33,28 +29,7 @@ public class Discord {
 		builder.setTimestamp(ZonedDateTime.now().toInstant());
 		return builder;
 	}
-
-	public static Member getmember(Guild guild, String UserID) {
-		logger.info("getMember: " + UserID);
-		Member member = null;
-		try {
-			member = guild.getMemberById(UserID.replaceAll("<", "").replaceAll(">", "").replaceAll("@", "").replaceAll("!", ""));
-			logger.info("gotMember: " + member);
-		} catch (Exception e) {
-			try {
-				member = guild.retrieveMemberById(UserID.replaceAll("<", "").replaceAll(">", "").replaceAll("@", "").replaceAll("!", "")).complete();
-				logger.info("retrievedMember: " + member);
-			} catch (Exception e1) {
-				logger.info("Member not Found!");
-			}
-		}
-		return member;
-	}
-
-	public static Member getmember(Guild guild, User user) {
-		return getmember(guild, user.getId());
-	}
-
+	
 	public static Integer isMod(Member member) {
 
 //-1 = Fehler		
@@ -72,7 +47,6 @@ public class Discord {
 				return 3;
 			}
 
-			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 
 //Userrollen auslesen
 
@@ -83,9 +57,9 @@ public class Discord {
 
 //Administrator
 
-			if (!(ini.get("ModRollen", "Admin") == null)) {
+			if (!(Settings.Admin.length==0)) {
 				ArrayList<String> Admins = new ArrayList<String>();
-				String[] Rollen = ini.get("ModRollen", "Admin").replaceAll("]", "").replaceAll("\\s", "").split(",");
+				String[] Rollen = Settings.Admin;
 
 				for (int i = 0; i < Rollen.length; i++) {
 					Admins.add(Rollen[i]);
@@ -98,9 +72,9 @@ public class Discord {
 
 //Moderator
 
-			if (!(ini.get("ModRollen", "Mod") == null)) {
+			if (!(Settings.Mod.length==0)) {
 				ArrayList<String> Mods = new ArrayList<String>();
-				String[] Rollen = ini.get("ModRollen", "Mod").replaceAll("]", "").replaceAll("\\s", "").split(",");
+				String[] Rollen = Settings.Mod;
 
 				for (int i = 0; i < Rollen.length; i++) {
 					Mods.add(Rollen[i]);
@@ -114,9 +88,9 @@ public class Discord {
 
 //Channelmod
 
-			if (!(ini.get("ModRollen", "Channelmod") == null)) {
+			if (!(Settings.Channelmod.length==0)) {
 				ArrayList<String> Channelmods = new ArrayList<String>();
-				String[] Rollen = ini.get("ModRollen", "Channelmod").replaceAll("]", "").replaceAll("\\s", "").split(",");
+				String[] Rollen = Settings.Channelmod;
 
 				for (int i = 0; i < Rollen.length; i++) {
 					Channelmods.add(Rollen[i]);
