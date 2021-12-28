@@ -23,7 +23,7 @@ public class ReactionRemoveLog extends ListenerAdapter {
 
 				// Nachrichtenlink Erzeugung:
 				String GuildID = event.getGuild().getId().toString();
-				String ChannelID = event.getTextChannel().getId();
+				String ChannelID = event.getChannel().getId();
 				String MessageID = event.getMessageId();
 				String Nachrichtenlink = "https://discordapp.com/channels/" + GuildID + "/" + ChannelID + "/" + MessageID;
 

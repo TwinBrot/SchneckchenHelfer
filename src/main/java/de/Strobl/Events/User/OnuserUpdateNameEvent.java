@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ini4j.Wini;
 
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
@@ -14,7 +13,6 @@ import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class OnuserUpdateNameEvent extends ListenerAdapter {
-	public Wini ini;
 	private static final Logger logger = LogManager.getLogger(OnuserUpdateNameEvent.class);
 
 	@Override
@@ -27,7 +25,7 @@ public class OnuserUpdateNameEvent extends ListenerAdapter {
 				if (!ID.equals("137612175454765056") && !ID.equals("196990278643613696") && !ID.equals("137267295801049088") && !ID.equals("137300611212247040") && !ID.equals("109777843046645760")
 						&& !ID.equals("137258978479439873") && !ID.equals("227131380058947584")) {
 //ArrayList verbotener Namen
-					String[] Name = ini.get("Namensüberwachung", "Verboten").replaceAll("]", "").replaceAll("\\s", "").split(",");
+					String[] Name = Settings.Namen;
 					ArrayList<String> Namen = new ArrayList<String>();
 					for (int i = 0; i < Name.length; i++) {
 						Namen.add(Name[i]);
