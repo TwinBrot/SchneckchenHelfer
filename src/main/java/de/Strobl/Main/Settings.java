@@ -45,19 +45,17 @@ public class Settings {
 		Channelmod = ini.get("ModRollen", "Channelmod").replaceAll(" ", "").split(",");
 		Datei = ini.get("Dateiüberwachung", "Allowed").replaceAll(" ", "").split(",");
 		Namen = ini.get("Namensüberwachung", "Verboten").replaceAll(" ", "").split(",");
-
 		String DateiTemp = ini.get("Dateiüberwachung", "Active");
 		if (DateiTemp.equals("true")) {
 			DateiActive = true;
 		} else {
 			DateiActive = false;
 		}
-
 		String NamenTemp = ini.get("Namensüberwachung", "Active");
 		if (NamenTemp.equals("true")) {
-			DateiActive = true;
+			NamenActive = true;
 		} else {
-			DateiActive = false;
+			NamenActive = false;
 		}
 		
 		

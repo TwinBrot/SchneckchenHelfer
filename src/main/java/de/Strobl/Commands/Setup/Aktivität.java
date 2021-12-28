@@ -19,13 +19,13 @@ public class Aktivität {
 
 	public static void aktivität(SlashCommandEvent event) {
 		try {
-
-			String typ = Settings.AktivitätTyp;
-			String text = Settings.AktivitätText;
+			String typ = event.getOption("activitytyp").getAsString();
+			String text = event.getOption("activitytext").getAsString();
+			
 			String URL = Settings.StreamLink;
 
 			Settings.set("Settings", "AktivitätTyp", typ);
-			Settings.set("Settings", "AktivitätTyp", text);
+			Settings.set("Settings", "AktivitätText", text);
 
 			if (typ.equals("playing")) {
 				event.getJDA().getPresence().setActivity(Activity.playing(text));
