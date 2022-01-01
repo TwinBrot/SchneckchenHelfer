@@ -28,16 +28,21 @@ public class ScamDetection extends ListenerAdapter {
 
 	private void CodeWort(MessageReceivedEvent event) {
 		try {
-			String message = event.getMessage().getContentRaw().toLowerCase();
-			if (message.contains("http")) {
-				if (message.contains("@everyone")) {
+			String m = event.getMessage().getContentRaw().toLowerCase();
+			if (m.contains("http")) {
+				if (m.contains("@everyone")) {
 					Instance(event, "Nachricht gelöscht! Schlüsselwörter erkannt!");
 					return;
 				}
-				if (message.contains("free") || message.contains("gift") || message.contains("trade") || message.contains("distrib") || message.contains("hack") || message.contains("money")
-						|| message.contains("installer") || message.contains("giving") || message.contains("over") || message.contains("give")) {
-					if (message.contains("disc") || message.contains("steam") || message.contains("nitro") || message.contains("cs:go") || message.contains("boost") || message.contains("csgo")
-							|| message.contains("valorant") || message.contains("skin") || message.contains("Game") || message.contains("@everyone")) {
+				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money")
+						|| m.contains("installer") || m.contains("giving") || m.contains("over") || m.contains("give")) {
+					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo")
+							|| m.contains("valorant") || m.contains("skin") || m.contains("Game") || m.contains("@everyone")) {
+						
+						if (m.contains("https://discord.gift/")) {
+							logger.info("Discord-Nitro Geschenk erkannt: " + m);
+							return;
+						}
 						Instance(event, "Nachricht gelöscht! Schlüsselwörter erkannt!");
 						return;
 					}
@@ -63,12 +68,12 @@ public class ScamDetection extends ListenerAdapter {
 
 	private void Instance(MessageReceivedEvent event, String title) {
 		try {
-			String message = event.getMessage().getContentRaw().toLowerCase();
+			String m = event.getMessage().getContentRaw().toLowerCase();
 			event.getMessage().delete().queue(success -> {
 				try {
 					Guild guild = event.getGuild();
 					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
-					builder.addField("Nachrichten Inhalt:", message, false);
+					builder.addField("Nachrichten Inhalt:", m, false);
 					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312> <@81796365214023680>")
 							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + event.getMember().getId(), "Ban User")).queue();
 					builder.clear();
