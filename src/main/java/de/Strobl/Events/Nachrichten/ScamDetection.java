@@ -74,7 +74,7 @@ public class ScamDetection extends ListenerAdapter {
 					Guild guild = event.getGuild();
 					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
 					builder.addField("Nachrichten Inhalt:", m, false);
-					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312> <@81796365214023680>")
+					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>")
 							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + event.getMember().getId(), "Ban User")).queue();
 					builder.clear();
 				} catch (Exception e) {
