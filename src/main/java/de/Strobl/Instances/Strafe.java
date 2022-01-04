@@ -31,7 +31,7 @@ public class Strafe {
 	public Strafe(@Nonnull String newuserid, @Nonnull StrafenTyp newtyp, @Nonnull String newtext, @Nonnull String modid) {
 		this.userid = newuserid;
 		this.typ = newtyp;
-		this.text = newtext;
+		this.text = newtext.replaceAll("'", "`");
 		this.modid = modid;
 	}
 
@@ -39,7 +39,7 @@ public class Strafe {
 		this.id = newid;
 		this.userid = newuserid;
 		this.typ = newtyp;
-		this.text = newtext;
+		this.text = newtext.replaceAll("'", "`");
 		this.modid = modid;
 	}
 
