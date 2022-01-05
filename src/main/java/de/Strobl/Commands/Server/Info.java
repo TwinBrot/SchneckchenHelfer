@@ -46,10 +46,10 @@ public class Info extends ListenerAdapter {
 			if (!(builder.getFields().size() == 0)) {
 				embeds.add(builder);
 			}
-			if ((embeds.size()==0)) {
+			if ((embeds.size() == 0)) {
 				EventHook.editOriginal("Der User <@" + user.getId() + "> hat keine Hinweise/Warns/Kicks/Bans/Mutes").queue();
 			}
-			for (int i = 0; i< embeds.size(); i++) {
+			for (int i = 0; i < embeds.size(); i++) {
 				if (i == 0) {
 					EventHook.editOriginal("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).queue();
 				} else {
@@ -86,7 +86,11 @@ public class Info extends ListenerAdapter {
 					builder.addField(field);
 				});
 			});
-			event.getMessage().reply("User: " + user.getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
+			if (builder.getFields().size() == 0) {
+				event.getMessage().reply("Der User <@" + user.getId() + "> hat keine Hinweise/Warns/Kicks/Bans/Mutes").allowedMentions(Collections.emptyList()).queue();
+			} else {
+				event.getMessage().reply("User: " + user.getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
+			}
 			builder.clear();
 		} catch (Exception e) {
 			logger.error("Fehler beim Abrufen der Userdaten:", e);

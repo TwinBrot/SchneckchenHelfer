@@ -46,7 +46,7 @@ public class InviteDetection extends ListenerAdapter {
 											logger.error("Fehler Invite Detection", e);
 										}
 									}, e -> {
-										if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ErrorResponseException")) {
+										if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ContextException")) {
 											logger.error("Fehler Invite Detection", e);
 										}
 									});

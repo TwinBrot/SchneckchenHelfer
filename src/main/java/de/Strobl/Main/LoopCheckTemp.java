@@ -28,9 +28,8 @@ public class LoopCheckTemp implements Runnable {
 					String userid = strafeTemp.getUserID();
 					
 					if (typ.equalsIgnoreCase("Ban")) {
-						System.out.println(strafeTemp.getID() + " " + strafeTemp.getUserID() + " " + strafeTemp.getDateTime().toString() + " " + strafeTemp.getStrafenTyp().toString());
+						logger.info(strafeTemp.getID() + " " + strafeTemp.getUserID() + " " + strafeTemp.getDateTime().toString() + " " + strafeTemp.getStrafenTyp().toString());
 						guild.unban(userid).queue(success -> {
-							System.out.println("Unbanned");
 							try {
 								EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, "Tempban User entbannt", userid, null);
 								guild.getTextChannelById(Settings.LogChannel).sendMessage("User: <@" + userid + ">").setEmbeds(builder.build()).queue();
