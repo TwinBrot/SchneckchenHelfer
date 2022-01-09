@@ -34,11 +34,11 @@ public class ScamDetection extends ListenerAdapter {
 					Instance(event, "Nachricht gelöscht! Schlüsselwörter erkannt!");
 					return;
 				}
-				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money")
-						|| m.contains("installer") || m.contains("giving") || m.contains("over") || m.contains("give")) {
-					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo")
-							|| m.contains("valorant") || m.contains("skin") || m.contains("Game") || m.contains("@everyone")) {
-						
+				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money") || m.contains("installer")
+						|| m.contains("giving") || m.contains("over") || m.contains("give")) {
+					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo") || m.contains("valorant")
+							|| m.contains("skin") || m.contains("Game") || m.contains("@everyone")) {
+
 						if (m.contains("https://discord.gift/")) {
 							logger.info("Discord-Nitro Geschenk erkannt: " + m);
 							return;
@@ -68,6 +68,11 @@ public class ScamDetection extends ListenerAdapter {
 
 	private void Instance(MessageReceivedEvent event, String title) {
 		try {
+
+			if (Discord.isMod(event.getMember()) > 0) {
+				logger.info("Scam erkannt. Author ist Mod, daher nicht gelöscht.");
+				return;
+			}
 			String m = event.getMessage().getContentRaw().toLowerCase();
 			event.getMessage().delete().queue(success -> {
 				try {

@@ -34,6 +34,12 @@ public class InviteDetection extends ListenerAdapter {
 						Invite.resolve(event.getJDA(), splitcontent.replace(invite, "").replaceAll("/", "")).queue(temp -> {
 							try {
 								if (!temp.getGuild().getId().equals(event.getGuild().getId())) {
+
+									if (Discord.isMod(event.getMember()) > 0) {
+										logger.info("Servereinladung erkannt. Author ist Mod, daher nicht gelöscht.");
+										return;
+									}
+
 									event.getMessage().delete().queue(success -> {
 										try {
 											String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";

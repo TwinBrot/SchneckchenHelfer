@@ -22,6 +22,7 @@ public class Filechecker extends ListenerAdapter {
 		if (!event.isFromGuild()) {
 			return;
 		}
+
 		try {
 			Boolean inactive = !Settings.DateiActive;
 			Boolean Bot = event.getAuthor().isBot();
@@ -43,6 +44,12 @@ public class Filechecker extends ListenerAdapter {
 			List<Attachment> Dateien = event.getMessage().getAttachments();
 			for (int i = 0; i < Dateien.size(); i++) {
 				if (!DateiEndungen.contains(Dateien.get(i).getFileExtension().toLowerCase())) {
+
+					if (Discord.isMod(event.getMember()) > 0) {
+						logger.info("Nicht erlaubte Dateiendung erkannt. Author ist Mod, daher nicht gelöscht.");
+						return;
+					}
+
 					event.getMessage().delete().queue(success -> {
 						EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Unerlaubte Dateiendung erkannt. Nachricht gelöscht!", event.getMember().getId(),
 								event.getMember().getEffectiveAvatarUrl());
