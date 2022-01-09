@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -154,7 +156,22 @@ public class Main {
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
 			Loops.scheduleAtFixedRate(new LoopCheckTemp(), 10, 60, TimeUnit.SECONDS);
+			
+			
 
+			Scanner scanner = new Scanner(System.in);
+			try {
+				while (true) {
+					String end = scanner.nextLine();
+					if (end.equals("shutdown")) {
+						jda.shutdown();
+						System.exit(0);
+					}
+				}
+			} catch (NoSuchElementException e) {
+			}
+			scanner.close();
+			
 //Fehler Management
 		} catch (IllegalStateException e) {
 			logger.fatal("IllegalStateException - 'Presence Intent' und 'Server Members Intent' im Discord Developer Portal aktiviert? ", e);
