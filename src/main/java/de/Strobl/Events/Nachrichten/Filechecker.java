@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message.Attachment;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -42,17 +43,33 @@ public class Filechecker extends ListenerAdapter {
 			}
 
 			List<Attachment> Dateien = event.getMessage().getAttachments();
+//Alle Dateiendungen kontrollieren
 			for (int i = 0; i < Dateien.size(); i++) {
-				if (!DateiEndungen.contains(Dateien.get(i).getFileExtension().toLowerCase())) {
 
-					if (Discord.isMod(event.getMember()) > 0) {
+//Kontrolle ob Endung erlaubt / Endung vorhanden
+				boolean delete = false;
+				if (Dateien.get(i).getFileExtension() == null) {
+					delete = true;
+				} else if (!DateiEndungen.contains(Dateien.get(i).getFileExtension().toLowerCase())) {
+					delete = true;
+				}
+
+//Delete Message, if User is not Mod
+				if (delete) {
+					Member member = event.getMember();
+					if (Discord.isMod(member) > 0) {
 						logger.info("Nicht erlaubte Dateiendung erkannt. Author ist Mod, daher nicht gelöscht.");
 						return;
 					}
-
 					event.getMessage().delete().queue(success -> {
-						EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Unerlaubte Dateiendung erkannt. Nachricht gelöscht!", event.getMember().getId(),
-								event.getMember().getEffectiveAvatarUrl());
+						member.getUser().openPrivateChannel().queue(pc -> {
+							EmbedBuilder userinfo = Discord.standardEmbed(Color.RED, "Deine Nachrichten wurde automatisch gelöscht!", member.getId(), member.getEffectiveAvatarUrl());
+							userinfo.addField("Grund:", "Unerlaubte Dateiendung erkannt \n Versuch es am besten mit einer anderen Dateiendung.", true);
+							pc.sendMessageEmbeds(userinfo.build()).queue(null, e -> {
+							});
+							userinfo.clear();
+						});
+						EmbedBuilder builder = Discord.standardEmbed(Color.RED, "Unerlaubte Dateiendung erkannt. Nachricht gelöscht!", member.getId(), member.getEffectiveAvatarUrl());
 						builder.addField("Channel:", event.getChannel().getAsMention(), true);
 						builder.addField("DateiName:", event.getMessage().getAttachments().get(0).getFileName(), true);
 						event.getGuild().getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584>")
