@@ -35,9 +35,9 @@ public class ScamDetection extends ListenerAdapter {
 					return;
 				}
 				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money") || m.contains("installer")
-						|| m.contains("giving") || m.contains("over") || m.contains("give")) {
+						|| m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop")) {
 					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo") || m.contains("valorant")
-							|| m.contains("skin") || m.contains("Game") || m.contains("@everyone")) {
+							|| m.contains("skin") || m.contains("Game")) {
 
 						if (m.contains("https://discord.gift/")) {
 							logger.info("Discord-Nitro Geschenk erkannt: " + m);

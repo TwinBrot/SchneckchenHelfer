@@ -17,6 +17,10 @@ public class ReactionRemoveLog extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+		if (!event.isFromGuild()) {
+			return;
+		}
+		
 		try {
 //Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353") && !event.getChannel().getId().equals("720439181696041122")) {
