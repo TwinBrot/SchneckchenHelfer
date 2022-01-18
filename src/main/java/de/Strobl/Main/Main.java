@@ -19,6 +19,7 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
+import de.Strobl.Commands.MessageReceivedFunsies;
 import de.Strobl.Commands.SlashCommand;
 import de.Strobl.Events.EmoteEvent;
 import de.Strobl.Events.Channel.ChannelCreate;
@@ -42,7 +43,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "2.3.4";
+	public static String version = "2.3.5";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -85,6 +86,7 @@ public class Main {
 			// Commands
 			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new MessageReceived());
+			Builder.addEventListeners(new MessageReceivedFunsies());
 			Builder.addEventListeners(new ButtonInteraction());
 			// Message Events
 			Builder.addEventListeners(new EmoteTracking());
