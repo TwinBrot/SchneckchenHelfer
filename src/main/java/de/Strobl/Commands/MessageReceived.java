@@ -15,6 +15,12 @@ public class MessageReceived extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		try {
+			if (event.getMessage().getContentRaw().equals("<@729067250954403890> danke") && event.getMember().getId().equals("227131380058947584")) {
+				event.getMessage().reply(event.getMember().getAsMention() + " gerngeschehen").queue();
+				return;
+			}
+			
+			
 			String args[] = event.getMessage().getContentRaw().split("\\s");
 //Commanderkennung
 			if (!args[0].equals("*warns")) {
