@@ -15,12 +15,12 @@ public class MessageReceived extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		try {
-			if (event.getMessage().getContentRaw().equals("<@729067250954403890> danke") && event.getMember().getId().equals("227131380058947584")) {
+			if ((event.getMessage().getContentRaw().equals("<@729067250954403890> danke") || event.getMessage().getContentRaw().equals("<@!729067250954403890> danke"))
+					&& event.getMember().getId().equals("227131380058947584")) {
 				event.getMessage().reply(event.getMember().getAsMention() + " gerngeschehen").queue();
 				return;
 			}
-			
-			
+
 			String args[] = event.getMessage().getContentRaw().split("\\s");
 //Commanderkennung
 			if (!args[0].equals("*warns")) {
@@ -43,8 +43,7 @@ public class MessageReceived extends ListenerAdapter {
 			}
 
 //Nötigen Rechte vorhanden?
-			if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.MESSAGE_SEND,
-					Permission.VIEW_CHANNEL)) {
+			if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.MESSAGE_SEND, Permission.VIEW_CHANNEL)) {
 				logger.error("Fehlende Berechtigung um auf Befehl zu antworten");
 				logger.error("GuildChannel: " + event.getGuildChannel());
 				logger.error("Permissions: " + event.getGuild().getSelfMember().getPermissions());
