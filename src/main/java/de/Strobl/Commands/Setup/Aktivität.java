@@ -11,13 +11,13 @@ import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Aktivität {
 
 	private static final Logger logger = LogManager.getLogger(Aktivität.class);
 
-	public static void aktivität(SlashCommandEvent event) {
+	public static void aktivität(SlashCommandInteractionEvent event) {
 		try {
 			String typ = event.getOption("activitytyp").getAsString();
 			String text = event.getOption("activitytext").getAsString();

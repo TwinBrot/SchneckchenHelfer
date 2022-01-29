@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.ListedEmote;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Emotes {
@@ -22,7 +22,7 @@ public class Emotes {
 	public static EmbedBuilder EmbedEmotes = new EmbedBuilder();
 	private static final Logger logger = LogManager.getLogger(Emotes.class);
 
-	public static void emotes(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void emotes(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			counter = 0;
 			MessageChannel channel = event.getChannel();

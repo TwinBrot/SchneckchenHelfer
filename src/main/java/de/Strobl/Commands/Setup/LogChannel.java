@@ -12,12 +12,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class LogChannel {
 	private static final Logger logger = LogManager.getLogger(LogChannel.class);
 
-	public static void setup(SlashCommandEvent event) {
+	public static void setup(SlashCommandInteractionEvent event) {
 		try {
 			GuildChannel Channel = event.getOption("textchannel").getAsGuildChannel();
 			if (Channel.getType() == ChannelType.TEXT) {

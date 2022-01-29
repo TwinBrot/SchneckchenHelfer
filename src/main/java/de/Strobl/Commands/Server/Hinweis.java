@@ -11,13 +11,13 @@ import de.Strobl.Instances.Strafe;
 import de.Strobl.Instances.StrafenTyp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Hinweis {
 	private static final Logger logger = LogManager.getLogger(Hinweis.class);
 
-	public static void onSlashCommand(SlashCommandEvent event, User user, String Text, InteractionHook EventHook) {
+	public static void SlashCommandInteraction(SlashCommandInteractionEvent event, User user, String Text, InteractionHook EventHook) {
 		try {
 			if (event.getJDA().getSelfUser() == user) {
 				EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();

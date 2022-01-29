@@ -13,14 +13,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class BanButton {
 	private static final Logger logger = LogManager.getLogger(BanButton.class);
 
-	public static void bancheck(ButtonClickEvent event, InteractionHook hook, String id) {
+	public static void bancheck(ButtonInteractionEvent event, InteractionHook hook, String id) {
 		try {
 			event.getMessage().editMessage(event.getMessage().getContentRaw() + " Button clicked!").queue();
 			TextChannel channel = event.getGuild().getTextChannelById("486955077899386909");
@@ -31,7 +31,7 @@ public class BanButton {
 		}
 	}
 
-	public static void banchecked(ButtonClickEvent event, InteractionHook hook, String id) {
+	public static void banchecked(ButtonInteractionEvent event, InteractionHook hook, String id) {
 		event.getGuild().retrieveMemberById(id).queue(member -> {
 			try {
 				member.getUser().openPrivateChannel().queue(channel -> {
@@ -56,7 +56,7 @@ public class BanButton {
 		});
 	}
 
-	private static void baninstance(ButtonClickEvent event, InteractionHook hook, String id, Guild guild, Member member, Boolean info) {
+	private static void baninstance(ButtonInteractionEvent event, InteractionHook hook, String id, Guild guild, Member member, Boolean info) {
 		String avatar = null;
 		if (!(member == null)) {
 			avatar = member.getEffectiveAvatarUrl();

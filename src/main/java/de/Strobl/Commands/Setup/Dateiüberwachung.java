@@ -12,13 +12,13 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Dateiüberwachung {
 	private static final Logger logger = LogManager.getLogger(Dateiüberwachung.class);
 
-	public static void add(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void add(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Allowed = ini.get("Dateiüberwachung", "Allowed").split(",\\s+");
@@ -62,7 +62,7 @@ public class Dateiüberwachung {
 		}
 	}
 
-	public static void remove(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void remove(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Allowed = ini.get("Dateiüberwachung", "Allowed").split(",\\s+");
@@ -106,7 +106,7 @@ public class Dateiüberwachung {
 		}
 	}
 
-	public static void list(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void list(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			String[] Allowed = Settings.Datei;
 
@@ -127,7 +127,7 @@ public class Dateiüberwachung {
 		}
 	}
 
-	public static void onoff(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void onoff(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Boolean stateold = Settings.DateiActive;
 			String state;

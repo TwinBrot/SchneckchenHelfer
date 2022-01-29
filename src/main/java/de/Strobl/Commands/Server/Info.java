@@ -13,7 +13,7 @@ import de.Strobl.Instances.Strafe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class Info extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(Info.class);
 
-	public static void slashcommandevent(SlashCommandEvent event, User user, InteractionHook EventHook) {
+	public static void slashcommandevent(SlashCommandInteractionEvent event, User user, InteractionHook EventHook) {
 		try {
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Userinformationen:", user.getId(), user.getEffectiveAvatarUrl());
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());

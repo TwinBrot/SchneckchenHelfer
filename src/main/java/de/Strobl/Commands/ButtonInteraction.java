@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Commands.Buttons.BanButton;
 import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
@@ -14,7 +14,7 @@ public class ButtonInteraction extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(ButtonInteraction.class);
 
 	@Override
-	public void onButtonClick(ButtonClickEvent event) {
+	public void onButtonInteraction(ButtonInteractionEvent event) {
 		try {
 			InteractionHook hook = event.getHook();
 // Console Output

@@ -13,13 +13,13 @@ import de.Strobl.Main.Main;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class ModRolle {
 	private static final Logger logger = LogManager.getLogger(ModRolle.class);
 
-	public static void add(SlashCommandEvent event, InteractionHook Hook) {
+	public static void add(SlashCommandInteractionEvent event, InteractionHook Hook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String Stufe = event.getOption("zugriffsstufe").getAsString();
@@ -52,7 +52,7 @@ public class ModRolle {
 		}
 	}
 
-	public static void remove(SlashCommandEvent event, InteractionHook Hook) {
+	public static void remove(SlashCommandInteractionEvent event, InteractionHook Hook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String RemoveRole = event.getOption("rolle").getAsString();
@@ -108,7 +108,7 @@ public class ModRolle {
 		}
 	}
 
-	public static void list(SlashCommandEvent event, InteractionHook Hook) {
+	public static void list(SlashCommandInteractionEvent event, InteractionHook Hook) {
 		try {
 			String[] AdminList = Settings.Admin;
 			String[] ModList = Settings.Mod;

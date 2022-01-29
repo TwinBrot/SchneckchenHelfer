@@ -9,12 +9,12 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Onlinestatus {
 	private static final Logger logger = LogManager.getLogger(Onlinestatus.class);
 
-	public static void change(SlashCommandEvent event) {
+	public static void change(SlashCommandInteractionEvent event) {
 		try {
 
 			String status = event.getOption("onlinestatus").getAsString();

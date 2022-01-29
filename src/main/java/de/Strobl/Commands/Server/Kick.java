@@ -12,13 +12,13 @@ import de.Strobl.Instances.StrafenTyp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Kick {
 	private static final Logger logger = LogManager.getLogger(Kick.class);
 
-	public static void onSlashCommand(SlashCommandEvent event, Member member, String Text, InteractionHook EventHook) {
+	public static void onSlashCommand(SlashCommandInteractionEvent event, Member member, String Text, InteractionHook EventHook) {
 		try {
 			if (event.getJDA().getSelfUser() == member.getUser()) {
 				EventHook.editOriginal("Wolltest du wirklich mich kicken? 🙄  Vergiss das mal gleich wieder.").queue();

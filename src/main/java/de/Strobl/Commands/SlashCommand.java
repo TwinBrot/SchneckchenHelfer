@@ -31,11 +31,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
@@ -43,7 +45,7 @@ public class SlashCommand extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(SlashCommand.class);
 
 	@Override
-	public void onSlashCommand(SlashCommandEvent event) {
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 		InteractionHook EventHook = event.getHook();
 		event.deferReply(false).queue();
 		try {
@@ -101,7 +103,7 @@ public class SlashCommand extends ListenerAdapter {
 				if (event.getName().equals("hinweis")) {
 					User user = event.getOption("user").getAsUser();
 					String grundhinweis = event.getOption("grund").getAsString();
-					Hinweis.onSlashCommand(event, user, grundhinweis, EventHook);
+					Hinweis.SlashCommandInteraction(event, user, grundhinweis, EventHook);
 					return;
 				} else if (event.getName().equals("info")) {
 					User user = event.getOption("user").getAsUser();
@@ -309,40 +311,40 @@ public class SlashCommand extends ListenerAdapter {
 		}
 	}
 
-	private static CommandData onlinestatus() {
-		return new CommandData("onlinestatus", "Ändert den Onlinestatus des Bots").addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.").addChoice("online", "ONLINE")
+	private static SlashCommandData onlinestatus() {
+		return Commands.slash("onlinestatus", "Ändert den Onlinestatus des Bots").addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.").addChoice("online", "ONLINE")
 				.addChoice("nichtstören", "DO_NOT_DISTURB").addChoice("abwesend", "IDLE").addChoice("unsichtbar", "INVISIBLE").setRequired(true));
 	}
 
-	private static CommandData activity() {
-		return new CommandData("activity", "Konfiguriert die Aktivität des Bots").addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
+	private static SlashCommandData activity() {
+		return Commands.slash("activity", "Konfiguriert die Aktivität des Bots").addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
 				.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
 				.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true));
 	}
 
-	private static CommandData name() {
-		return new CommandData("namen", "Konfiguriert die Namensüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
+	private static SlashCommandData name() {
+		return Commands.slash("namen", "Konfiguriert die Namensüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
 				.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
 				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen").addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen").addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen"));
 	}
 
-	private static CommandData datei() {
-		return new CommandData("datei", "Konfiguriert die Dateiüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
+	private static SlashCommandData datei() {
+		return Commands.slash("datei", "Konfiguriert die Dateiüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
 				.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
 				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen").addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen").addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen"));
 	}
 
-	private static CommandData logchannel() {
-		return new CommandData("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.")
+	private static SlashCommandData logchannel() {
+		return Commands.slash("logchannel", "Legt den Kanal fest, in dem die Alarme gepostet werden.")
 				.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true));
 	}
 
-	private static CommandData modrolle() {
-		return new CommandData("modrolle", "Konfiguriert die Modrollen")
+	private static SlashCommandData modrolle() {
+		return Commands.slash("modrolle", "Konfiguriert die Modrollen")
 				.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen").addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true))
 						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true).addChoice("Admin", "Admin").addChoice("Mod", "Mod")
 								.addChoice("ChannelMod", "Channelmod")))
@@ -350,51 +352,51 @@ public class SlashCommand extends ListenerAdapter {
 				.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf."));
 	}
 
-	private static CommandData emotes() {
-		return new CommandData("emotes", "Startet die Emoteauswertung");
+	private static SlashCommandData emotes() {
+		return Commands.slash("emotes", "Startet die Emoteauswertung");
 	}
 
-	private static CommandData info() {
-		return new CommandData("info", "Ruft Informationen über einen User ab.").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true));
+	private static SlashCommandData info() {
+		return Commands.slash("info", "Ruft Informationen über einen User ab.").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true));
 	}
 
-	private static CommandData hinweis() {
-		return new CommandData("hinweis", "Schickt einem User einen Hinweis").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+	private static SlashCommandData hinweis() {
+		return Commands.slash("hinweis", "Schickt einem User einen Hinweis").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Hinweis-Text an.").setRequired(true));
 	}
 
-	private static CommandData warn() {
-		return new CommandData("warn", "Schickt einem User eine Verwarnung").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+	private static SlashCommandData warn() {
+		return Commands.slash("warn", "Schickt einem User eine Verwarnung").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund an.").setRequired(true));
 	}
 
-	private static CommandData kick() {
-		return new CommandData("kick", "Kickt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+	private static SlashCommandData kick() {
+		return Commands.slash("kick", "Kickt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Kicks an.").setRequired(true));
 	}
 
-	private static CommandData ban() {
-		return new CommandData("ban", "Bannt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+	private static SlashCommandData ban() {
+		return Commands.slash("ban", "Bannt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
-	private static CommandData tempban() {
-		return new CommandData("tempban", "Bannt den ausgewählten User temporär").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+	private static SlashCommandData tempban() {
+		return Commands.slash("tempban", "Bannt den ausgewählten User temporär").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Format: 1y1mon1w1d1h1min").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
-	private static CommandData permaban() {
-		return new CommandData("permaban", "Bannt den ausgewählten User Permanent").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+	private static SlashCommandData permaban() {
+		return Commands.slash("permaban", "Bannt den ausgewählten User Permanent").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
-	private static CommandData changeban() {
-		return new CommandData("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
+	private static SlashCommandData changeban() {
+		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true));
 	}
 
-	private static CommandData remove() {
-		return new CommandData("remove", "Entfernt Daten aus der Datenbank! Macht Keine Strafen rückgängig!.").addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe").setRequired(true));
+	private static SlashCommandData remove() {
+		return Commands.slash("remove", "Entfernt Daten aus der Datenbank! Macht Keine Strafen rückgängig!.").addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe").setRequired(true));
 	}
 }

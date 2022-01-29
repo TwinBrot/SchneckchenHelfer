@@ -8,13 +8,13 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Remove extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(Remove.class);
-	public static void remove(SlashCommandEvent event, InteractionHook Hook) {
+	public static void remove(SlashCommandInteractionEvent event, InteractionHook Hook) {
 		try {
 			String strafenID = event.getOption("id").getAsString();
 			Strafe strafe;

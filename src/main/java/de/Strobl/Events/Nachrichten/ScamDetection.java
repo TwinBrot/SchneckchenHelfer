@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class ScamDetection extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(ScamDetection.class);
@@ -37,7 +37,7 @@ public class ScamDetection extends ListenerAdapter {
 				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money") || m.contains("installer")
 						|| m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop")) {
 					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo") || m.contains("valorant")
-							|| m.contains("skin") || m.contains("Game")) {
+							|| m.contains("skin") || m.contains("game")) {
 
 						if (m.contains("https://discord.gift/")) {
 							logger.info("Discord-Nitro Geschenk erkannt: " + m);

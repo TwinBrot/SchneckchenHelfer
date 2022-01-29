@@ -12,13 +12,13 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Main;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Namensüberwachung {
 	private static final Logger logger = LogManager.getLogger(Namensüberwachung.class);
 
-	public static void add(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void add(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Verboten = Settings.Namen;
@@ -61,7 +61,7 @@ public class Namensüberwachung {
 		}
 	}
 
-	public static void remove(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void remove(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Wini ini = new Wini(new File(Main.Pfad + "settings.ini"));
 			String[] Verboten = ini.get("Namensüberwachung", "Verboten").split(",\\s+");
@@ -103,7 +103,7 @@ public class Namensüberwachung {
 		}
 	}
 
-	public static void list(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void list(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			String[] Verboten = Settings.Namen;
 			String list = "";
@@ -123,7 +123,7 @@ public class Namensüberwachung {
 		}
 	}
 
-	public static void onoff(SlashCommandEvent event, InteractionHook EventHook) {
+	public static void onoff(SlashCommandInteractionEvent event, InteractionHook EventHook) {
 		try {
 			Boolean stateold = Settings.NamenActive;
 			String state;
