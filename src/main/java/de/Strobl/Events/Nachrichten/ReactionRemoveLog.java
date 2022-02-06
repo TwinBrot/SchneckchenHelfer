@@ -30,7 +30,9 @@ public class ReactionRemoveLog extends ListenerAdapter {
 				String ChannelID = event.getChannel().getId();
 				String MessageID = event.getMessageId();
 				String Nachrichtenlink = "https://discordapp.com/channels/" + GuildID + "/" + ChannelID + "/" + MessageID;
-
+				if (event.getMember() == null) {
+					return;
+				}
 				EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Reaction Removed", event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
 				try {
 					builder.setThumbnail(event.getReactionEmote().getEmote().getImageUrl());

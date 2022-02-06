@@ -2,6 +2,7 @@ package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,7 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -73,14 +75,15 @@ public class ScamDetection extends ListenerAdapter {
 				logger.info("Scam erkannt. Author ist Mod, daher nicht gelöscht.");
 				return;
 			}
+			Member member = event.getMember();
 			String m = event.getMessage().getContentRaw().toLowerCase();
 			event.getMessage().delete().queue(success -> {
 				try {
 					Guild guild = event.getGuild();
-					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
+					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, member.getId(), member.getEffectiveAvatarUrl());
 					builder.addField("Nachrichten Inhalt:", m, false);
-					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>")
-							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + event.getMember().getId(), "Ban User")).queue();
+					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>")
+							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + member.getId(), "Ban User")).queue();
 					builder.clear();
 				} catch (Exception e) {
 					logger.error("Fehler ScamDetection LogChannel", e);
@@ -89,6 +92,20 @@ public class ScamDetection extends ListenerAdapter {
 				if (!e.getClass().getName().equals("net.dv8tion.jda.api.exceptions.ErrorResponseException")) {
 					logger.error("Fehler ScamDetection Ban", e);
 				}
+			});
+			member.getUser().openPrivateChannel().queue(pc -> {
+				EmbedBuilder builder = Discord.standardEmbed(Color.red, "TimeOut", member.getId(), member.getUser().getEffectiveAvatarUrl());
+				builder.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
+				builder.setDescription("Dein Account wurde gerade für 10 Minuten getimeoutet!");
+				builder.addField("Grund:", "Verdacht auf Scam! \n Die Moderatoren werden den Verdacht kontrollieren. ", true);
+				builder.addField("Wenn sich der Verdacht bestätigt:", "Sollte sich der Verdacht bestätigen, wird dein Account temporär vom Server gebannt.", false);
+				builder.addField("Wenn sich der Verdacht NICHT bestätigt:",
+						"Sollte eine Nachricht fälschlicherweise als Scam erkannt werden, so musst du nichts unternehmen. Die Mods werden dich wieder freischalten.", false);
+				pc.sendMessageEmbeds(builder.build()).queue(x -> {
+					member.timeoutFor(10, TimeUnit.MINUTES).queue(success -> {
+					}, e -> {
+					});
+				});
 			});
 		} catch (Exception e) {
 			logger.error("Fehler ScamDetection", e);
