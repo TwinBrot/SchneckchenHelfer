@@ -14,14 +14,19 @@ public class MessageReceivedFunsies extends ListenerAdapter {
 		try {
 //Server
 			if (event.isFromGuild()) {
-				if ((event.getMessage().getContentRaw().equals("<@729067250954403890> danke") || event.getMessage().getContentRaw().equals("<@!729067250954403890> danke"))
-						&& event.getMember().getId().equals("227131380058947584")) {
-					event.getMessage().reply(event.getMember().getAsMention() + " gerngeschehen").queue();
+				if (!event.getMember().getId().equals("227131380058947584")) {
 					return;
-				} else if (event.getMessage().getContentRaw().equals("<@!729067250954403890> was denkst du von yeehaw?")) {
-					event.getMessage().reply("Leider pingt sie mich die ganze Zeit. Das nervt mich komplett.....Aber sie hört einfach nicht auf mich <@714767360069861417> 😡").queue();
 				}
-				
+				if ((event.getMessage().getContentRaw().startsWith("<@729067250954403890>") || event.getMessage().getContentRaw().startsWith("<@!729067250954403890>"))) {
+					String m = event.getMessage().getContentRaw();
+					m = m.replaceAll("<@729067250954403890> ", "").replaceAll("<@!729067250954403890> ", "");
+					
+					if (m.equalsIgnoreCase("danke")) {
+						event.getMessage().reply(event.getMember().getAsMention() + " gerngeschehen").queue();
+					} else if (m.equalsIgnoreCase("was denkst du von yeehaw?")) {
+						event.getMessage().reply("Leider pingt sie mich die ganze Zeit. Das nervt mich komplett.....Aber sie hört einfach nicht auf mich <@714767360069861417> 😡").queue();
+					}
+				}
 				
 //DM
 			} else {
