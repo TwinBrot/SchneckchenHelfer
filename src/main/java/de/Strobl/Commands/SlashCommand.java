@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import de.Strobl.Commands.Server.Ban;
+import de.Strobl.Commands.Server.ChangeTemp;
 import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Info;
@@ -26,6 +27,7 @@ import de.Strobl.Commands.Setup.Namensüberwachung;
 import de.Strobl.Commands.Setup.Onlinestatus;
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.StrafeTemp;
+import de.Strobl.Instances.StrafenTyp;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -233,6 +235,24 @@ public class SlashCommand extends ListenerAdapter {
 						Ban.onSlashCommand(event, user, null, text, EventHook, unbantime);
 					});
 					return;
+				} else if (event.getName().equals("changeban")) {
+					User user = event.getOption("user").getAsUser();
+					DateTime unbantime = StrafeTemp.fromString(event.getOption("dauer").getAsString());
+					if (unbantime == null) {
+						EventHook.editOriginal("Das Fomat der Dauer ist nicht korrekt! Richtiges Format: 1y1mon1w1d1h1min").queue();
+						return;
+					}
+					ChangeTemp.onSlashCommand(event, user, EventHook, unbantime, StrafenTyp.BAN);
+					return;
+				} else if (event.getName().equals("changemute")) {
+					User user = event.getOption("user").getAsUser();
+					DateTime unbantime = StrafeTemp.fromString(event.getOption("dauer").getAsString());
+					if (unbantime == null) {
+						EventHook.editOriginal("Das Fomat der Dauer ist nicht korrekt! Richtiges Format: 1y1mon1w1d1h1min").queue();
+						return;
+					}
+					ChangeTemp.onSlashCommand(event, user, EventHook, unbantime, StrafenTyp.MUTE);
+					return;
 				}
 			}
 
@@ -259,9 +279,11 @@ public class SlashCommand extends ListenerAdapter {
 					return;
 				}
 			}
-			event.getHook().editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
-			logger.warn("Befehl konnte nicht ausgeführt werden. Hatte der User die notwendigen Rechte: " + event.getName() + " " + event.getMember().getEffectiveName());
-		} catch (Exception e) {
+			event.getHook().editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen!").queue();
+			logger.warn("Befehl wurde nicht ausgeführt. Hatte der User die notwendigen Rechte: " + event.getName() + " " + event.getMember().getEffectiveName());
+		} catch (
+
+		Exception e) {
 			EventHook.editOriginal("Es ist etwas schiefgelaufen. Bitte wende dich an Twin.").queue();
 			logger.error("Fehler beim auswerten des Befehls", e);
 		}
@@ -290,6 +312,7 @@ public class SlashCommand extends ListenerAdapter {
 			newlist.add(tempban());
 			newlist.add(permaban());
 			newlist.add(changeban());
+			newlist.add(changemute());
 			newlist.add(remove());
 
 			register(newlist, jda);
@@ -317,8 +340,9 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData activity() {
-		return Commands.slash("activity", "Konfiguriert die Aktivität des Bots").addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
-				.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
+		return Commands
+				.slash("activity", "Konfiguriert die Aktivität des Bots").addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
+						.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
 				.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true));
 	}
 
@@ -392,8 +416,13 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData changeban() {
-		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(STRING, "user", "Gib die ID des Users an").setRequired(true))
+		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true));
+	}
+
+	private static SlashCommandData changemute() {
+		return Commands.slash("changemute", "Ändert die Dauer eines Mutes.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
+				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des Mutes an").setRequired(true));
 	}
 
 	private static SlashCommandData remove() {

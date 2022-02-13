@@ -33,7 +33,7 @@ public class StrafeTemp {
 		this.userid = userid;
 		this.typ = typ;
 		this.unbantime = unbantime;
-		saved = true;
+		this.saved = true;
 	}
 
 	public static List<StrafeTemp> getAll() throws SQLException {
@@ -62,6 +62,12 @@ public class StrafeTemp {
 		return temp;
 	}
 
+	public StrafeTemp updateTime(DateTime time) throws SQLException {
+		this.unbantime = time;
+		this.save();
+		return this;
+	}
+	
 	public DateTime getDateTime() {
 		return this.unbantime;
 	}
@@ -92,29 +98,38 @@ public class StrafeTemp {
 		Connection conn = DriverManager.getConnection(SQL.connectionname);
 		Statement stat = conn.createStatement();
 		stat.executeUpdate("delete from temp where id = '" + id + "';");
+		this.saved = false;
 		conn.close();
 	}
 
 	public StrafeTemp save() throws SQLException {
 		Connection conn = DriverManager.getConnection(SQL.connectionname);
 		Statement stat = conn.createStatement();
-		if (!saved) {
+		if (saved) {
 			remove();
 		}
+		List<StrafeTemp> list = getByUserId(this.userid);
+		list.forEach(temp -> {
+			try {
+				if (temp.getStrafenTyp() == this.typ) {
+					temp.delete();
+				}
+			} catch (SQLException e) {
+				logger.error("Fehler beim löschen alter TEMP-Strafe", e);
+			}
+		});
 		stat.executeUpdate("INSERT INTO temp (id, userid, typ, time) VALUES ('" + id + "', '" + userid + "','" + typ.toString() + "','" + unbantime + "')");
 		conn.close();
 		stat.close();
-		saved = true;
+		this.saved = true;
 		return this;
 	}
-	
+
 	public static DateTime fromString(String ZeitRaw) {
 		DateTime unbantime = DateTime.now();
-		
 		if (ZeitRaw == "") {
 			return null;
 		}
-		
 		for (int i = 0; i < ZeitRaw.length(); i++) {
 			i--;
 			Integer merker = 0;
@@ -152,11 +167,6 @@ public class StrafeTemp {
 				return null;
 			}
 		}
-		
-		
-		
-		
-		
 		return unbantime;
 	}
 
