@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -20,7 +21,7 @@ public class ReactionRemoveLog extends ListenerAdapter {
 		if (!event.isFromGuild()) {
 			return;
 		}
-		
+
 		try {
 //Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353") && !event.getChannel().getId().equals("720439181696041122")) {
@@ -40,8 +41,8 @@ public class ReactionRemoveLog extends ListenerAdapter {
 				}
 				builder.addField("Emote:", event.getReactionEmote().getName(), true);
 				builder.addField("Nachrichten Link:", "[Drück mich](" + Nachrichtenlink + ")", true);
-				event.getGuild().getTextChannelById(Settings.LogChannel).sendMessage("User: " + event.getMember().getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList())
-						.queue();
+				TextChannel log = event.getGuild().getTextChannelById(Settings.LogChannel);
+				log.sendMessage("User: " + event.getMember().getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
 				builder.clear();
 			}
 		} catch (Exception e) {

@@ -101,11 +101,8 @@ public class ScamDetection extends ListenerAdapter {
 				builder.addField("Wenn sich der Verdacht bestätigt:", "Sollte sich der Verdacht bestätigen, wird dein Account temporär vom Server gebannt.", false);
 				builder.addField("Wenn sich der Verdacht NICHT bestätigt:",
 						"Sollte eine Nachricht fälschlicherweise als Scam erkannt werden, so musst du nichts unternehmen. Die Mods werden dich wieder freischalten.", false);
-				pc.sendMessageEmbeds(builder.build()).queue(x -> {
-					member.timeoutFor(10, TimeUnit.MINUTES).queue(success -> {
-					}, e -> {
-					});
-				});
+				pc.sendMessageEmbeds(builder.build()).queue(msg -> {}, e -> {});
+				member.timeoutFor(10, TimeUnit.MINUTES).queue();
 			});
 		} catch (Exception e) {
 			logger.error("Fehler ScamDetection", e);
