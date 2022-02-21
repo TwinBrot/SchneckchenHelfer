@@ -26,7 +26,7 @@ public class LoopCheckTemp implements Runnable {
 					String typ = strafeTemp.getStrafenTyp().toString();
 					String id = strafeTemp.getID();
 					String userid = strafeTemp.getUserID();
-					
+//Unban
 					if (typ.equalsIgnoreCase("Ban")) {
 						logger.info(strafeTemp.getID() + " " + strafeTemp.getUserID() + " " + strafeTemp.getDateTime().toString() + " " + strafeTemp.getStrafenTyp().toString());
 						guild.unban(userid).queue(success -> {
@@ -53,18 +53,11 @@ public class LoopCheckTemp implements Runnable {
 								logger.error("Fehler Automatischer Entbann.", e);
 							}
 						});
-						
-						
-						
-						
-						
-						
-						
-						
+//Unmute
 					} else if (typ.equalsIgnoreCase("mute")) {
-						guild.retrieveMemberById(id).queue(member -> {
-							guild.removeRoleFromMember(id, guild.getRoleById("728414039713251338")).queue(); //TODO gescheit!
-						});
+//						guild.retrieveMemberById(id).queue(member -> {
+//							guild.removeRoleFromMember(id, guild.getRoleById("728414039713251338")).queue(); //TODO gescheit!
+//						});
 
 					}
 
