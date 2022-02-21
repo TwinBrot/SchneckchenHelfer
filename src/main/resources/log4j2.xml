@@ -5,11 +5,8 @@
 			<PatternLayout>
 				<pattern>
 					[%-5level] %d{dd-MM-yy HH:mm:ss} - %msg%n
-				</pattern>
+				</pattern>>
 			</PatternLayout>
-			<Filters>
-				<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
-			</Filters>
 		</Console>
 		<RollingFile name="RollFile-Appender" fileName="./log/log.log" filePattern="./log/%d{yyyy.MM.dd HH.mm.ss}.log.gz">
 			<PatternLayout>
@@ -17,15 +14,15 @@
 					[%-5level] %d{dd-MM-yy HH:mm:ss} - %msg%n
 				</pattern>
 			</PatternLayout>
-			<Policies>
-				<OnStartupTriggeringPolicy />
-			</Policies>
+		<Policies>
+			<OnStartupTriggeringPolicy />
+		</Policies>
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="Debug">
-			<AppenderRef ref="Console-Appender" />
-			<AppenderRef ref="RollFile-Appender" />
+		<Root level="Info">
+		<AppenderRef ref="Console-Appender" />
+		<AppenderRef ref="RollFile-Appender" />
 		</Root>
 	</Loggers>
 </Configuration>
