@@ -28,6 +28,8 @@ public class MessageReceivedFunsies extends ListenerAdapter {
 						event.getMessage().reply(event.getMember().getAsMention() + " gerngeschehen").queue();
 					} else if (m.equalsIgnoreCase("was denkst du von yeehaw?")) {
 						event.getMessage().reply("Leider pingt sie mich die ganze Zeit. Das nervt mich komplett.....Aber sie hört einfach nicht auf mich <@714767360069861417> 😡").queue();
+					} else if (m.equalsIgnoreCase("Twosday")) {
+						event.getMessage().reply("Es ist Twosday 🥈").queue();
 					}
 				}
 
