@@ -53,7 +53,6 @@ public class Mute {
 			}
 
 			String grund = text;
-			@SuppressWarnings("unused")
 			String grundshort = Discord.trim(grund);
 
 // Nachricht an User vorbereiten
@@ -71,7 +70,7 @@ public class Mute {
 			});
 
 // TimeOuten
-			member.timeoutFor(dauer, TimeUnit.DAYS).queue(success -> {
+			member.timeoutFor(dauer, TimeUnit.DAYS).reason(grundshort).queue(success -> {
 
 // DMs öffnen & abschicken
 				member.getUser().openPrivateChannel().queue(userchannel -> {
