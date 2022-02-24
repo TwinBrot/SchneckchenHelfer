@@ -17,6 +17,7 @@ import de.Strobl.Commands.Server.Emotes;
 import de.Strobl.Commands.Server.Hinweis;
 import de.Strobl.Commands.Server.Info;
 import de.Strobl.Commands.Server.Kick;
+import de.Strobl.Commands.Server.Mute;
 import de.Strobl.Commands.Server.Remove;
 import de.Strobl.Commands.Server.Warn;
 import de.Strobl.Commands.Setup.Aktivität;
@@ -253,6 +254,22 @@ public class SlashCommand extends ListenerAdapter {
 					}
 					ChangeTemp.onSlashCommand(event, user, EventHook, unbantime, StrafenTyp.MUTE);
 					return;
+
+				} else if (event.getName().equals("mute")) {
+					Member member = event.getOption("user").getAsMember();
+					String text;
+					try {
+						text = event.getOption("grund").getAsString();
+					} catch (NullPointerException e) {
+						text = "";
+					}
+					if (member == null) {
+						EventHook.editOriginal("Konnte den User nicht finden").queue();
+						return;
+					}
+					Mute.onSlashCommand(event, member, text, EventHook);
+					return;
+
 				}
 			}
 
@@ -314,6 +331,7 @@ public class SlashCommand extends ListenerAdapter {
 			newlist.add(changeban());
 			newlist.add(changemute());
 			newlist.add(remove());
+			newlist.add(mute());
 
 			register(newlist, jda);
 			Settings.set("Setup", "Version", versionbot);
@@ -402,6 +420,12 @@ public class SlashCommand extends ListenerAdapter {
 	private static SlashCommandData ban() {
 		return Commands.slash("ban", "Bannt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
+	}
+
+	private static SlashCommandData mute() {
+		return Commands.slash("mute", "Timeoutet den ausgewählten User für X Tage").addOptions(new OptionData(USER, "user", "Wähle den User aus, der getimeoutet werden soll.").setRequired(true))
+				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des TimeOuts an.").setRequired(true))
+				.addOptions(new OptionData(STRING, "dauer", "Gib hier die Anzahl der Tage TimeOut an.").setRequired(true));
 	}
 
 	private static SlashCommandData tempban() {
