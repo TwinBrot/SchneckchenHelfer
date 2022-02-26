@@ -329,7 +329,6 @@ public class SlashCommand extends ListenerAdapter {
 			newlist.add(tempban());
 			newlist.add(permaban());
 			newlist.add(changeban());
-			newlist.add(changemute());
 			newlist.add(remove());
 			newlist.add(mute());
 
@@ -425,7 +424,9 @@ public class SlashCommand extends ListenerAdapter {
 	private static SlashCommandData mute() {
 		return Commands.slash("mute", "Timeoutet den ausgewählten User für X Tage").addOptions(new OptionData(USER, "user", "Wähle den User aus, der getimeoutet werden soll.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des TimeOuts an.").setRequired(true))
-				.addOptions(new OptionData(STRING, "dauer", "Gib hier die Anzahl der Tage TimeOut an.").setRequired(true));
+				.addOptions(new OptionData(STRING, "days", "Gib hier die Anzahl der Tage TimeOut an.").setRequired(false))
+				.addOptions(new OptionData(STRING, "hours", "Gib hier die Anzahl der Stunden TimeOut an.").setRequired(false))
+				.addOptions(new OptionData(STRING, "minutes", "Gib hier die Anzahl der Minuten TimeOut an.").setRequired(false));
 	}
 
 	private static SlashCommandData tempban() {
@@ -442,11 +443,6 @@ public class SlashCommand extends ListenerAdapter {
 	private static SlashCommandData changeban() {
 		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true));
-	}
-
-	private static SlashCommandData changemute() {
-		return Commands.slash("changemute", "Ändert die Dauer eines Mutes.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
-				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des Mutes an").setRequired(true));
 	}
 
 	private static SlashCommandData remove() {

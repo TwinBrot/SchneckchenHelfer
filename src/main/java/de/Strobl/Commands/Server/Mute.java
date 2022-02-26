@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
@@ -40,37 +41,72 @@ public class Mute {
 				return;
 			}
 
-//Auslesen der Optionen
-			Long dauer;
+//Auslesen & Umwandeln der Optionen
+			int days;
+			int hours;
+			int minutes;
+
 			try {
-				dauer = Long.parseLong(event.getOption("dauer").getAsString());
-				if (dauer > Member.MAX_TIME_OUT_LENGTH || dauer < 1) {
-					throw new NumberFormatException();
+				try {
+					String optiondays = event.getOption("days").getAsString();
+					days = Integer.parseInt(optiondays);
+				} catch (NullPointerException e) {
+					days = 0;
 				}
+
+				try {
+					String optionhours = event.getOption("hours").getAsString();
+					hours = Integer.parseInt(optionhours);
+				} catch (NullPointerException e) {
+					hours = 0;
+				}
+
+				try {
+					String optionminutes = event.getOption("minutes").getAsString();
+					minutes = Integer.parseInt(optionminutes);
+				} catch (NullPointerException e) {
+					minutes = 0;
+				}
+				
+//Dauer falsch angegeben
+				
 			} catch (NumberFormatException e) {
-				eventHook.editOriginal("Option 'Dauer' wurde falsch angegeben! Erlaubt sind nur Zahlen 1 - " + Member.MAX_TIME_OUT_LENGTH).queue();
+				eventHook.editOriginal("Dauer falsch angegeben! Bitte gib nur Zahlen ein!").queue();
 				return;
 			}
+			
+//Dauer angegeben?
+			
+			if (days == 0 && hours == 0 && minutes == 0) {
+				eventHook.editOriginal("Keine Dauer angegeben! User wurde nicht getimeoutet!").queue();
+				return;
+			}
+			
+//Dauer kleiner 28 Tage?
 
-			String grund = text;
-			String grundshort = Discord.trim(grund);
+			int timedif = days*60*24 + hours * 60 + minutes;
+			DateTime unmute = DateTime.now().plusDays(days).plusHours(hours).plusMinutes(minutes);
+			
+			if (timedif > Member.MAX_TIME_OUT_LENGTH * 24 * 60) {
+				eventHook.editOriginal("Die Dauer darf nicht länger als 28 Tage sein!").queue();
+				return;
+			}
+			
+			String grundshort = Discord.trim(text);
 
 // Nachricht an User vorbereiten
+			
 			EmbedBuilder builderuser = Discord.standardEmbed(Color.RED, "TimeOut auf Server", member.getId(), member.getEffectiveAvatarUrl());
 			builderuser.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
-			String description;
-			if (dauer > 1) {
-				description = "Dauer: " + dauer + " Tage";
-			} else {
-				description = "Dauer: " + dauer + " Tag";
-			}
+			String description = "Ende TimeOut: " + unmute.toString("dd.MM.yyyy kk:mm");
 			builderuser.setDescription(description);
 			Discord.SplitTexttoField(text, "Grund:").forEach(field -> {
 				builderuser.addField(field);
 			});
 
 // TimeOuten
-			member.timeoutFor(dauer, TimeUnit.DAYS).reason(grundshort).queue(success -> {
+			
+			member.timeoutFor(timedif, TimeUnit.MINUTES).reason(grundshort).queue(success -> {
 
 // DMs öffnen & abschicken
 				member.getUser().openPrivateChannel().queue(userchannel -> {
