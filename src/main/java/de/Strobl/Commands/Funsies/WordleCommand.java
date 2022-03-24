@@ -44,6 +44,11 @@ public class WordleCommand {
 						eventHook.editOriginal("Du hast doch bereits gewonnen").queue(msg -> {
 							msg.delete().queueAfter(1, TimeUnit.MINUTES);
 						});
+						
+					} else if (old.Wort6 !=null) {
+						eventHook.editOriginal("Du kannst das heutige Wordle nicht erneut spielen!").queue(msg -> {
+							msg.delete().queueAfter(1, TimeUnit.MINUTES);
+						});
 					} else {
 						eventHook.editOriginal("Du hast das heutige Wordle bereits gestartet! Bitte verwende die Buttons um fortzufahren!").queue(msg -> {
 							msg.delete().queueAfter(1, TimeUnit.MINUTES);
