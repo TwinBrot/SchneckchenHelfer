@@ -32,7 +32,7 @@ public class Settings {
 	public static Boolean NamenActive;
 	public static String[] Namen;
 	public static ArrayList<String> Links;
-	public static String currentword; //TODO
+	public static String currentword;
 
 	public static void load() throws InvalidFileFormatException, IOException, NullPointerException {
 		Wini ini = new Wini(new File(Pfad + "settings.ini"));
@@ -61,7 +61,7 @@ public class Settings {
 			NamenActive = false;
 		}
 		currentword = ini.get("Settings", "Wordle");
-		if (currentword == "") {
+		if (currentword.equals("")) {
 			Wordle.newWord();
 		}
 		
