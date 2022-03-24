@@ -40,9 +40,15 @@ public class WordleCommand {
 					old.updateWordle();
 					title = "Willkommen zurück zu Wordles!";
 				} else {
-					eventHook.editOriginal("Du hast das heutige Wordle bereits gestartet! Bitte verwende die Buttons um fortzufahren!").queue(msg -> {
-						msg.delete().queueAfter(1, TimeUnit.MINUTES);
-					});
+					if (old.finished) {
+						eventHook.editOriginal("Du hast doch bereits gewonnen").queue(msg -> {
+							msg.delete().queueAfter(1, TimeUnit.MINUTES);
+						});
+					} else {
+						eventHook.editOriginal("Du hast das heutige Wordle bereits gestartet! Bitte verwende die Buttons um fortzufahren!").queue(msg -> {
+							msg.delete().queueAfter(1, TimeUnit.MINUTES);
+						});
+					}
 					return;
 				}
 				;
