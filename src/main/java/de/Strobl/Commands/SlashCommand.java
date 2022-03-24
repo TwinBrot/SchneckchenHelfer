@@ -49,9 +49,18 @@ public class SlashCommand extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		InteractionHook EventHook = event.getHook();
+		if (event.getName().equals("wordle")) {
+			return;
+		}
 		event.deferReply(false).queue();
+		InteractionHook EventHook = event.getHook();
 		try {
+
+// Only accept commands from Guilds
+
+			if (!event.isFromGuild()) {
+				return;
+			}
 
 // Console Output
 			String CommandData = "Befehl: " + event.getName();
@@ -66,14 +75,6 @@ public class SlashCommand extends ListenerAdapter {
 			logger.info("Befehl erkannt: _______________________________________________________________________");
 			logger.info("Author: " + event.getMember());
 			logger.info(CommandData);
-
-// Only accept commands from Guilds
-
-			if (!event.isFromGuild()) {
-				EventHook.editOriginal("Diese Befehle funktionieren nur auf dem Server.").queue();
-				logger.info("Befehl in den Privatnachrichten erkannt. Abbruch");
-				return;
-			}
 
 // Block Commands in Channels i can't Write in.
 
@@ -92,6 +93,8 @@ public class SlashCommand extends ListenerAdapter {
 // 3 = Admin
 
 			Integer Modrolle = Discord.isMod(event.getMember());
+
+
 			if (Modrolle == 0) {
 				EventHook.editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
 				return;
@@ -99,7 +102,7 @@ public class SlashCommand extends ListenerAdapter {
 				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Wende dich bitte an Twin.").queue();
 				return;
 			}
-
+			
 // Auslesen der Befehle
 // Channelmod
 			if (Modrolle > 0) {
@@ -346,6 +349,8 @@ public class SlashCommand extends ListenerAdapter {
 				commandsguild.addCommands(command);
 			}
 			commandsguild.queue(success -> logger.info("Befehle wurden Guild registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
+			jda.updateCommands().addCommands(wordle()).queue(success -> logger.info("Befehle wurden JDA registriert: " + success),
+					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Registrieren der Befehle:", e);
 		}
@@ -447,5 +452,11 @@ public class SlashCommand extends ListenerAdapter {
 
 	private static SlashCommandData remove() {
 		return Commands.slash("remove", "Entfernt Daten aus der Datenbank! Macht Keine Strafen rückgängig!.").addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe").setRequired(true));
+	}
+
+//Funsies
+
+	private static SlashCommandData wordle() {
+		return Commands.slash("wordle", "Startet eine neue World-Session");
 	}
 }

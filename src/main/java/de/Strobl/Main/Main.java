@@ -2,6 +2,9 @@ package de.Strobl.Main;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,8 +22,10 @@ import org.kohsuke.github.GitHubBuilder;
 
 import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
-import de.Strobl.Commands.MessageReceivedFunsies;
+import de.Strobl.Commands.ModalInteraction;
 import de.Strobl.Commands.SlashCommand;
+import de.Strobl.Commands.Funsies.MessageReceivedFunsies;
+import de.Strobl.Commands.Funsies.SlashCommandFunsies;
 import de.Strobl.Events.EmoteEvent;
 import de.Strobl.Events.Channel.ChannelCreate;
 import de.Strobl.Events.Nachrichten.EmoteTracking;
@@ -32,6 +37,7 @@ import de.Strobl.Events.User.BotIsOfflineAlarm;
 import de.Strobl.Events.User.JoinNamensüberwachung;
 import de.Strobl.Events.User.OnuserUpdateNameEvent;
 import de.Strobl.Instances.SQL;
+import de.Strobl.Instances.Wordle;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -43,7 +49,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "3.1.1";
+	public static String version = "4.0.0";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -63,8 +69,7 @@ public class Main {
 			}
 
 //Settings.ini und SQL starten
-			
-			
+
 			Settings.Update();
 			Settings.load();
 			SQL.initialize();
@@ -85,9 +90,11 @@ public class Main {
 //Event Listener
 			// Commands
 			Builder.addEventListeners(new SlashCommand());
+			Builder.addEventListeners(new SlashCommandFunsies());
 			Builder.addEventListeners(new MessageReceived());
 			Builder.addEventListeners(new MessageReceivedFunsies());
 			Builder.addEventListeners(new ButtonInteraction());
+			Builder.addEventListeners(new ModalInteraction());
 			// Message Events
 			Builder.addEventListeners(new EmoteTracking());
 			Builder.addEventListeners(new Filechecker());
@@ -141,7 +148,7 @@ public class Main {
 			}
 
 //JDA Starten und fertigstellung abwarten
-
+			
 			jda = Builder.build().awaitReady();
 			SlashCommand.startupcheck(jda, version);
 
@@ -157,9 +164,15 @@ public class Main {
 // Loops starten
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
-			Loops.scheduleAtFixedRate(new LoopCheckTemp(), 10, 60, TimeUnit.SECONDS);
-			
-			
+			Loops.scheduleAtFixedRate(new Loops(), 10, 60, TimeUnit.SECONDS);
+
+			ScheduledExecutorService WordleLoop = Executors.newScheduledThreadPool(1);
+			Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MINUTES);
+			WordleLoop.scheduleAtFixedRate(new Runnable() {
+				public void run() {
+					Wordle.newWord();
+				}
+			}, midnight, 1440, TimeUnit.MINUTES);
 
 			Scanner scanner = new Scanner(System.in);
 			try {
@@ -173,7 +186,7 @@ public class Main {
 			} catch (NoSuchElementException e) {
 			}
 			scanner.close();
-			
+
 //Fehler Management
 		} catch (IllegalStateException e) {
 			logger.fatal("IllegalStateException - 'Presence Intent' und 'Server Members Intent' im Discord Developer Portal aktiviert? ", e);

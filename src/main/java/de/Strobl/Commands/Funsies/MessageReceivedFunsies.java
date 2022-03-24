@@ -1,4 +1,4 @@
-package de.Strobl.Commands;
+package de.Strobl.Commands.Funsies;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

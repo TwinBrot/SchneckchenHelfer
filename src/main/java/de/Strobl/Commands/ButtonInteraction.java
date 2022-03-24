@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Commands.Buttons.BanButton;
+import de.Strobl.Commands.Funsies.WordleCommand;
 import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -20,13 +21,18 @@ public class ButtonInteraction extends ListenerAdapter {
 // Console Output
 			String componentID = event.getComponentId();
 			logger.info("Button erkannt: _______________________________________________________________________");
-			logger.info("Author: " + event.getMember());
+			if (event.getMember() == null) {
+				logger.info("Author: " + event.getUser());
+			} else {
+				logger.info("Author: " + event.getMember());
+			}
 			logger.info(componentID);
 
 // Only from Guilds
 			if (!event.isFromGuild()) {
-				event.reply("Buttons funktionieren nur auf Servern.").queue();
-				logger.info("Befehl wurde abgebrochen, Befehl in DM erkannt.");
+				if (event.getButton().getId().startsWith("wordle")) {
+					WordleCommand.wordlebuttonclick(event);
+				}
 				return;
 			}
 

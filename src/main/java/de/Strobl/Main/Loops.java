@@ -12,8 +12,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class LoopCheckTemp implements Runnable {
-	private static final Logger logger = LogManager.getLogger(LoopCheckTemp.class);
+public class Loops implements Runnable {
+	private static final Logger logger = LogManager.getLogger(Loops.class);
 	private static JDA jda = Main.jda;
 	private static Guild guild = jda.getGuilds().get(0);
 
@@ -53,12 +53,6 @@ public class LoopCheckTemp implements Runnable {
 								logger.error("Fehler Automatischer Entbann.", e);
 							}
 						});
-//Unmute
-					} else if (typ.equalsIgnoreCase("mute")) {
-//						guild.retrieveMemberById(id).queue(member -> {
-//							guild.removeRoleFromMember(id, guild.getRoleById("728414039713251338")).queue(); //TODO gescheit!
-//						});
-
 					}
 
 				}

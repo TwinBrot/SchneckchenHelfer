@@ -26,6 +26,9 @@ public class SQL {
 			stat.executeUpdate("CREATE TABLE if not exists emotes (emoteid UNIQUE, count);");
 			stat.executeUpdate("CREATE INDEX if not exists emotes_id ON emotes (emoteid); ");
 			stat.executeUpdate("CREATE TABLE if not exists temp (id	INTEGER UNIQUE, userid , typ , time, PRIMARY KEY(id));");
+			stat.executeUpdate("CREATE TABLE if not exists wordle (UserID TEXT, finished TEXT, Streak INTEGER, Datum TEXT, Wort1 TEXT, Wort2 TEXT, Wort3 TEXT, Wort4 TEXT, Wort5 TEXT, Wort6 TEXT);");
+			stat.close();
+			conn.close();
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Initialisieren der Datenbank:", e);
 			throw new SQLException();
@@ -41,7 +44,7 @@ public class SQL {
 			while (rs.next()) {
 				result = rs.getString("count");
 			}
-			if (result==null) {
+			if (result == null) {
 				stat.executeUpdate("INSERT INTO emotes (emoteid, count) VALUES ('" + emoteid + "','1');");
 				return;
 			}

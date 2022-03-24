@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SchneckchenHelfer</groupId>
 	<artifactId>SchneckchenHelfer</artifactId>
-	<version>3.1.1</version>
+	<version>4.0.0</version>
 	<name>SchneckchenHelfer</name>
 	<properties>
 		<encoding>UTF-8</encoding>
@@ -75,9 +75,9 @@
 		</dependency>
 		<!--Discord API-->
 		<dependency>
-			<groupId>net.dv8tion</groupId>
+			<groupId>com.github.xirado</groupId>
 			<artifactId>JDA</artifactId>
-			<version>5.0.0-alpha.9</version>
+			<version>36eea2a1c5</version>
 			<exclusions>
 				<!--No Audio-->
 				<exclusion>
@@ -104,6 +104,10 @@
 			<id>org.kohsuke</id>
 			<name>org.kohsuke</name>
 			<url>https://mvnrepository.com/artifact/</url>
+		</repository>
+		<repository>
+			<id>jitpack</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 </project>

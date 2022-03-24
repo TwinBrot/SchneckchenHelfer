@@ -10,6 +10,8 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Profile.Section;
 import org.ini4j.Wini;
 
+import de.Strobl.Instances.Wordle;
+
 public class Settings {
 	private static final Logger logger = LogManager.getLogger(Settings.class);
 	private static Boolean update = false;
@@ -30,6 +32,7 @@ public class Settings {
 	public static Boolean NamenActive;
 	public static String[] Namen;
 	public static ArrayList<String> Links;
+	public static String currentword; //TODO
 
 	public static void load() throws InvalidFileFormatException, IOException, NullPointerException {
 		Wini ini = new Wini(new File(Pfad + "settings.ini"));
@@ -57,7 +60,10 @@ public class Settings {
 		} else {
 			NamenActive = false;
 		}
-		
+		currentword = ini.get("Settings", "Wordle");
+		if (currentword == "") {
+			Wordle.newWord();
+		}
 		
 		
 		Wini linkini = new Wini(new File(Main.Pfad + "Link.ini"));
@@ -100,6 +106,7 @@ public class Settings {
 			create(ini, "Settings", "StreamLink", "https://www.twitch.tv/maudado");
 			create(ini, "Settings", "Status", "ONLINE");
 			create(ini, "Settings", "LogChannel", "");
+			create(ini, "Settings", "Wordle", "");
 			create(ini, "ModRollen", "Admin", "");
 			create(ini, "ModRollen", "Mod", "");
 			create(ini, "ModRollen", "Channelmod", "");
