@@ -44,6 +44,16 @@ public class SlashCommandFunsies extends ListenerAdapter {
 				return;
 			}
 
+			if (event.getName().equals("ssp")) {
+				SSPCommand.sspstart(event, EventHook);
+				return;
+			}
+
+			if (event.getName().equals("tictactoe")) {
+				TicTacToeCommand.tictactoestart(event, EventHook);
+				return;
+			}
+
 		} catch (Exception e) {
 			EventHook.editOriginal("Es ist etwas schiefgelaufen. Bitte wende dich an Twin.").queue();
 			logger.error("Fehler beim auswerten des Befehls", e);

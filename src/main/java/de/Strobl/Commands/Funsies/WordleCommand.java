@@ -150,15 +150,20 @@ public class WordleCommand {
 		int trys = 0;
 		if (wordle.Wort1 != null) {
 			trys++;
-		} else if (wordle.Wort2 != null) {
+		}
+		if (wordle.Wort2 != null) {
 			trys++;
-		} else if (wordle.Wort3 != null) {
+		}
+		if (wordle.Wort3 != null) {
 			trys++;
-		} else if (wordle.Wort4 != null) {
+		}
+		if (wordle.Wort4 != null) {
 			trys++;
-		} else if (wordle.Wort5 != null) {
+		}
+		if (wordle.Wort5 != null) {
 			trys++;
-		} else if (wordle.Wort6 != null) {
+		}
+		if (wordle.Wort6 != null) {
 			trys++;
 		}
 		Field field = null;
@@ -180,7 +185,7 @@ public class WordleCommand {
 		}
 
 		builder.addField(header, wordle.createPattern(false), false);
-		
+
 		if (field != null) {
 			builder.addField(field);
 		}

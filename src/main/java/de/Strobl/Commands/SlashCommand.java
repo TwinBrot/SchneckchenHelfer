@@ -49,7 +49,7 @@ public class SlashCommand extends ListenerAdapter {
 
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		if (event.getName().equals("wordle")) {
+		if (event.getName().equals("wordle") || event.getName().equals("tictactoe") || event.getName().equals("ssp")) {
 			return;
 		}
 		event.deferReply(false).queue();
@@ -94,7 +94,6 @@ public class SlashCommand extends ListenerAdapter {
 
 			Integer Modrolle = Discord.isMod(event.getMember());
 
-
 			if (Modrolle == 0) {
 				EventHook.editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen.").queue();
 				return;
@@ -102,7 +101,7 @@ public class SlashCommand extends ListenerAdapter {
 				EventHook.editOriginal("Bei der Ausführung ist ein Fehler aufgetreten. Wende dich bitte an Twin.").queue();
 				return;
 			}
-			
+
 // Auslesen der Befehle
 // Channelmod
 			if (Modrolle > 0) {
@@ -315,42 +314,53 @@ public class SlashCommand extends ListenerAdapter {
 			if (Settings.Version.equals(versionbot)) {
 				return;
 			}
-			ArrayList<CommandData> newlist = new ArrayList<CommandData>();
+			ArrayList<CommandData> newlistguild = new ArrayList<CommandData>();
 
-			newlist.add(onlinestatus());
-			newlist.add(activity());
-			newlist.add(name());
-			newlist.add(datei());
-			newlist.add(logchannel());
-			newlist.add(modrolle());
-			newlist.add(emotes());
-			newlist.add(info());
-			newlist.add(hinweis());
-			newlist.add(warn());
-			newlist.add(kick());
-			newlist.add(ban());
-			newlist.add(tempban());
-			newlist.add(permaban());
-			newlist.add(changeban());
-			newlist.add(remove());
-			newlist.add(mute());
+			newlistguild.add(onlinestatus());
+			newlistguild.add(activity());
+			newlistguild.add(name());
+			newlistguild.add(datei());
+			newlistguild.add(logchannel());
+			newlistguild.add(modrolle());
+			newlistguild.add(emotes());
+			newlistguild.add(info());
+			newlistguild.add(hinweis());
+			newlistguild.add(warn());
+			newlistguild.add(kick());
+			newlistguild.add(ban());
+			newlistguild.add(tempban());
+			newlistguild.add(permaban());
+			newlistguild.add(changeban());
+			newlistguild.add(remove());
+			newlistguild.add(mute());
 
-			register(newlist, jda);
+			ArrayList<CommandData> newlistjda = new ArrayList<CommandData>();
+
+			newlistjda.add(wordle());
+//			newlistjda.add(tictactoe());
+			newlistjda.add(ssp());
+
+			register(newlistguild, newlistjda, jda);
 			Settings.set("Setup", "Version", versionbot);
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Aktuallisieren der Befehle:", e);
 		}
 	}
 
-	public static void register(ArrayList<CommandData> list, JDA jda) {
+	public static void register(ArrayList<CommandData> listserver, ArrayList<CommandData> listjda, JDA jda) {
 		try {
 			CommandListUpdateAction commandsguild = jda.getGuilds().get(0).updateCommands();
-			for (CommandData command : list) {
+			for (CommandData command : listserver) {
 				commandsguild.addCommands(command);
 			}
 			commandsguild.queue(success -> logger.info("Befehle wurden Guild registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
-			jda.updateCommands().addCommands(wordle()).queue(success -> logger.info("Befehle wurden JDA registriert: " + success),
-					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
+
+			CommandListUpdateAction commandsjda = jda.updateCommands();
+			for (CommandData command : listjda) {
+				commandsjda.addCommands(command);
+			}
+			commandsjda.queue(success -> logger.info("Befehle wurden JDA registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
+
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Registrieren der Befehle:", e);
 		}
@@ -458,5 +468,14 @@ public class SlashCommand extends ListenerAdapter {
 
 	private static SlashCommandData wordle() {
 		return Commands.slash("wordle", "Startet eine neue World-Session");
+	}
+
+	private static SlashCommandData tictactoe() {
+		return Commands.slash("tictactoe", "Startet eine neue TicTacToe-Session").addOptions(new OptionData(USER, "oponent", "Gegner hier angeben!").setRequired(false));
+	}
+
+	private static SlashCommandData ssp() {
+		return Commands.slash("ssp", "Schere - Stein - Papier")
+				.addOptions(new OptionData(STRING, "auswahl", "Schere Stein oder Papier?").addChoice("Schere", "schere").addChoice("Stein", "stein").addChoice("Papier", "papier").setRequired(true));
 	}
 }
