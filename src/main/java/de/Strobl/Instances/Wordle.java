@@ -108,7 +108,7 @@ public class Wordle {
 
 	// Update
 	public void updateWordle() throws Exception {
-		if (this.datum.plusDays(2).withTimeAtStartOfDay().isAfterNow()) {
+		if (!this.datum.plusDays(2).withTimeAtStartOfDay().isAfter(DateTime.now())) {
 			this.streak = 0;
 		}
 		this.datum = DateTime.now();
