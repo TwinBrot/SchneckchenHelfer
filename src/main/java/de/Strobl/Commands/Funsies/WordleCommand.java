@@ -13,6 +13,7 @@ import de.Strobl.Instances.Wordle;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -44,8 +45,8 @@ public class WordleCommand {
 						eventHook.editOriginal("Du hast doch bereits gewonnen").queue(msg -> {
 							msg.delete().queueAfter(1, TimeUnit.MINUTES);
 						});
-						
-					} else if (old.Wort6 !=null) {
+
+					} else if (old.Wort6 != null) {
 						eventHook.editOriginal("Du kannst das heutige Wordle nicht erneut spielen!").queue(msg -> {
 							msg.delete().queueAfter(1, TimeUnit.MINUTES);
 						});
@@ -86,14 +87,13 @@ public class WordleCommand {
 	public static void wordlemodal(ModalInteractionEvent event, InteractionHook hook) {
 		try {
 			Wordle wordle = new Wordle(event.getUser().getIdLong());
-			
+
 			if (wordle.finished) {
 				hook.sendMessage("Du hast doch bereits gewonnen").queue(msg -> {
 					msg.delete().queueAfter(1, TimeUnit.MINUTES);
 				});
 			}
-			
-			
+
 			if (wordle.datum.isAfter(DateTime.now().withTimeAtStartOfDay().plusDays(1))) {
 				hook.sendMessage("Leider hast du zu lange für das ausfüllen des Formulars benötigt und das Wordle ist abgelaufen!").queue(msg -> {
 					msg.delete().queueAfter(1, TimeUnit.MINUTES);
@@ -147,14 +147,31 @@ public class WordleCommand {
 	private static void updateMessage(ModalInteractionEvent event, InteractionHook hook, Wordle wordle) {
 		Color ebcolor;
 		String header = "";
+		int trys = 0;
+		if (wordle.Wort1 != null) {
+			trys++;
+		} else if (wordle.Wort2 != null) {
+			trys++;
+		} else if (wordle.Wort3 != null) {
+			trys++;
+		} else if (wordle.Wort4 != null) {
+			trys++;
+		} else if (wordle.Wort5 != null) {
+			trys++;
+		} else if (wordle.Wort6 != null) {
+			trys++;
+		}
+		Field field = null;
 		if (wordle.finished) {
 			ebcolor = Color.green;
-			header = "Glückwunsch! Das lief doch gut!";
+			header = "Glückwunsch!";
+			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " in " + trys + "/6 Versuchen erraten", wordle.createPattern(true), false);
 		} else if (wordle.Wort6 == null) {
 			ebcolor = Color.yellow;
 		} else {
 			ebcolor = Color.red;
 			header = "Leider wurde es dieses mal nichts. Das Wort wäre " + Settings.currentword + " gewesen!";
+			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " nicht erraten! " + trys + "/6 Versuche", wordle.createPattern(true), false);
 		}
 		EmbedBuilder builder = Discord.standardEmbed(ebcolor, "Wordle " + DateTime.now().toString("dd.MM.yy"), event.getUser().getId(), event.getUser().getEffectiveAvatarUrl());
 		builder.setDescription("Derzeitige Streak: " + wordle.streak);
@@ -162,13 +179,17 @@ public class WordleCommand {
 			builder.appendDescription("  🔥🔥🔥🔥🔥");
 		}
 
-		builder.addField(header, wordle.createPattern(), false);
+		builder.addField(header, wordle.createPattern(false), false);
+		
+		if (field != null) {
+			builder.addField(field);
+		}
 
 		WebhookMessageUpdateAction<Message> action = hook.editOriginalEmbeds(builder.build());
 		if (ebcolor == Color.green || ebcolor == Color.red) {
 			action.setActionRows(Collections.emptyList());
 		}
-		
+
 		action.queue();
 	}
 }

@@ -122,51 +122,52 @@ public class Wordle {
 		save();
 	}
 
-	public String createPattern() {
+	public String createPattern(Boolean silent) {
 		String pattern = "";
 		if (Wort1 != null) {
-			pattern = pattern + patternline(Wort1) + "\n";
+			pattern = pattern + patternline(Wort1, silent) + "\n";
 		}
 		if (Wort2 != null) {
-			pattern = pattern + patternline(Wort2) + "\n";
+			pattern = pattern + patternline(Wort2, silent) + "\n";
 		}
 		if (Wort3 != null) {
-			pattern = pattern + patternline(Wort3) + "\n";
+			pattern = pattern + patternline(Wort3, silent) + "\n";
 		}
 		if (Wort4 != null) {
-			pattern = pattern + patternline(Wort4) + "\n";
+			pattern = pattern + patternline(Wort4, silent) + "\n";
 		}
 		if (Wort5 != null) {
-			pattern = pattern + patternline(Wort5) + "\n";
+			pattern = pattern + patternline(Wort5, silent) + "\n";
 		}
 		if (Wort6 != null) {
-			pattern = pattern + patternline(Wort6) + "\n";
+			pattern = pattern + patternline(Wort6, silent) + "\n";
 		}
+		pattern = pattern + "\n\n\n";
 		return pattern;
 	}
 
-	private static String patternline(String word) {
+	private static String patternline(String word, Boolean silent) {
 		String line = "";
 		String sol = Settings.currentword;
 		char solchar1 = sol.charAt(0);
 		char ischar1 = word.charAt(0);
-		line = linechar(sol, ischar1, solchar1, line);
+		line = linechar(sol, ischar1, solchar1, line, silent);
 		char solchar2 = sol.charAt(1);
 		char ischar2 = word.charAt(1);
-		line = linechar(sol, ischar2, solchar2, line);
+		line = linechar(sol, ischar2, solchar2, line, silent);
 		char solchar3 = sol.charAt(2);
 		char ischar3 = word.charAt(2);
-		line = linechar(sol, ischar3, solchar3, line);
+		line = linechar(sol, ischar3, solchar3, line, silent);
 		char solchar4 = sol.charAt(3);
 		char ischar4 = word.charAt(3);
-		line = linechar(sol, ischar4, solchar4, line);
+		line = linechar(sol, ischar4, solchar4, line, silent);
 		char solchar5 = sol.charAt(4);
 		char ischar5 = word.charAt(4);
-		line = linechar(sol, ischar5, solchar5, line);
+		line = linechar(sol, ischar5, solchar5, line, silent);
 		return line;
 	}
 
-	private static String linechar(String sol, char ischar, char solchar, String line) {
+	private static String linechar(String sol, char ischar, char solchar, String line, Boolean silent) {
 		HashMap<String, String> correct = new HashMap<>();
 		correct.put("A", "🇦");
 		correct.put("B", "🇧");
@@ -225,17 +226,29 @@ public class Wordle {
 
 		char[] solchars = sol.toCharArray();
 		Boolean boolcor = (solchar == ischar);
-		Boolean cont = (solchars[0] == ischar || solchars[1] == ischar || solchars[2] == ischar || solchars[3] == ischar || solchars[4] == ischar)&& !boolcor;
+		Boolean cont = (solchars[0] == ischar || solchars[1] == ischar || solchars[2] == ischar || solchars[3] == ischar || solchars[4] == ischar) && !boolcor;
 		Boolean wrong = !(boolcor || cont);
 
 		if (boolcor) {
-			line = line + " " + correct.get(ischar + "") + " ";
+			if (silent) {
+				line = line + "🟩";
+			} else {
+				line = line + " " + correct.get(ischar + "") + " ";
+			}
 		}
 		if (cont) {
-			line = line + " " + wrongpos.get(ischar + "") + " ";
+			if (silent) {
+				line = line + "🟨";
+			} else {
+				line = line + " " + wrongpos.get(ischar + "") + " ";
+			}
 		}
 		if (wrong) {
-			line = line + "   " + ischar + "   ";
+			if (silent) {
+				line = line + "⬛";
+			} else {
+				line = line + "   " + ischar + "   ";
+			}
 		}
 
 		return line;
