@@ -12,14 +12,11 @@ import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import javax.security.auth.login.LoginException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
-
 import de.Strobl.Commands.ButtonInteraction;
 import de.Strobl.Commands.MessageReceived;
 import de.Strobl.Commands.ModalInteraction;
@@ -49,7 +46,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "4.0.4";
+	public static String version = "4.0.5";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -57,7 +54,7 @@ public class Main {
 	public static void main(String[] arguments) {
 		try {
 			logger.info("Starte Schneckchencord-Bot mit Version " + version);
-// Update für den Bot verfügbar?
+			// Update für den Bot verfügbar?
 			try {
 				GitHub github = new GitHubBuilder().build();
 				String neusteversion = github.getRepository("TwinBrot/Schneckchencord").getLatestRelease().getTagName();
@@ -68,26 +65,26 @@ public class Main {
 				logger.error("Konnte nicht auf neuste Version überprüfen!", e);
 			}
 
-//Settings.ini und SQL starten
+			// Settings.ini und SQL starten
 
 			Settings.Update();
 			Settings.load();
 			SQL.initialize();
 
-//JDA Builder
+			// JDA Builder
 
 			JDABuilder Builder = JDABuilder.createDefault(Settings.Token);
-			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS, GatewayIntent.GUILD_MESSAGE_REACTIONS,
-					GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
-			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_TYPING,
-					GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS,
+					GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS, GatewayIntent.GUILD_MEMBERS);
+			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING,
+					GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ROLE_TAGS, CacheFlag.EMOTE);
 			Builder.disableCache(CacheFlag.ONLINE_STATUS);
 			Builder.setChunkingFilter(ChunkingFilter.NONE);
 			Builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 			Builder.setAutoReconnect(true);
 
-//Event Listener
+			// Event Listener
 			// Commands
 			Builder.addEventListeners(new SlashCommand());
 			Builder.addEventListeners(new SlashCommandFunsies());
@@ -109,7 +106,7 @@ public class Main {
 			Builder.addEventListeners(new ChannelCreate());
 			Builder.addEventListeners(new EmoteEvent());
 
-//Activity
+			// Activity
 
 			String Typ = Settings.AktivitätTyp;
 			String Text = Settings.AktivitätText;
@@ -130,7 +127,7 @@ public class Main {
 				break;
 			}
 
-//Status
+			// Status
 
 			switch (Settings.Status) {
 			case "ONLINE":
@@ -147,12 +144,12 @@ public class Main {
 				break;
 			}
 
-//JDA Starten und fertigstellung abwarten
-			
+			// JDA Starten und fertigstellung abwarten
+
 			jda = Builder.build().awaitReady();
 			SlashCommand.startupcheck(jda, version);
 
-//Cache Emotes
+			// Cache Emotes
 
 			jda.getGuilds().get(0).retrieveEmotes().queue(GuildEmotes -> {
 				ServerEmotesID = new ArrayList<String>();
@@ -161,7 +158,7 @@ public class Main {
 				});
 			});
 
-// Loops starten
+			// Loops starten
 
 			ScheduledExecutorService Loops = Executors.newScheduledThreadPool(1);
 			Loops.scheduleAtFixedRate(new Loops(), 10, 60, TimeUnit.SECONDS);
@@ -169,6 +166,7 @@ public class Main {
 			ScheduledExecutorService WordleLoop = Executors.newScheduledThreadPool(1);
 			Long midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MINUTES);
 			WordleLoop.scheduleAtFixedRate(new Runnable() {
+				@Override
 				public void run() {
 					Wordle.newWord();
 				}
@@ -187,7 +185,7 @@ public class Main {
 			}
 			scanner.close();
 
-//Fehler Management
+			// Fehler Management
 		} catch (IllegalStateException e) {
 			logger.fatal("IllegalStateException - 'Presence Intent' und 'Server Members Intent' im Discord Developer Portal aktiviert? ", e);
 

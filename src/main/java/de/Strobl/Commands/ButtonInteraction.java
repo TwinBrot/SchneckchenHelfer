@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.Strobl.Commands.Buttons.BanButton;
+import de.Strobl.Commands.Funsies.TicTacToeCommand;
 import de.Strobl.Commands.Funsies.WordleCommand;
 import de.Strobl.Instances.Discord;
 import net.dv8tion.jda.api.Permission;
@@ -32,6 +33,9 @@ public class ButtonInteraction extends ListenerAdapter {
 			if (!event.isFromGuild()) {
 				if (event.getButton().getId().startsWith("wordle")) {
 					WordleCommand.wordlebuttonclick(event);
+				}
+				if (event.getButton().getId().startsWith("TicTacToe_")) {
+					TicTacToeCommand.tictactoebutton(event, hook);
 				}
 				return;
 			}

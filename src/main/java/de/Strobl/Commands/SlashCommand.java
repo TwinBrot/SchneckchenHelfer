@@ -4,13 +4,10 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.CHANNEL;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.ROLE;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
-
 import java.util.ArrayList;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
-
 import de.Strobl.Commands.Server.Ban;
 import de.Strobl.Commands.Server.ChangeTemp;
 import de.Strobl.Commands.Server.Emotes;
@@ -56,13 +53,13 @@ public class SlashCommand extends ListenerAdapter {
 		InteractionHook EventHook = event.getHook();
 		try {
 
-// Only accept commands from Guilds
+			// Only accept commands from Guilds
 
 			if (!event.isFromGuild()) {
 				return;
 			}
 
-// Console Output
+			// Console Output
 			String CommandData = "Befehl: " + event.getName();
 			if (event.getSubcommandGroup() != null) {
 				CommandData = CommandData + "  SubCommandGroup: " + event.getSubcommandGroup();
@@ -76,7 +73,7 @@ public class SlashCommand extends ListenerAdapter {
 			logger.info("Author: " + event.getMember());
 			logger.info(CommandData);
 
-// Block Commands in Channels i can't Write in.
+			// Block Commands in Channels i can't Write in.
 
 			if (!event.getGuild().getSelfMember().hasPermission(event.getGuildChannel(), Permission.MESSAGE_SEND, Permission.VIEW_CHANNEL)) {
 				EventHook.editOriginal("Ich habe nicht die nötigen Rechte, diesen Befehl auszuführen.").queue();
@@ -85,12 +82,12 @@ public class SlashCommand extends ListenerAdapter {
 				return;
 			}
 
-// Modrollen Abfragen
-// -1 = Fehler
-// 0 = User
-// 1 = Channelmod
-// 2 = Mod
-// 3 = Admin
+			// Modrollen Abfragen
+			// -1 = Fehler
+			// 0 = User
+			// 1 = Channelmod
+			// 2 = Mod
+			// 3 = Admin
 
 			Integer Modrolle = Discord.isMod(event.getMember());
 
@@ -102,8 +99,8 @@ public class SlashCommand extends ListenerAdapter {
 				return;
 			}
 
-// Auslesen der Befehle
-// Channelmod
+			// Auslesen der Befehle
+			// Channelmod
 			if (Modrolle > 0) {
 				if (event.getName().equals("hinweis")) {
 					User user = event.getOption("user").getAsUser();
@@ -117,9 +114,9 @@ public class SlashCommand extends ListenerAdapter {
 				}
 			}
 
-// Modrolle: Moderator
+			// Modrolle: Moderator
 			if (Modrolle > 1) {
-// Setup-Commands
+				// Setup-Commands
 
 				if (event.getName().equals("namen")) {
 					String SubCommandName = event.getSubcommandName();
@@ -145,7 +142,7 @@ public class SlashCommand extends ListenerAdapter {
 						Dateiüberwachung.list(event, EventHook);
 					}
 					return;
-// Moderations-Commands
+					// Moderations-Commands
 				} else if (event.getName().equals("emotes")) {
 					Emotes.emotes(event, EventHook);
 					return;
@@ -275,7 +272,7 @@ public class SlashCommand extends ListenerAdapter {
 				}
 			}
 
-// Admin
+			// Admin
 			if (Modrolle > 2) {
 				switch (event.getName()) {
 				case "modrolle":
@@ -299,7 +296,8 @@ public class SlashCommand extends ListenerAdapter {
 				}
 			}
 			event.getHook().editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen!").queue();
-			logger.warn("Befehl wurde nicht ausgeführt. Hatte der User die notwendigen Rechte: " + event.getName() + " " + event.getMember().getEffectiveName());
+			logger.warn("Befehl wurde nicht ausgeführt. Hatte der User die notwendigen Rechte: " + event.getName() + " "
+					+ event.getMember().getEffectiveName());
 		} catch (
 
 		Exception e) {
@@ -337,7 +335,7 @@ public class SlashCommand extends ListenerAdapter {
 			ArrayList<CommandData> newlistjda = new ArrayList<CommandData>();
 
 			newlistjda.add(wordle());
-//			newlistjda.add(tictactoe());
+			newlistjda.add(tictactoe());
 			newlistjda.add(ssp());
 
 			register(newlistguild, newlistjda, jda);
@@ -353,13 +351,15 @@ public class SlashCommand extends ListenerAdapter {
 			for (CommandData command : listserver) {
 				commandsguild.addCommands(command);
 			}
-			commandsguild.queue(success -> logger.info("Befehle wurden Guild registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
+			commandsguild.queue(success -> logger.info("Befehle wurden Guild registriert: " + success),
+					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 
 			CommandListUpdateAction commandsjda = jda.updateCommands();
 			for (CommandData command : listjda) {
 				commandsjda.addCommands(command);
 			}
-			commandsjda.queue(success -> logger.info("Befehle wurden JDA registriert: " + success), failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
+			commandsjda.queue(success -> logger.info("Befehle wurden JDA registriert: " + success),
+					failure -> logger.fatal("Fehler beim Registrieren der Befehle:", failure));
 
 		} catch (Exception e) {
 			logger.fatal("Fehler beim Registrieren der Befehle:", e);
@@ -367,13 +367,14 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData onlinestatus() {
-		return Commands.slash("onlinestatus", "Ändert den Onlinestatus des Bots").addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.").addChoice("online", "ONLINE")
-				.addChoice("nichtstören", "DO_NOT_DISTURB").addChoice("abwesend", "IDLE").addChoice("unsichtbar", "INVISIBLE").setRequired(true));
+		return Commands.slash("onlinestatus", "Ändert den Onlinestatus des Bots")
+				.addOptions(new OptionData(STRING, "onlinestatus", "Legt den Onlinestatus fest.").addChoice("online", "ONLINE")
+						.addChoice("nichtstören", "DO_NOT_DISTURB").addChoice("abwesend", "IDLE").addChoice("unsichtbar", "INVISIBLE").setRequired(true));
 	}
 
 	private static SlashCommandData activity() {
-		return Commands
-				.slash("activity", "Konfiguriert die Aktivität des Bots").addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
+		return Commands.slash("activity", "Konfiguriert die Aktivität des Bots")
+				.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
 						.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
 				.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true));
 	}
@@ -381,16 +382,20 @@ public class SlashCommand extends ListenerAdapter {
 	private static SlashCommandData name() {
 		return Commands.slash("namen", "Konfiguriert die Namensüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
 				.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
-				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen").addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
-				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen").addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
+				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
+						.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
+				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
+						.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen"));
 	}
 
 	private static SlashCommandData datei() {
 		return Commands.slash("datei", "Konfiguriert die Dateiüberwachung").addSubcommands(new SubcommandData("activate", "Namensüberwachung aktivieren"))
 				.addSubcommands(new SubcommandData("deactivate", "Namensüberwachung deaktivieren"))
-				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen").addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
-				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen").addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
+				.addSubcommands(new SubcommandData("add", "Verbotene Namen hinzufügen")
+						.addOptions(new OptionData(STRING, "name", "Hier verbotenen Namen angeben.").setRequired(true)))
+				.addSubcommands(new SubcommandData("remove", "Verbotene Namen entfernen")
+						.addOptions(new OptionData(STRING, "name", "Hier Namen angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Liste der Verbotenen Namen"));
 	}
 
@@ -401,10 +406,12 @@ public class SlashCommand extends ListenerAdapter {
 
 	private static SlashCommandData modrolle() {
 		return Commands.slash("modrolle", "Konfiguriert die Modrollen")
-				.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen").addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true))
-						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true).addChoice("Admin", "Admin").addChoice("Mod", "Mod")
-								.addChoice("ChannelMod", "Channelmod")))
-				.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen").addOptions(new OptionData(STRING, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
+				.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen")
+						.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true))
+						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true)
+								.addChoice("Admin", "Admin").addChoice("Mod", "Mod").addChoice("ChannelMod", "Channelmod")))
+				.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen")
+						.addOptions(new OptionData(STRING, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf."));
 	}
 
@@ -413,16 +420,19 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData info() {
-		return Commands.slash("info", "Ruft Informationen über einen User ab.").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true));
+		return Commands.slash("info", "Ruft Informationen über einen User ab.")
+				.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true));
 	}
 
 	private static SlashCommandData hinweis() {
-		return Commands.slash("hinweis", "Schickt einem User einen Hinweis").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+		return Commands.slash("hinweis", "Schickt einem User einen Hinweis")
+				.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Hinweis-Text an.").setRequired(true));
 	}
 
 	private static SlashCommandData warn() {
-		return Commands.slash("warn", "Schickt einem User eine Verwarnung").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+		return Commands.slash("warn", "Schickt einem User eine Verwarnung")
+				.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund an.").setRequired(true));
 	}
 
@@ -432,12 +442,14 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData ban() {
-		return Commands.slash("ban", "Bannt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+		return Commands.slash("ban", "Bannt den ausgewählten User")
+				.addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
 	private static SlashCommandData mute() {
-		return Commands.slash("mute", "Timeoutet den ausgewählten User für X Tage").addOptions(new OptionData(USER, "user", "Wähle den User aus, der getimeoutet werden soll.").setRequired(true))
+		return Commands.slash("mute", "Timeoutet den ausgewählten User für X Tage")
+				.addOptions(new OptionData(USER, "user", "Wähle den User aus, der getimeoutet werden soll.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des TimeOuts an.").setRequired(true))
 				.addOptions(new OptionData(STRING, "days", "Gib hier die Anzahl der Tage TimeOut an.").setRequired(false))
 				.addOptions(new OptionData(STRING, "hours", "Gib hier die Anzahl der Stunden TimeOut an.").setRequired(false))
@@ -445,37 +457,42 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData tempban() {
-		return Commands.slash("tempban", "Bannt den ausgewählten User temporär").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+		return Commands.slash("tempban", "Bannt den ausgewählten User temporär")
+				.addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Format: 1y1mon1w1d1h1min").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
 	private static SlashCommandData permaban() {
-		return Commands.slash("permaban", "Bannt den ausgewählten User Permanent").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+		return Commands.slash("permaban", "Bannt den ausgewählten User Permanent")
+				.addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
 	private static SlashCommandData changeban() {
-		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
+		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.")
+				.addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true));
 	}
 
 	private static SlashCommandData remove() {
-		return Commands.slash("remove", "Entfernt Daten aus der Datenbank! Macht Keine Strafen rückgängig!.").addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe").setRequired(true));
+		return Commands.slash("remove", "Entfernt Daten aus der Datenbank! Macht Keine Strafen rückgängig!.")
+				.addOptions(new OptionData(STRING, "id", "Eindeutige ID der Strafe").setRequired(true));
 	}
 
-//Funsies
+	// Funsies
 
 	private static SlashCommandData wordle() {
 		return Commands.slash("wordle", "Startet eine neue World-Session");
 	}
 
 	private static SlashCommandData tictactoe() {
-		return Commands.slash("tictactoe", "Startet eine neue TicTacToe-Session").addOptions(new OptionData(USER, "oponent", "Gegner hier angeben!").setRequired(false));
+		return Commands.slash("tictactoe", "Startet eine neue TicTacToe-Session").addOptions(new OptionData(STRING, "kistärke", "Schwierigkeit der KI")
+				.addChoice("Leicht", "leicht").addChoice("Mittel", "mittel").addChoice("Schwer", "schwer").setRequired(true));
 	}
 
 	private static SlashCommandData ssp() {
-		return Commands.slash("ssp", "Schere - Stein - Papier")
-				.addOptions(new OptionData(STRING, "auswahl", "Schere Stein oder Papier?").addChoice("Schere", "schere").addChoice("Stein", "stein").addChoice("Papier", "papier").setRequired(true));
+		return Commands.slash("ssp", "Schere - Stein - Papier").addOptions(new OptionData(STRING, "auswahl", "Schere Stein oder Papier?")
+				.addChoice("Schere", "schere").addChoice("Stein", "stein").addChoice("Papier", "papier").setRequired(true));
 	}
 }

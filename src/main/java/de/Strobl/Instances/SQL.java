@@ -27,6 +27,7 @@ public class SQL {
 			stat.executeUpdate("CREATE INDEX if not exists emotes_id ON emotes (emoteid); ");
 			stat.executeUpdate("CREATE TABLE if not exists temp (id	INTEGER UNIQUE, userid , typ , time, PRIMARY KEY(id));");
 			stat.executeUpdate("CREATE TABLE if not exists wordle (UserID TEXT, finished TEXT, Streak INTEGER, Datum TEXT, Wort1 TEXT, Wort2 TEXT, Wort3 TEXT, Wort4 TEXT, Wort5 TEXT, Wort6 TEXT);");
+			stat.executeUpdate("CREATE TABLE if not exists tictactoe (player1 TEXT, player2 TEXT, messageid1 TEXT, messageid2 TEXT, kidif INTEGER, ki TEXT, turn TEXT, field11 TEXT, field12 TEXT, field13 TEXT, field21 TEXT, field22 TEXT, field23 TEXT, field31 TEXT, field32 TEXT, field33 TEXT);");
 			stat.close();
 			conn.close();
 		} catch (Exception e) {

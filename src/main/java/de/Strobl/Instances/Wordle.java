@@ -65,11 +65,7 @@ public class Wordle {
 				this.Wort5 = null;
 			if (this.Wort6.equals("null"))
 				this.Wort6 = null;
-			if (rs.getString("finished").equals("true")) {
-				this.finished = true;
-			} else {
-				this.finished = false;
-			}
+			this.finished = rs.getString("finished").equals("true");
 			rs.close();
 			stat.close();
 			conn.close();
