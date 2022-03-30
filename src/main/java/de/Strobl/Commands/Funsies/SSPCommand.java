@@ -1,10 +1,8 @@
 package de.Strobl.Commands.Funsies;
 
 import java.util.Random;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
@@ -29,11 +27,12 @@ public class SSPCommand {
 			if (choice.equalsIgnoreCase(random)) {
 				eventHook.editOriginal(random + "\n\n\nUnentschieden!!! Revanche?").queue();
 
-			} else if ((choice.equals("schere") && random.equals("Papier")) || choice.equals("papier") && random.equals("Stein") || choice.equals("stein") && random.equals("Schere")) {
-				eventHook.editOriginal(random + "\n\n\nDu hast gewonnen! Ich will eine Ravanche!").queue();
+			} else if ((choice.equals("schere") && random.equals("Papier")) || choice.equals("papier") && random.equals("Stein")
+					|| choice.equals("stein") && random.equals("Schere")) {
+				eventHook.editOriginal(random + "\n\n\nDu hast gewonnen! Ich will eine Revanche!").queue();
 
 			} else {
-				eventHook.editOriginal(random + "\n\n\nDu hast verloren! Na, willst du eine Ravanche?").queue();
+				eventHook.editOriginal(random + "\n\n\nDu hast verloren! Na, willst du eine Revanche?").queue();
 			}
 
 		} catch (Exception e) {
