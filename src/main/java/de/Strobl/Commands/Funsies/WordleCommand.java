@@ -3,11 +3,9 @@ package de.Strobl.Commands.Funsies;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Wordle;
 import de.Strobl.Main.Settings;
@@ -56,8 +54,7 @@ public class WordleCommand {
 						});
 					}
 					return;
-				}
-				;
+				} ;
 			}
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, title, event.getUser().getId(), event.getUser().getEffectiveAvatarUrl());
 			eventHook.editOriginal("").setEmbeds(builder.build()).setActionRow(Button.of(ButtonStyle.PRIMARY, "wordle", "Wort Prüfen!")).queue();
@@ -71,6 +68,10 @@ public class WordleCommand {
 	public static void wordlebuttonclick(ButtonInteractionEvent event) {
 		try {
 			Wordle wordle = new Wordle(event.getUser().getIdLong());
+			if (wordle.datum.isBefore(DateTime.now().withTimeAtStartOfDay())) {
+				event.getMessage().editMessage("Dieses Wordle ist leider bereits abgelaufen! Starte doch mit /wordle ein neues")
+						.setActionRow(Collections.emptyList()).queue();
+			}
 			if (wordle.Wort6 != null) {
 				event.getHook().sendMessage("Du hast bereits alle Versuche aufgebraucht!").queue(msg -> {
 					msg.delete().queueAfter(1, TimeUnit.MINUTES);
@@ -79,7 +80,8 @@ public class WordleCommand {
 			}
 		} catch (Exception e) {
 		}
-		TextInput wordlewort = TextInput.create("wordlewort", "Nächster Versuch:", TextInputStyle.SHORT).setPlaceholder("Wort hier eingeben").setRequired(true).setMinLength(5).setMaxLength(5).build();
+		TextInput wordlewort = TextInput.create("wordlewort", "Nächster Versuch:", TextInputStyle.SHORT).setPlaceholder("Wort hier eingeben")
+				.setRequired(true).setMinLength(5).setMaxLength(5).build();
 		Modal wordlemodal = Modal.create("wordle", "Wordle").addActionRows(ActionRow.of(wordlewort)).build();
 		event.replyModal(wordlemodal).queue();
 	}
@@ -87,7 +89,10 @@ public class WordleCommand {
 	public static void wordlemodal(ModalInteractionEvent event, InteractionHook hook) {
 		try {
 			Wordle wordle = new Wordle(event.getUser().getIdLong());
-
+			if (wordle.datum.isBefore(DateTime.now().withTimeAtStartOfDay())) {
+				event.getInteraction().editMessage("Dieses Wordle ist leider schon abgelaufen! Starte doch mit /wordle ein neues")
+						.setActionRow(Collections.emptyList()).queue();
+			}
 			if (wordle.finished) {
 				hook.sendMessage("Du hast doch bereits gewonnen").queue(msg -> {
 					msg.delete().queueAfter(1, TimeUnit.MINUTES);
@@ -100,8 +105,7 @@ public class WordleCommand {
 				});
 			}
 			if (wordle.Wort6 != null) {
-				hook.editOriginalComponents(Collections.emptyList()).queue();
-				;
+				hook.editOriginalComponents(Collections.emptyList()).queue();;
 				hook.sendMessage("Du hast bereits alle Versuche aufgebraucht!").queue(msg -> {
 					msg.delete().queueAfter(1, TimeUnit.MINUTES);
 				});
@@ -170,15 +174,18 @@ public class WordleCommand {
 		if (wordle.finished) {
 			ebcolor = Color.green;
 			header = "Glückwunsch!";
-			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " in " + trys + "/6 Versuchen erraten", wordle.createPattern(true), false);
+			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " in " + trys + "/6 Versuchen erraten",
+					wordle.createPattern(true), false);
 		} else if (wordle.Wort6 == null) {
 			ebcolor = Color.yellow;
 		} else {
 			ebcolor = Color.red;
 			header = "Leider wurde es dieses mal nichts. Das Wort wäre " + Settings.currentword + " gewesen!";
-			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " nicht erraten! " + trys + "/6 Versuche", wordle.createPattern(true), false);
+			field = new Field("Schneckchencordle " + DateTime.now().toString("dd.MM.yy") + " nicht erraten! " + trys + "/6 Versuche",
+					wordle.createPattern(true), false);
 		}
-		EmbedBuilder builder = Discord.standardEmbed(ebcolor, "Wordle " + DateTime.now().toString("dd.MM.yy"), event.getUser().getId(), event.getUser().getEffectiveAvatarUrl());
+		EmbedBuilder builder = Discord.standardEmbed(ebcolor, "Wordle " + DateTime.now().toString("dd.MM.yy"), event.getUser().getId(),
+				event.getUser().getEffectiveAvatarUrl());
 		builder.setDescription("Derzeitige Streak: " + wordle.streak);
 		if (wordle.streak > 4) {
 			builder.appendDescription("  🔥🔥🔥🔥🔥");
