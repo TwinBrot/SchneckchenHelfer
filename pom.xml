@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SchneckchenHelfer</groupId>
 	<artifactId>SchneckchenHelfer</artifactId>
-	<version>4.0.5</version>
+	<version>4.0.6</version>
 	<name>SchneckchenHelfer</name>
 	<properties>
 		<encoding>UTF-8</encoding>
