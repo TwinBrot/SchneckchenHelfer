@@ -210,6 +210,9 @@ public class WordleCommand {
 		EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Anleitung Schneckchencordle", member.getId(), member.getEffectiveAvatarUrl());
 		builder.setDescription(
 				"__Jeden Tag kann man 1x spielen! Um Mitternacht wird ein neues Wort erzeugt. Jeder Spieler hat am Tag das gleiche Wort! Also bitte teile keine Hinweise an andere User!__");
+		builder.addField("Bedienung:",
+				"In Privatnachrichten /wordle schicken startet eine neue Session Schneckchencordle \n Über den Button 'Wort prüfen!' können im Anschluss die Worte eingegeben werden.",
+				false);
 		builder.addField("Ziel: Ein Wort mit 5 Buchstaben erraten.",
 				"Jeden Tag bekommt man 6 Versuche. Nach jedem Versuch wird angezeigt, ob die einzelnen Buchstaben korrekt sind oder an einer anderen Position im Wort vorhanden sind.",
 				false);
