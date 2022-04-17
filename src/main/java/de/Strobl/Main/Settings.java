@@ -8,9 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Profile.Section;
+import de.Strobl.CommandsFunsies.Wordle.Wordle;
 import org.ini4j.Wini;
-
-import de.Strobl.Instances.Wordle;
 
 public class Settings {
 	private static final Logger logger = LogManager.getLogger(Settings.class);
