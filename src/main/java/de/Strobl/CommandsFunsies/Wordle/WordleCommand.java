@@ -33,11 +33,11 @@ public class WordleCommand {
 			String title = "";
 			if (old.datum == null) {
 				old.newWordle();
-				title = "Herzlich Willkommen zu deinem ersten Wordle! 😇";
+				title = "Herzlich Willkommen zu deinem ersten Schneckchencordle! 😇";
 			} else {
 				if (old.datum.isBefore(DateTime.now().withTimeAtStartOfDay())) {
 					old.updateWordle();
-					title = "Willkommen zurück zu Wordles!";
+					title = "Willkommen zurück zu Schneckchencordle!";
 				} else {
 					if (old.finished) {
 						eventHook.editOriginal("Du hast doch bereits gewonnen").queue(msg -> {
@@ -45,13 +45,14 @@ public class WordleCommand {
 						});
 
 					} else if (old.Wort6 != null) {
-						eventHook.editOriginal("Du kannst das heutige Wordle nicht erneut spielen!").queue(msg -> {
+						eventHook.editOriginal("Du kannst das heutige Schneckchencordle nicht erneut spielen!").queue(msg -> {
 							msg.delete().queueAfter(1, TimeUnit.MINUTES);
 						});
 					} else {
-						eventHook.editOriginal("Du hast das heutige Wordle bereits gestartet! Bitte verwende die Buttons um fortzufahren!").queue(msg -> {
-							msg.delete().queueAfter(1, TimeUnit.MINUTES);
-						});
+						eventHook.editOriginal("Du hast das heutige Schneckchencordle bereits gestartet! Bitte verwende die Buttons um fortzufahren!")
+								.queue(msg -> {
+									msg.delete().queueAfter(1, TimeUnit.MINUTES);
+								});
 					}
 					return;
 				} ;
@@ -137,6 +138,8 @@ public class WordleCommand {
 			if (versuch.equals(Settings.currentword)) {
 				wordle.finished = true;
 				wordle.streak = wordle.streak + 1;
+			} else if (wordle.Wort6 != null) {
+				wordle.streak = 0;
 			}
 			wordle.save();
 			updateMessage(event, hook, wordle);
@@ -188,9 +191,12 @@ public class WordleCommand {
 				event.getUser().getEffectiveAvatarUrl());
 		builder.setDescription("Derzeitige Streak: " + wordle.streak);
 		if (wordle.streak > 4) {
-			builder.appendDescription("  🔥🔥🔥🔥🔥");
+			builder.appendDescription("  🔥");
+			int flame = wordle.streak / 5;
+			for (int i = 1; i < flame; i++) {
+				builder.appendDescription("🔥");
+			}
 		}
-
 		builder.addField(header, wordle.createPattern(false), false);
 
 		if (field != null) {
