@@ -71,7 +71,7 @@ public class WordleCommand {
 			Wordle wordle = new Wordle(event.getUser().getIdLong());
 			if (wordle.datum.isBefore(DateTime.now().withTimeAtStartOfDay())) {
 				event.getMessage().editMessage("Dieses Wordle ist leider bereits abgelaufen! Starte doch mit /wordle ein neues")
-						.setActionRow(Collections.emptyList()).queue();
+						.setActionRow(Button.primary("blank", "Wort Prüfen!").asDisabled()).queue();
 			}
 			if (wordle.Wort6 != null) {
 				event.getHook().sendMessage("Du hast bereits alle Versuche aufgebraucht!").queue(msg -> {
@@ -92,7 +92,7 @@ public class WordleCommand {
 			Wordle wordle = new Wordle(event.getUser().getIdLong());
 			if (wordle.datum.isBefore(DateTime.now().withTimeAtStartOfDay())) {
 				event.getInteraction().editMessage("Dieses Wordle ist leider schon abgelaufen! Starte doch mit /wordle ein neues")
-						.setActionRow(Collections.emptyList()).queue();
+						.setActionRow(Button.primary("blank", "Wort Prüfen!").asDisabled()).queue();
 			}
 			if (wordle.finished) {
 				hook.sendMessage("Du hast doch bereits gewonnen").queue(msg -> {
@@ -138,8 +138,6 @@ public class WordleCommand {
 			if (versuch.equals(Settings.currentword)) {
 				wordle.finished = true;
 				wordle.streak = wordle.streak + 1;
-			} else if (wordle.Wort6 != null) {
-				wordle.streak = 0;
 			}
 			wordle.save();
 			updateMessage(event, hook, wordle);
@@ -205,7 +203,7 @@ public class WordleCommand {
 
 		WebhookMessageUpdateAction<Message> action = hook.editOriginalEmbeds(builder.build());
 		if (ebcolor == Color.green || ebcolor == Color.red) {
-			action.setActionRows(Collections.emptyList());
+			action.setActionRow(Button.primary("blank", "Wort Prüfen!").asDisabled());
 		}
 
 		action.queue();

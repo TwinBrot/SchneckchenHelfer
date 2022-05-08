@@ -2,12 +2,9 @@ package de.Strobl.CommandsMod.Server;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,7 +25,8 @@ public class Info extends ListenerAdapter {
 			List<Strafe> list = Strafe.getAll(user.getId());
 			ArrayList<EmbedBuilder> embeds = new ArrayList<EmbedBuilder>();
 			list.forEach(strafe -> {
-				List<Field> listfield = Discord.SplitTexttoField(strafe.getText(), strafe.getTypString() + ": " + strafe.getId() + " Zuständiger Mod(ID): " + strafe.getModID());
+				List<Field> listfield = Discord.SplitTexttoField(strafe.getText(),
+						strafe.getTypString() + ": " + strafe.getId() + " Zuständiger Mod(ID): " + strafe.getModID());
 				Integer size = 0;
 				for (int i = 0; i < listfield.size(); i++) {
 					size = size + listfield.get(i).getValue().length() + listfield.get(i).getName().length();
@@ -53,7 +51,7 @@ public class Info extends ListenerAdapter {
 				if (i == 0) {
 					EventHook.editOriginal("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).queue();
 				} else {
-					event.getChannel().sendMessage("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).allowedMentions(Collections.emptyList()).queue();
+					event.getChannel().sendMessage("User: " + user.getAsMention()).setEmbeds(embeds.get(i).build()).queue();
 				}
 			}
 			builder.clear();
@@ -73,7 +71,8 @@ public class Info extends ListenerAdapter {
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 			List<Strafe> list = Strafe.getAll(user.getId());
 			list.forEach(strafe -> {
-				List<Field> listfield = Discord.SplitTexttoField(strafe.getText(), strafe.getTypString() + ": " + strafe.getId() + " Zuständiger Mod(ID): " + strafe.getModID());
+				List<Field> listfield = Discord.SplitTexttoField(strafe.getText(),
+						strafe.getTypString() + ": " + strafe.getId() + " Zuständiger Mod(ID): " + strafe.getModID());
 				Integer size = 0;
 				for (int i = 0; i < listfield.size(); i++) {
 					size = size + listfield.get(i).getValue().length() + listfield.get(i).getName().length();
@@ -87,9 +86,9 @@ public class Info extends ListenerAdapter {
 				});
 			});
 			if (builder.getFields().size() == 0) {
-				event.getMessage().reply("Der User <@" + user.getId() + "> hat keine Hinweise/Warns/Kicks/Bans/Mutes").allowedMentions(Collections.emptyList()).queue();
+				event.getMessage().reply("Der User <@" + user.getId() + "> hat keine Hinweise/Warns/Kicks/Bans/Mutes").queue();
 			} else {
-				event.getMessage().reply("User: " + user.getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
+				event.getMessage().reply("User: " + user.getAsMention()).setEmbeds(builder.build()).queue();
 			}
 			builder.clear();
 		} catch (Exception e) {

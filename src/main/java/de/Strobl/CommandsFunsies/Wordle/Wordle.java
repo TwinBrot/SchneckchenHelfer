@@ -99,6 +99,9 @@ public class Wordle {
 		if (!this.datum.plusDays(2).withTimeAtStartOfDay().isAfter(DateTime.now())) {
 			this.streak = 0;
 		}
+		if (!finished) {
+			this.streak = 0;
+		}
 		this.datum = DateTime.now();
 		this.Wort1 = null;
 		this.Wort2 = null;
