@@ -2,15 +2,14 @@ package de.Strobl.Main;
 
 import java.awt.Color;
 import java.sql.SQLException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.StrafeTemp;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 
 public class Loops implements Runnable {
 	private static final Logger logger = LogManager.getLogger(Loops.class);
@@ -26,10 +25,11 @@ public class Loops implements Runnable {
 					String typ = strafeTemp.getStrafenTyp().toString();
 					String id = strafeTemp.getID();
 					String userid = strafeTemp.getUserID();
-//Unban
+					// Unban
 					if (typ.equalsIgnoreCase("Ban")) {
-						logger.info(strafeTemp.getID() + " " + strafeTemp.getUserID() + " " + strafeTemp.getDateTime().toString() + " " + strafeTemp.getStrafenTyp().toString());
-						guild.unban(userid).queue(success -> {
+						logger.info(strafeTemp.getID() + " " + strafeTemp.getUserID() + " " + strafeTemp.getDateTime().toString() + " "
+								+ strafeTemp.getStrafenTyp().toString());
+						guild.unban(UserSnowflake.fromId(userid)).queue(success -> {
 							try {
 								EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, "Tempban User entbannt", userid, null);
 								guild.getTextChannelById(Settings.LogChannel).sendMessage("User: <@" + userid + ">").setEmbeds(builder.build()).queue();

@@ -2,10 +2,8 @@ package de.Strobl.CommandsMod.Buttons;
 
 import java.awt.Color;
 import java.sql.SQLException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import de.Strobl.Instances.StrafenTyp;
@@ -13,6 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -24,7 +23,8 @@ public class BanButton {
 		try {
 			event.getMessage().editMessage(event.getMessage().getContentRaw() + " Button clicked!").queue();
 			TextChannel channel = event.getGuild().getTextChannelById("486955077899386909");
-			channel.sendMessage("Bist du dir sicher, dass du den User <@" + id + "> bannen willst?").setActionRow(Button.danger("finalban " + id, "User bannen")).queue();
+			channel.sendMessage("Bist du dir sicher, dass du den User <@" + id + "> bannen willst?")
+					.setActionRow(Button.danger("finalban " + id, "User bannen")).queue();
 		} catch (Exception e) {
 			event.getMessage().reply("Fehler bei der Buttonauswertung!").queue();
 			logger.error("Fehler Button Auswertung", e);
@@ -62,7 +62,7 @@ public class BanButton {
 			avatar = member.getEffectiveAvatarUrl();
 		}
 		EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "User wurde vom Server gebannt:", id, avatar);
-		guild.ban(id, 7, "Button Ban durch Scam Detection").queue(success -> {
+		guild.ban(UserSnowflake.fromId(id), 7, "Button Ban durch Scam Detection").queue(success -> {
 			String dm;
 			if (!info) {
 				dm = "User konnte nicht Informiert werden!";
@@ -85,7 +85,8 @@ public class BanButton {
 			}
 
 			builder.addField(sql, dm, false);
-			builder.addField("Grund:", "Automatisch generierter Ban, ausgelöst durch die ScamProtection.\nBestätigt durch " + event.getMember().getAsMention(), true);
+			builder.addField("Grund:",
+					"Automatisch generierter Ban, ausgelöst durch die ScamProtection.\nBestätigt durch " + event.getMember().getAsMention(), true);
 			builder.setAuthor(event.getMember().getEffectiveName(), null, event.getMember().getEffectiveAvatarUrl());
 			event.getChannel().sendMessage("User: <@" + id + ">").setEmbeds(builder.build()).queue();
 			event.getMessage().delete().queue();
