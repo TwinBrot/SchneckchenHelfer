@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EmoteTracking extends ListenerAdapter {
 	private static final Logger logger = LogManager.getLogger(EmoteTracking.class);
+
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (!event.isFromGuild()) {
@@ -22,7 +23,7 @@ public class EmoteTracking extends ListenerAdapter {
 			if (event.getAuthor().isBot()) {
 				return;
 			}
-			List<Emote> eventEmotes = event.getMessage().getEmotes();
+			List<Emote> eventEmotes = event.getMessage().getMentions().getEmotes();
 			ArrayList<String> Emotes = new ArrayList<String>();
 			for (int i = 0; eventEmotes.size() > i; i++) {
 				Emotes.add(eventEmotes.get(i).getId());
@@ -41,7 +42,6 @@ public class EmoteTracking extends ListenerAdapter {
 					logger.error("Unbekannter Fehler beim Emotecounter erhöhen:", e);
 				}
 			});
-
 
 		} catch (Exception e) {
 			logger.error("Fehler Emotezählung:", e);
