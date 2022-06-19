@@ -3,10 +3,8 @@ package de.Strobl.Events.Nachrichten;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -32,14 +30,17 @@ public class ScamDetection extends ListenerAdapter {
 		try {
 			String m = event.getMessage().getContentRaw().toLowerCase();
 			if (m.contains("http")) {
+				if (m.contains("https://media.discordapp.net/attachments") || m.contains("https://tenor.com/")) {
+					return;
+				}
 				if (m.contains("@everyone")) {
 					Instance(event, "Nachricht gelöscht! Schlüsselwörter erkannt!");
 					return;
 				}
-				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money") || m.contains("installer")
-						|| m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop")) {
-					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost") || m.contains("csgo") || m.contains("valorant")
-							|| m.contains("skin") || m.contains("game")) {
+				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money")
+						|| m.contains("installer") || m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop")) {
+					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost")
+							|| m.contains("csgo") || m.contains("valorant") || m.contains("skin") || m.contains("game")) {
 
 						if (m.contains("https://discord.gift/")) {
 							logger.info("Discord-Nitro Geschenk erkannt: " + m);
@@ -82,7 +83,8 @@ public class ScamDetection extends ListenerAdapter {
 					Guild guild = event.getGuild();
 					EmbedBuilder builder = Discord.standardEmbed(Color.red, title, member.getId(), member.getEffectiveAvatarUrl());
 					builder.addField("Nachrichten Inhalt:", m, false);
-					guild.getTextChannelById(Settings.LogChannel).sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>")
+					guild.getTextChannelById(Settings.LogChannel)
+							.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>")
 							.setEmbeds(builder.build()).setActionRow(Button.danger("ban " + member.getId(), "Ban User")).queue();
 					builder.clear();
 				} catch (Exception e) {
@@ -98,10 +100,14 @@ public class ScamDetection extends ListenerAdapter {
 				builder.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
 				builder.setDescription("Dein Account wurde gerade für 10 Minuten getimeoutet!");
 				builder.addField("Grund:", "Verdacht auf Scam! \n Die Moderatoren werden den Verdacht kontrollieren. ", true);
-				builder.addField("Wenn sich der Verdacht bestätigt:", "Sollte sich der Verdacht bestätigen, wird dein Account temporär vom Server gebannt.", false);
+				builder.addField("Wenn sich der Verdacht bestätigt:",
+						"Sollte sich der Verdacht bestätigen, wird dein Account temporär vom Server gebannt.", false);
 				builder.addField("Wenn sich der Verdacht NICHT bestätigt:",
-						"Sollte eine Nachricht fälschlicherweise als Scam erkannt werden, so musst du nichts unternehmen. Die Mods werden dich wieder freischalten.", false);
-				pc.sendMessageEmbeds(builder.build()).queue(msg -> {}, e -> {});
+						"Sollte eine Nachricht fälschlicherweise als Scam erkannt werden, so musst du nichts unternehmen. Die Mods werden dich wieder freischalten.",
+						false);
+				pc.sendMessageEmbeds(builder.build()).queue(msg -> {
+				}, e -> {
+				});
 				member.timeoutFor(10, TimeUnit.MINUTES).queue();
 			});
 		} catch (Exception e) {

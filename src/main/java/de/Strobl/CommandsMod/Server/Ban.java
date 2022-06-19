@@ -71,7 +71,7 @@ public class Ban {
 
 	private static void ban(Member modmember, Guild guild, Member banmember, User banuser, String text, InteractionHook hook, Boolean dm,
 			DateTime unbantime) {
-		// User Kicken
+		// User Bannen
 		String reasontrim = Discord.trim(text);
 		guild.ban(UserSnowflake.fromId(banuser.getId()), 7, reasontrim).queue(success -> {
 			try {
