@@ -30,7 +30,7 @@ public class ScamDetection extends ListenerAdapter {
 		try {
 			String m = event.getMessage().getContentRaw().toLowerCase();
 			if (m.contains("http")) {
-				if (m.contains("https://media.discordapp.net/attachments") || m.contains("https://tenor.com/")) {
+				if (m.contains("https://cdn.discordapp.com/attachments") || m.contains("https://tenor.com/")) {
 					return;
 				}
 				if (m.contains("@everyone")) {
