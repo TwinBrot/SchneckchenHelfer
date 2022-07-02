@@ -2,10 +2,8 @@ package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
 import java.util.Collections;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,7 +21,7 @@ public class ReactionRemoveLog extends ListenerAdapter {
 		}
 
 		try {
-//Abfrage
+			// Abfrage
 			if (!event.getChannel().getId().equals("143488875182948353") && !event.getChannel().getId().equals("720439181696041122")) {
 
 				// Nachrichtenlink Erzeugung:
@@ -34,12 +32,13 @@ public class ReactionRemoveLog extends ListenerAdapter {
 				if (event.getMember() == null) {
 					return;
 				}
-				EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Reaction Removed", event.getMember().getId(), event.getMember().getEffectiveAvatarUrl());
+				EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Reaction Removed", event.getMember().getId(),
+						event.getMember().getEffectiveAvatarUrl());
 				try {
-					builder.setThumbnail(event.getReactionEmote().getEmote().getImageUrl());
+					// builder.setThumbnail(event.getEmoji()); //TODO Lösung suchen
 				} catch (Exception e) {
 				}
-				builder.addField("Emote:", event.getReactionEmote().getName(), true);
+				builder.addField("Emote:", event.getEmoji().getName(), true);
 				builder.addField("Nachrichten Link:", "[Drück mich](" + Nachrichtenlink + ")", true);
 				TextChannel log = event.getGuild().getTextChannelById(Settings.LogChannel);
 				log.sendMessage("User: " + event.getMember().getAsMention()).setEmbeds(builder.build()).allowedMentions(Collections.emptyList()).queue();
