@@ -38,7 +38,7 @@ public class ScamDetection extends ListenerAdapter {
 					return;
 				}
 				if (m.contains("free") || m.contains("gift") || m.contains("trade") || m.contains("distrib") || m.contains("hack") || m.contains("money")
-						|| m.contains("installer") || m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop")) {
+						|| m.contains("installer") || m.contains("giving") || m.contains("over") || m.contains("give") || m.contains("drop") || m.contains("aktion")) {
 					if (m.contains("disc") || m.contains("steam") || m.contains("nitro") || m.contains("cs:go") || m.contains("boost")
 							|| m.contains("csgo") || m.contains("valorant") || m.contains("skin") || m.contains("game")) {
 
