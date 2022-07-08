@@ -98,7 +98,7 @@ public class ScamDetection extends ListenerAdapter {
 			member.getUser().openPrivateChannel().queue(pc -> {
 				EmbedBuilder builder = Discord.standardEmbed(Color.red, "TimeOut", member.getId(), member.getUser().getEffectiveAvatarUrl());
 				builder.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
-				builder.setDescription("Dein Account wurde gerade für 10 Minuten getimeoutet!");
+				builder.setDescription("Dein Account wurde gerade automatisch für 10 Minuten getimeoutet!");
 				builder.addField("Grund:", "Verdacht auf Scam! \n Die Moderatoren werden den Verdacht kontrollieren. ", true);
 				builder.addField("Wenn sich der Verdacht bestätigt:",
 						"Sollte sich der Verdacht bestätigen, wird dein Account temporär vom Server gebannt.", false);

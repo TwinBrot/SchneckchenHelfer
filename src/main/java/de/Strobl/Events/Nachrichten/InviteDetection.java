@@ -1,6 +1,7 @@
 package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,15 +40,29 @@ public class InviteDetection extends ListenerAdapter {
 										logger.info("Servereinladung erkannt. Author ist Mod, daher nicht gelöscht.");
 										return;
 									}
+									
 
+									event.getMember().getUser().openPrivateChannel().queue(pc -> {
+										EmbedBuilder builder = Discord.standardEmbed(Color.red, "TimeOut", event.getMember().getId(), event.getMember().getUser().getEffectiveAvatarUrl());
+										builder.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
+										builder.setDescription("Dein Account wurde gerade automatisch für 10 Minuten getimeoutet!");
+										builder.addField("Grund:", "Senden eines Discord-Invitelinks!", true);
+										builder.addField("Die Moderatoren werden das kontrollieren.", "Wenn sich der Verdacht nicht bestätigt, werden die Moderatoren dich wieder freischalten.", false);
+										pc.sendMessageEmbeds(builder.build()).queue(msg -> {
+										}, e -> {
+										});
+										event.getMember().timeoutFor(10, TimeUnit.MINUTES).queueAfter(5, TimeUnit.SECONDS);
+									});
+									
+									
 									event.getMessage().delete().queue(success -> {
 										try {
 											String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";
 											Member member = event.getMember();
 											EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, title, member.getId(), member.getEffectiveAvatarUrl());
-											builder.addField("Nachrichten Text: ", content, true);
+											builder.addField("Channel: " + "Nachrichten Text: ", content, true);
 											TextChannel channel = event.getGuild().getTextChannelById(Settings.LogChannel);
-											channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584>").setEmbeds(builder.build()).queue();
+											channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>").setEmbeds(builder.build()).queue();
 										} catch (Exception e) {
 											logger.error("Fehler Invite Detection", e);
 										}
