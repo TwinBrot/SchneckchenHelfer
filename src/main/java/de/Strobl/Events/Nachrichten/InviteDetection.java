@@ -51,7 +51,7 @@ public class InviteDetection extends ListenerAdapter {
 										pc.sendMessageEmbeds(builder.build()).queue(msg -> {
 										}, e -> {
 										});
-										event.getMember().timeoutFor(10, TimeUnit.MINUTES).queueAfter(5, TimeUnit.SECONDS);
+										event.getMember().timeoutFor(10, TimeUnit.MINUTES).queueAfter(1, TimeUnit.SECONDS);
 									});
 									
 									
@@ -60,7 +60,7 @@ public class InviteDetection extends ListenerAdapter {
 											String title = "Invite eines anderen Servers erkannt. Nachricht gelöscht!";
 											Member member = event.getMember();
 											EmbedBuilder builder = Discord.standardEmbed(Color.BLUE, title, member.getId(), member.getEffectiveAvatarUrl());
-											builder.addField("Channel: " + "Nachrichten Text: ", content, true);
+											builder.addField("Channel: " + event.getGuildChannel().getName() + "     Nachrichten Text: ", content, true);
 											TextChannel channel = event.getGuild().getTextChannelById(Settings.LogChannel);
 											channel.sendMessage("User: " + member.getAsMention() + " Notification: <@227131380058947584> <@140206875596685312>").setEmbeds(builder.build()).queue();
 										} catch (Exception e) {
