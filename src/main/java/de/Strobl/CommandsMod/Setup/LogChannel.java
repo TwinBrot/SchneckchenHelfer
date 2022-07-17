@@ -19,7 +19,7 @@ public class LogChannel {
 
 	public static void setup(SlashCommandInteractionEvent event) {
 		try {
-			GuildChannel Channel = event.getOption("textchannel").getAsGuildChannel();
+			GuildChannel Channel = event.getOption("textchannel").getAsChannel();
 			if (Channel.getType() == ChannelType.TEXT) {
 				String ChannelID = Channel.getId();
 				TextChannel textchannel = event.getGuild().getTextChannelById(ChannelID);

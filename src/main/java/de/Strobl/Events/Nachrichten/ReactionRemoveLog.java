@@ -2,8 +2,10 @@ package de.Strobl.Events.Nachrichten;
 
 import java.awt.Color;
 import java.util.Collections;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import de.Strobl.Instances.Discord;
 import de.Strobl.Main.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -35,7 +37,7 @@ public class ReactionRemoveLog extends ListenerAdapter {
 				EmbedBuilder builder = Discord.standardEmbed(Color.CYAN, "Reaction Removed", event.getMember().getId(),
 						event.getMember().getEffectiveAvatarUrl());
 				try {
-					// builder.setThumbnail(event.getEmoji()); //TODO Lösung suchen
+					builder.setThumbnail(event.getReaction().getEmoji().asCustom().getImageUrl());
 				} catch (Exception e) {
 				}
 				builder.addField("Emote:", event.getEmoji().getName(), true);
