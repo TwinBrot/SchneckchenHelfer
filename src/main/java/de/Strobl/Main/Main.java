@@ -46,7 +46,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "4.3.0";
+	public static String version = "4.3.1";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -76,7 +76,7 @@ public class Main {
 			JDABuilder Builder = JDABuilder.createDefault(Settings.Token);
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS,
 					GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
-					GatewayIntent.GUILD_MEMBERS);
+					GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT);
 			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING,
 					GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ROLE_TAGS, CacheFlag.EMOJI);
