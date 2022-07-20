@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SchneckchenHelfer</groupId>
 	<artifactId>SchneckchenHelfer</artifactId>
-	<version>4.3.1</version>
+	<version>4.4.0</version>
 	<name>SchneckchenHelfer</name>
 	<properties>
 		<encoding>UTF-8</encoding>
@@ -55,6 +55,7 @@
 			<artifactId>log4j-slf4j18-impl</artifactId>
 			<version>2.18.0</version>
 		</dependency>
+		<!--Save to INI-->
 		<dependency>
 			<groupId>org.ini4j</groupId>
 			<artifactId>ini4j</artifactId>
@@ -70,7 +71,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>5.0.0-alpha.15</version>
+			<version>5.0.0-alpha.16</version>
 			<exclusions>
 				<!--No Audio-->
 				<exclusion>
@@ -85,7 +86,13 @@
 			<artifactId>github-api</artifactId>
 			<version>1.307</version>
 		</dependency>
-		<!--Zeit API-->
+		<!--Twitch API-->
+		<dependency>
+			<groupId>com.github.twitch4j</groupId>
+			<artifactId>twitch4j</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+		<!--Zeit-->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>

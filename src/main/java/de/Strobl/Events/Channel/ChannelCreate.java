@@ -1,5 +1,7 @@
 package de.Strobl.Events.Channel;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,16 +18,14 @@ public class ChannelCreate extends ListenerAdapter {
 			if (!event.isFromGuild()) {
 				return;
 			}
-			String id = event.getChannel().getId();
-			TextChannel channel = event.getGuild().getTextChannelById(id);
+			TextChannel channel = event.getChannel().asTextChannel();
 			String topic = event.getNewValue();
 			if (topic == null) {
 				return;
 			}
 			if (topic.startsWith("User ID:")) {
-				Thread.sleep(1000);
 				topic = topic.replaceFirst("User ID: ", "");
-				channel.sendMessage("<@" + topic + ">").queue();
+				channel.sendMessage("<@" + topic + ">").queueAfter(1000, TimeUnit.MILLISECONDS);
 			} else {
 				return;
 			}

@@ -8,8 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Profile.Section;
-import de.Strobl.CommandsFunsies.Wordle.Wordle;
 import org.ini4j.Wini;
+
+import de.Strobl.CommandsFunsies.Wordle.Wordle;
 
 public class Settings {
 	private static final Logger logger = LogManager.getLogger(Settings.class);
@@ -23,6 +24,7 @@ public class Settings {
 	public static String StreamLink;
 	public static String Status;
 	public static String LogChannel;
+	public static String AnnounceChannel;
 	public static String[] Admin;
 	public static String[] Mod;
 	public static String[] Channelmod;
@@ -32,6 +34,9 @@ public class Settings {
 	public static String[] Namen;
 	public static ArrayList<String> Links;
 	public static String currentword;
+	public static String twitchid;
+	public static String twitchsecret;
+	public static String streamer;
 
 	public static void load() throws InvalidFileFormatException, IOException, NullPointerException {
 		Wini ini = new Wini(new File(Pfad + "settings.ini"));
@@ -47,6 +52,11 @@ public class Settings {
 		Channelmod = ini.get("ModRollen", "Channelmod").replaceAll(" ", "").split(",");
 		Datei = ini.get("Dateiüberwachung", "Allowed").replaceAll(" ", "").split(",");
 		Namen = ini.get("Namensüberwachung", "Verboten").replaceAll(" ", "").split(",");
+		AnnounceChannel = ini.get("Twitch", "AnnounceChannel");
+		twitchid = ini.get("Twitch", "twitchid");
+		twitchsecret = ini.get("Twitch", "twitchsecret");
+		streamer = ini.get("Twitch", "streamer");
+
 		String DateiTemp = ini.get("Dateiüberwachung", "Active");
 		if (DateiTemp.equals("true")) {
 			DateiActive = true;
@@ -63,8 +73,7 @@ public class Settings {
 		if (currentword.equals("")) {
 			Wordle.newWord();
 		}
-		
-		
+
 		Wini linkini = new Wini(new File(Main.Pfad + "Link.ini"));
 		Section links = linkini.get("Links");
 		ArrayList<String> temp = new ArrayList<String>();
@@ -72,7 +81,6 @@ public class Settings {
 			temp.add(link);
 		});
 		Links = temp;
-		
 	}
 
 	public static void set(String section, String option, String value) throws IOException {
@@ -82,11 +90,11 @@ public class Settings {
 		load();
 	}
 
-	@SuppressWarnings("unused")
 	public static void Update() {
 		try {
 // Read settings.ini File
 			try {
+				@SuppressWarnings("unused")
 				Wini ini = new Wini(new File(Pfad + "settings.ini"));
 			} catch (IOException e) {
 				logger.warn("settings.ini nicht gefunden.");
@@ -105,14 +113,20 @@ public class Settings {
 			create(ini, "Settings", "StreamLink", "https://www.twitch.tv/maudado");
 			create(ini, "Settings", "Status", "ONLINE");
 			create(ini, "Settings", "LogChannel", "");
+			create(ini, "Settings", "AnnounceChannel", "");
 			create(ini, "Settings", "Wordle", "");
 			create(ini, "ModRollen", "Admin", "");
 			create(ini, "ModRollen", "Mod", "");
 			create(ini, "ModRollen", "Channelmod", "");
 			create(ini, "Dateiüberwachung", "Active", "false");
-			create(ini, "Dateiüberwachung", "Allowed", "jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp");
+			create(ini, "Dateiüberwachung", "Allowed",
+					"jpg, png, jpeg, gif, bmp, mp3, mov, mp4, m4a, webp, webm, tif, avi, psd, jpg_large, wav, txt, pdf, jfif, heic, jpglarge, 3gp");
 			create(ini, "Namensüberwachung", "Active", "false");
 			create(ini, "Namensüberwachung", "Verboten", "");
+			create(ini, "Twitch", "AnnounceChannel", "");
+			create(ini, "Twitch", "twitchid", "");
+			create(ini, "Twitch", "twitchsecret", "");
+			create(ini, "Twitch", "streamer", "");
 
 			if (update) {
 				logger.warn("Settings.ini wird angepasst");

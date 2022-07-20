@@ -4,10 +4,13 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.CHANNEL;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.ROLE;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
+
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
+
 import de.Strobl.CommandsFunsies.Wordle.WordleCommand;
 import de.Strobl.CommandsMod.Server.Ban;
 import de.Strobl.CommandsMod.Server.ChangeTemp;
@@ -19,6 +22,7 @@ import de.Strobl.CommandsMod.Server.Mute;
 import de.Strobl.CommandsMod.Server.Remove;
 import de.Strobl.CommandsMod.Server.Warn;
 import de.Strobl.CommandsMod.Setup.Aktivität;
+import de.Strobl.CommandsMod.Setup.AnnounceChannel;
 import de.Strobl.CommandsMod.Setup.Dateiüberwachung;
 import de.Strobl.CommandsMod.Setup.LogChannel;
 import de.Strobl.CommandsMod.Setup.ModRolle;
@@ -289,14 +293,16 @@ public class SlashCommand extends ListenerAdapter {
 				case "logchannel":
 					LogChannel.setup(event);
 					return;
+				case "announcechannel":
+					AnnounceChannel.setup(event);
+					return;
 				case "wordle":
 					WordleCommand.anleitung(event, hook);
 					return;
 				}
 			}
 			event.getHook().editOriginal("Du hast nicht die notwendigen Rechte diesen Befehl auszuführen!").queue();
-			logger.warn("Befehl wurde nicht ausgeführt. Hatte der User die notwendigen Rechte: " + event.getName() + " "
-					+ event.getMember().getEffectiveName());
+			logger.warn("Befehl wurde nicht ausgeführt. Hatte der User die notwendigen Rechte: " + event.getName() + " " + event.getMember().getEffectiveName());
 		} catch (
 
 		Exception e) {
@@ -318,6 +324,7 @@ public class SlashCommand extends ListenerAdapter {
 			newlistguild.add(name());
 			newlistguild.add(datei());
 			newlistguild.add(logchannel());
+			newlistguild.add(announcechannel());
 			newlistguild.add(modrolle());
 			newlistguild.add(emotes());
 			newlistguild.add(info());
@@ -373,8 +380,8 @@ public class SlashCommand extends ListenerAdapter {
 
 	private static SlashCommandData activity() {
 		return Commands.slash("activity", "Konfiguriert die Aktivität des Bots")
-				.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing")
-						.addChoice("watching", "watching").addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
+				.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing").addChoice("watching", "watching")
+						.addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
 				.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true));
 	}
 
@@ -403,12 +410,17 @@ public class SlashCommand extends ListenerAdapter {
 				.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true));
 	}
 
+	private static SlashCommandData announcechannel() {
+		return Commands.slash("announcechannel", "Legt den Kanal fest, in dem Ankündigungen gepostet werden.")
+				.addOptions(new OptionData(CHANNEL, "textchannel", "Wähle den Textchannel aus.").setRequired(true));
+	}
+
 	private static SlashCommandData modrolle() {
 		return Commands.slash("modrolle", "Konfiguriert die Modrollen")
 				.addSubcommands(new SubcommandData("add", "Modrolle hinzufügen")
 						.addOptions(new OptionData(ROLE, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true))
-						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true)
-								.addChoice("Admin", "Admin").addChoice("Mod", "Mod").addChoice("ChannelMod", "Channelmod")))
+						.addOptions(new OptionData(STRING, "zugriffsstufe", "Welche Stufe soll die Rolle haben?").setRequired(true).addChoice("Admin", "Admin")
+								.addChoice("Mod", "Mod").addChoice("ChannelMod", "Channelmod")))
 				.addSubcommands(new SubcommandData("remove", "Verbotene Dateiendungen entfernen")
 						.addOptions(new OptionData(STRING, "rolle", "Hier die gewünschte Rolle angeben.").setRequired(true)))
 				.addSubcommands(new SubcommandData("list", "Listet alle Modrollen auf."));
@@ -424,14 +436,12 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData hinweis() {
-		return Commands.slash("hinweis", "Schickt einem User einen Hinweis")
-				.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+		return Commands.slash("hinweis", "Schickt einem User einen Hinweis").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Hinweis-Text an.").setRequired(true));
 	}
 
 	private static SlashCommandData warn() {
-		return Commands.slash("warn", "Schickt einem User eine Verwarnung")
-				.addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
+		return Commands.slash("warn", "Schickt einem User eine Verwarnung").addOptions(new OptionData(USER, "user", "Wähle hier den User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund an.").setRequired(true));
 	}
 
@@ -441,8 +451,7 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData ban() {
-		return Commands.slash("ban", "Bannt den ausgewählten User")
-				.addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
+		return Commands.slash("ban", "Bannt den ausgewählten User").addOptions(new OptionData(USER, "user", "Wähle den zu bannenden User aus.").setRequired(true))
 				.addOptions(new OptionData(STRING, "grund", "Gib hier den Grund des Bans an.").setRequired(true));
 	}
 
@@ -469,8 +478,7 @@ public class SlashCommand extends ListenerAdapter {
 	}
 
 	private static SlashCommandData changeban() {
-		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.")
-				.addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
+		return Commands.slash("changeban", "Ändert die Dauer eines Tempbans.").addOptions(new OptionData(USER, "user", "Gib die ID des Users an").setRequired(true))
 				.addOptions(new OptionData(STRING, "dauer", "Gib hier die neue Dauer des TempBans an").setRequired(true));
 	}
 

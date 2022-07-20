@@ -12,11 +12,14 @@ import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import javax.security.auth.login.LoginException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+
 import de.Strobl.CommandsFunsies.MessageReceivedFunsies;
 import de.Strobl.CommandsFunsies.SlashCommandFunsies;
 import de.Strobl.CommandsFunsies.Wordle.Wordle;
@@ -46,7 +49,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "4.3.1";
+	public static String version = "4.4.0";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -75,8 +78,8 @@ public class Main {
 
 			JDABuilder Builder = JDABuilder.createDefault(Settings.Token);
 			Builder.enableIntents(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_BANS,
-					GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
-					GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT);
+					GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MEMBERS,
+					GatewayIntent.MESSAGE_CONTENT);
 			Builder.disableIntents(GatewayIntent.GUILD_WEBHOOKS, GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_MESSAGE_TYPING,
 					GatewayIntent.DIRECT_MESSAGE_TYPING, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
 			Builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ROLE_TAGS, CacheFlag.EMOJI);
@@ -145,7 +148,7 @@ public class Main {
 				break;
 			}
 
-			// JDA Starten und fertigstellung abwarten
+			// JDA Starten
 
 			jda = Builder.build().awaitReady();
 			SlashCommand.startupcheck(jda, version);
@@ -172,6 +175,12 @@ public class Main {
 					Wordle.newWord();
 				}
 			}, midnight, 1440, TimeUnit.MINUTES);
+
+			// Twitch Verbindung starten
+
+			TwitchAPI.twitchAPI();
+
+			// Detect Commandline
 
 			Scanner scanner = new Scanner(System.in);
 			try {
