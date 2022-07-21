@@ -108,7 +108,6 @@ public class Settings {
 			create(ini, "Setup", "Version", "");
 			create(ini, "Settings", "AktivitätText", "/hilfe");
 			create(ini, "Settings", "AktivitätTyp", "playing");
-			create(ini, "Settings", "StreamLink", "https://www.twitch.tv/maudado");
 			create(ini, "Settings", "Status", "ONLINE");
 			create(ini, "Settings", "LogChannel", "");
 			create(ini, "Settings", "AnnounceChannel", "");
