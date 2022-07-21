@@ -21,7 +21,6 @@ public class Settings {
 	public static String Version;
 	public static String AktivitätText;
 	public static String AktivitätTyp;
-	public static String StreamLink;
 	public static String Status;
 	public static String LogChannel;
 	public static String AnnounceChannel;
@@ -44,7 +43,6 @@ public class Settings {
 		Version = ini.get("Setup", "Version");
 		AktivitätText = ini.get("Settings", "AktivitätText");
 		AktivitätTyp = ini.get("Settings", "AktivitätTyp");
-		StreamLink = ini.get("Settings", "StreamLink");
 		Status = ini.get("Settings", "Status");
 		LogChannel = ini.get("Settings", "LogChannel");
 		Admin = ini.get("ModRollen", "Admin").replaceAll(" ", "").split(",");

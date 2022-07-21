@@ -381,7 +381,7 @@ public class SlashCommand extends ListenerAdapter {
 	private static SlashCommandData activity() {
 		return Commands.slash("activity", "Konfiguriert die Aktivität des Bots")
 				.addOptions(new OptionData(STRING, "activitytyp", "Typ der Activity auswählen.").addChoice("playing", "playing").addChoice("watching", "watching")
-						.addChoice("listening", "listening").addChoice("streaming", "streaming").setRequired(true))
+						.addChoice("listening", "listening").setRequired(true))
 				.addOptions(new OptionData(STRING, "activitytext", "Konfiguriert den Text der Activity").setRequired(true));
 	}
 

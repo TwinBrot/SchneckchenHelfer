@@ -21,8 +21,6 @@ public class Aktivität {
 		try {
 			String typ = event.getOption("activitytyp").getAsString();
 			String text = event.getOption("activitytext").getAsString();
-			
-			String URL = Settings.StreamLink;
 
 			Settings.set("Settings", "AktivitätTyp", typ);
 			Settings.set("Settings", "AktivitätText", text);
@@ -33,8 +31,6 @@ public class Aktivität {
 				event.getJDA().getPresence().setActivity(Activity.listening(text));
 			} else if (typ.equals("watching")) {
 				event.getJDA().getPresence().setActivity(Activity.watching(text));
-			} else if (typ.equals("streaming")) {
-				event.getJDA().getPresence().setActivity(Activity.streaming(text, URL));
 			}
 			Member self = event.getGuild().getSelfMember();
 			EmbedBuilder builder = Discord.standardEmbed(Color.GREEN, "Aktivität eingestellt: " + typ, self.getId(), self.getEffectiveAvatarUrl());

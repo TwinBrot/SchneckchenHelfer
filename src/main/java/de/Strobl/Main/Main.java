@@ -49,7 +49,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
-	public static String version = "4.4.0";
+	public static String version = "4.4.1";
 	public static List<String> ServerEmotesID;
 	public static JDA jda;
 	public static String Pfad = "./";
@@ -114,7 +114,6 @@ public class Main {
 
 			String Typ = Settings.AktivitätTyp;
 			String Text = Settings.AktivitätText;
-			String URL = Settings.StreamLink;
 
 			switch (Typ) {
 			case "playing":
@@ -125,9 +124,6 @@ public class Main {
 				break;
 			case "watching":
 				Builder.setActivity(Activity.watching(Text));
-				break;
-			case "streaming":
-				Builder.setActivity(Activity.streaming(Text, URL));
 				break;
 			}
 
