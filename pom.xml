@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SchneckchenHelfer</groupId>
 	<artifactId>SchneckchenHelfer</artifactId>
-	<version>4.4.3</version>
+	<version>4.5.0beta1</version>
 	<name>SchneckchenHelfer</name>
 	<properties>
 		<encoding>UTF-8</encoding>
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>5.0.0-alpha.16</version>
+			<version>5.0.0-alpha.17</version>
 			<exclusions>
 				<!--No Audio-->
 				<exclusion>

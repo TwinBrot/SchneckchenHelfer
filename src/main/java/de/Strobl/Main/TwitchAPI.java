@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.common.events.domain.EventChannel;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
 import com.github.twitch4j.events.ChannelGoOfflineEvent;
 import com.github.twitch4j.helix.domain.Stream;
@@ -31,29 +32,33 @@ public class TwitchAPI {
 				return;
 			}
 			TwitchClientBuilder builder = TwitchClientBuilder.builder();
-			TwitchClient twitchClient = builder.withEnableHelix(true).withClientId(Settings.twitchid).withClientSecret(Settings.twitchsecret).build();
+			TwitchClient twitchClient = builder.withTimeout(10000).withEnableHelix(true).withClientId(Settings.twitchid).withClientSecret(Settings.twitchsecret)
+					.build();
 			twitchClient.getClientHelper().enableStreamEventListener(Settings.streamer);
 			twitchClient.getEventManager().onEvent(ChannelGoLiveEvent.class, event -> {
 				Stream stream = event.getStream();
-				jda.getPresence().setActivity(Activity.streaming(stream.getTitle(), "https://www.twitch.tv/" + streamer));
+				EventChannel channel = event.getChannel();
+				jda.getPresence().setActivity(Activity.streaming(stream.getTitle(), "https://www.twitch.tv/" + channel.getName()));
+				logger.info("Registered GoLiveEvent: " + channel.getName() + " with game " + stream.getGameName());
 				try {
 					if (Settings.AnnounceChannel.equals("")) {
 						logger.warn("Kein Announcement Channel festgelegt!");
 						return;
 					}
 					TextChannel textchannel = jda.getChannelById(TextChannel.class, Settings.AnnounceChannel);
-					if (textchannel.canTalk()) {
+					if (!textchannel.canTalk()) {
 						logger.warn("Kein Rechte im Announcement Channel zu schreiben!");
 						return;
 					}
 
 					jda.retrieveUserById(109777843046645760L).queue(owner -> {
-						String name = event.getChannel().getName();
+						String name = channel.getName();
 						EmbedBuilder embedbuilder = new EmbedBuilder();
 						embedbuilder.setColor(0x6441a5);
 						embedbuilder.setAuthor(owner.getName(), null, owner.getEffectiveAvatarUrl());
 						embedbuilder.setTitle(stream.getTitle(), "https://www.twitch.tv/" + name);
 						embedbuilder.addField("Game:", stream.getGameName(), false);
+						logger.warn("URL: " + stream.getThumbnailUrl());
 						embedbuilder.setImage(stream.getThumbnailUrl());
 						embedbuilder.setTimestamp(ZonedDateTime.now().toInstant());
 						embedbuilder.setFooter("Twitch", "https://pingcord.xyz/assets/twitch-footer.png");
@@ -65,6 +70,7 @@ public class TwitchAPI {
 				}
 			});
 			twitchClient.getEventManager().onEvent(ChannelGoOfflineEvent.class, event -> {
+				logger.info("Registered GoOfflineEvent: " + event.getChannel().getName());
 
 				// Activity
 				String Typ = Settings.AktivitätTyp;
