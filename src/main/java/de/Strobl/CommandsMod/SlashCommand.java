@@ -104,8 +104,9 @@ public class SlashCommand extends ListenerAdapter {
 			if (Modrolle > 0) {
 				if (event.getName().equals("hinweis")) {
 					User user = event.getOption("user").getAsUser();
+					Member member = event.getOption("user").getAsMember();
 					String grundhinweis = event.getOption("grund").getAsString();
-					Hinweis.SlashCommandInteraction(event, user, grundhinweis, hook);
+					Hinweis.SlashCommandInteraction(event, user, member, grundhinweis, hook);
 					return;
 				} else if (event.getName().equals("info")) {
 					User user = event.getOption("user").getAsUser();
@@ -151,8 +152,9 @@ public class SlashCommand extends ListenerAdapter {
 					return;
 				} else if (event.getName().equals("warn")) {
 					User user = event.getOption("user").getAsUser();
+					Member member = event.getOption("user").getAsMember();
 					String grundhinweis = event.getOption("grund").getAsString();
-					Warn.onSlashCommand(event, user, grundhinweis, hook);
+					Warn.onSlashCommand(event, user, member, grundhinweis, hook);
 					return;
 				} else if (event.getName().equals("kick")) {
 					Member member = event.getOption("user").getAsMember();
