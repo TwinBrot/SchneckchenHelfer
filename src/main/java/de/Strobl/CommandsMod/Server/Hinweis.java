@@ -10,6 +10,7 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import de.Strobl.Instances.StrafenTyp;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -17,13 +18,18 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class Hinweis {
 	private static final Logger logger = LogManager.getLogger(Hinweis.class);
 
-	public static void SlashCommandInteraction(SlashCommandInteractionEvent event, User user, String Text, InteractionHook EventHook) {
+	public static void SlashCommandInteraction(SlashCommandInteractionEvent event, User user, Member member, String Text, InteractionHook EventHook) {
 		try {
 			if (event.getJDA().getSelfUser() == user) {
 				EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keinen Hinweis schicken.").queue();
 				return;
 			}
 			;
+			if (!(member == null)) {
+				if (!event.getMember().canInteract(member)) {
+					return;
+				}
+			}
 
 			EmbedBuilder builderuser = Discord.standardEmbed(Color.YELLOW, "Hinweis des Serverteams:", user.getId(), user.getEffectiveAvatarUrl());
 			builderuser.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
@@ -34,12 +40,14 @@ public class Hinweis {
 				channel.sendMessageEmbeds(builderuser.build()).queue(success -> {
 					try {
 
-						EmbedBuilder builderintern = Discord.standardEmbed(Color.GREEN, "User hat einen Hinweis erhalten", user.getId(), user.getEffectiveAvatarUrl());
+						EmbedBuilder builderintern = Discord.standardEmbed(Color.GREEN, "User hat einen Hinweis erhalten", user.getId(),
+								user.getEffectiveAvatarUrl());
 
 						try {
 							Strafe strafe = new Strafe(user.getId(), StrafenTyp.HINWEIS, Text, event.getMember().getId()).save();
 							String id = strafe.getId();
-							builderintern.addField("Hinweis-ID: " + id, "**" + user.getName() + "'s Hinweis Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.HINWEIS) + "**", false);
+							builderintern.addField("Hinweis-ID: " + id,
+									"**" + user.getName() + "'s Hinweis Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.HINWEIS) + "**", false);
 
 						} catch (SQLException e) {
 

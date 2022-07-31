@@ -10,6 +10,7 @@ import de.Strobl.Instances.Discord;
 import de.Strobl.Instances.Strafe;
 import de.Strobl.Instances.StrafenTyp;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -17,13 +18,18 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 public class Warn {
 	private static final Logger logger = LogManager.getLogger(Warn.class);
 
-	public static void onSlashCommand(SlashCommandInteractionEvent event, User user, String Text, InteractionHook EventHook) {
+	public static void onSlashCommand(SlashCommandInteractionEvent event, User user, Member member, String Text, InteractionHook EventHook) {
 		try {
 			if (event.getJDA().getSelfUser() == user) {
 				EventHook.editOriginal("Du kannst dem " + event.getJDA().getSelfUser().getName() + " keine Verwarnung schicken.").queue();
 				return;
 			}
 			;
+			if (!(member == null)) {
+				if (!event.getMember().canInteract(member)) {
+					return;
+				}
+			}
 
 			EmbedBuilder builderuser = Discord.standardEmbed(Color.RED, "Verwarnung vom Serverteam:", user.getId(), user.getEffectiveAvatarUrl());
 			builderuser.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
@@ -39,7 +45,8 @@ public class Warn {
 						try {
 							Strafe strafe = new Strafe(user.getId(), StrafenTyp.WARN, Text, event.getMember().getId()).save();
 							String id = strafe.getId();
-							builderintern.addField("Warn-ID: " + id, "**" + user.getName() + "'s Warn Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.WARN) + "**", false);
+							builderintern.addField("Warn-ID: " + id,
+									"**" + user.getName() + "'s Warn Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.WARN) + "**", false);
 
 						} catch (SQLException e) {
 
@@ -66,7 +73,8 @@ public class Warn {
 						EmbedBuilder builderinternnodm = Discord.standardEmbed(Color.YELLOW, "User wurde verwarnt.", user.getId(), user.getEffectiveAvatarUrl());
 						builderinternnodm.setDescription("Die Verwarnung konnte nicht zugestellt werden. (Privatnachrichten aus?)\nWarn wurde abgespeichert.");
 						String id = strafe.getId();
-						builderinternnodm.addField("Warn-ID: " + id, "**" + user.getName() + "'s Warn Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.WARN) + "**", false);
+						builderinternnodm.addField("Warn-ID: " + id,
+								"**" + user.getName() + "'s Warn Nr. " + Strafe.getSQLSize(user.getId(), StrafenTyp.WARN) + "**", false);
 						Discord.SplitTexttoField(Text, "Warn-Grund:").forEach(field -> {
 							builderinternnodm.addField(field);
 						});
@@ -74,7 +82,8 @@ public class Warn {
 						EventHook.editOriginal("User: <@" + user.getId() + ">").setEmbeds(builderinternnodm.build()).queue();
 						builderinternnodm.clear();
 					} catch (Exception e1) {
-						EventHook.editOriginal("Verwarnung konnte nicht zugestellt werden. Privatnachrichten aus? \nWarn konnte zudem nicht gespeichert werden!").queue();
+						EventHook.editOriginal("Verwarnung konnte nicht zugestellt werden. Privatnachrichten aus? \nWarn konnte zudem nicht gespeichert werden!")
+								.queue();
 					}
 				});
 				builderuser.clear();
